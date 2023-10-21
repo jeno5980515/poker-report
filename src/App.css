@@ -1,11 +1,13 @@
+body {
+  background-color: black;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+.grid line {stroke: lightgrey;stroke-opacity: 0.7;shape-rendering: crispEdges;}
+.grid path {stroke-width: 0;}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
