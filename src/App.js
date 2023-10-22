@@ -2,11 +2,13 @@ import * as d3 from "d3";
 import { useEffect, useRef, useState } from 'react';
 import { Canvg } from 'canvg';
 import styled from 'styled-components';
+import Select, { components } from "react-select";
 
+import { ReactComponent as ArrowSVG } from './arrow.svg';
 import Content from './Content';
 import './App.css';
 
-import data from './BtnVSBB.json'
+import DATA from './BtnVSBB.json'
 
 const ChartWrapper = styled.div`
   width: 94%;
@@ -34,6 +36,16 @@ const Tooltip = styled.div`
   pointer-events: none;
 `
 
+const SelectWrapper = styled.div`
+  width: 150px;
+`
+
+const ArrowWrapper = styled.div`
+  width: 12px;
+  position: absolute;
+  right: 5px;
+`
+
 
 function sum(values) {
   return values.reduce((prev, value) => prev + value, 0);
@@ -52,7 +64,51 @@ const getColor = (text) => {
   }
 }
 
+const getValue = (text) => {
+  switch (text) {
+    case 'A':
+      return 14;
+    case 'K':
+      return 13;
+    case 'Q':
+      return 12;
+    case 'J':
+      return 11;
+    case 'T':
+      return 10;
+    default:
+      return parseInt(text);
+  }
+}
 
+const options = [
+  { value: 'flop', label: 'Flop' },
+  { value: 'check', label: 'Check' },
+]
+
+const useOutsideOver = (ref, callback) => {
+  const handleOver = (e) => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      callback();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mouseover', handleOver);
+
+    return () => {
+      document.removeEventListener('mouseover', handleOver);
+    };
+  });
+}
+
+const usePrevious = (value) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
 const App = () => {
   const canvasRef = useRef(null);
@@ -61,14 +117,19 @@ const App = () => {
   const axisLeftRef = useRef(null);
   const chartWrapperRef = useRef(null);
   const rectTextRef = useRef(null)
+  const selectDivRef = useRef(null)
 
   const [chartScrollX, setChartScrollX] = useState(0)
   const [barX, setBarX] = useState(0)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [rectTextLeft, setRectTextLeft] = useState(0)
+  const [order, setOrder] = useState('asc')
+  const [type, setType] = useState('flop')
+  const [menuIsOpen, setMenuIsOpen] = useState(false)
+  const [data, setData] = useState(DATA.results.data)
 
   const header = "label,value1,value2,value3,value4,value5";
-  const body = data.results.data.map(d => ({
+  const body = data.map(d => ({
     label: d.flop,
     values: [...d.actions].reverse().map((a) => {
       return a.frequency * 100
@@ -178,6 +239,10 @@ const App = () => {
     }
   }, [chartWrapperRef.current])
 
+  useOutsideOver(selectDivRef, () => {
+    setMenuIsOpen(false);
+  });
+
   useEffect(() => {
     if (rectTextRef.current) {
       setRectTextLeft(rectTextRef.current.getBoundingClientRect().x)
@@ -201,7 +266,6 @@ const App = () => {
   // }, [])
 
   const onBarMouseOver = (e) => {
-    console.log(rectTextLeft)
     const x = parseFloat(e.target.getAttribute('x')) + scaleX.bandwidth() / 2 + rectTextLeft - 9;
     const index = parseInt(e.target.getAttribute('data-index'));
     setBarX(x);
@@ -211,29 +275,126 @@ const App = () => {
   const onCanvasClick = (e) => {
     const rect = canvasRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left
-    const index = parseInt((x/rect.width) * data.results.data.length)
+    const index = parseInt((x/rect.width) * data.length)
     setSelectedIndex(index);
     chartWrapperRef.current.scrollLeft = scaleX.bandwidth() * index;
   }
 
-  useEffect(() => {
-    const fn = async () => {
-      const ctx = canvasRef.current.getContext('2d');
-      const serializer = new XMLSerializer();
-      const svgString = serializer.serializeToString(chartRef.current)
-      const v = await Canvg.from(ctx, svgString);
-      v.start();
-      v.stop();
+  const ValueContainer = ({ children, ...props }) => {
+    return (
+      components.ValueContainer && (
+        <components.ValueContainer {...props}>
+          <div onClick={() => onOrderChange()} style={{ display: 'flex' }}>
+            {children}
+            {!!children && (
+              order === 'asc'
+                ? <ArrowWrapper><ArrowSVG /></ArrowWrapper>
+                : <ArrowWrapper><ArrowSVG style={{ transform: 'rotate(180deg)' }} /></ArrowWrapper>
+            )}
+          </div>
+        </components.ValueContainer>
+      )
+    );
+  };
+
+  const onOrderChange = () => {
+    setOrder(order === 'asc' ? 'desc' : 'asc');
+    setMenuIsOpen(true);
+  }
+
+  const onSelectClick = (e) => {
+    if (selectDivRef.current && !selectDivRef.current.contains(e.target)) { 
+      setOrder(order === 'asc' ? 'desc' : 'asc');
     }
+  }
+
+  const syncCanvas = async () => {
+    const ctx = canvasRef.current.getContext('2d');
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(chartRef.current)
+    const v = await Canvg.from(ctx, svgString);
+    v.start();
+    v.stop();
+  }
+
+  useEffect(() => {
+    let newData = [...data]
+    if (type === 'flop') {
+      newData = [...newData].sort((a, b) => {
+        const flopA = a.flop;
+        const flopB = b.flop;
+        let isLeftBigger = true;
+        if (getValue(flopA[0]) > getValue(flopB[0])) {
+          isLeftBigger = true
+        } else if (getValue(flopA[0]) < getValue(flopB[0])) {
+          isLeftBigger = false
+        } else {
+          if (getValue(flopA[2]) > getValue(flopB[2])) {
+            isLeftBigger = true;
+          } else if (getValue(flopA[2]) < getValue(flopB[2])) {
+            isLeftBigger = false;
+          } else {
+            if (getValue(flopA[4]) > getValue(flopB[4])) {
+              isLeftBigger = true;
+            } else if (getValue(flopA[4]) < getValue(flopB[4])) {
+              isLeftBigger = false
+            }
+          }
+        }
+        if (order === 'asc') {
+          return isLeftBigger ? 1 : -1
+        } else {
+          return isLeftBigger ? -1 : 1
+        }
+      })
+    } else if (type === 'check') {
+      newData = [...newData].sort((a, b) => {
+        return order === 'desc'
+          ? b.actions[0].frequency - a.actions[0].frequency
+          : a.actions[0].frequency - b.actions[0].frequency
+      })
+    }
+    setData(newData)
+  }, [type, order])
+
+  useEffect(() => {
+    syncCanvas()
+  }, [data])
+
+  useEffect(() => {
     if (chartRef.current && canvasRef.current) {
-      fn()
+      syncCanvas()
     }
   }, [chartRef.current, canvasRef.current])
 
-  const content = data.results.data[selectedIndex]
+  const content = data[selectedIndex]
 
   return (
     <>
+      <SelectWrapper 
+        ref={selectDivRef}
+        onClick={onSelectClick}
+        onMouseEnter={() => setMenuIsOpen(true)}
+      >
+        <Select
+          defaultValue={options[0]}
+          options={options}
+          components={{ ValueContainer }}
+          menuIsOpen={menuIsOpen}
+          onChange={(e) => {
+            if (e.value === type) {
+              onOrderChange();
+            }
+            setType(e.value);
+          }}
+          styles={{
+            menu: base => ({
+              ...base,
+              marginTop: 0
+            })
+          }}
+        />
+      </SelectWrapper>
       <ChartWrapper
         ref={chartWrapperRef}
       >
