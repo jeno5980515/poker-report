@@ -1,10 +1,38 @@
 import * as d3 from "d3";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Canvg } from 'canvg';
 import styled from 'styled-components';
 
+import Content from './Content';
 import './App.css';
 
 import data from './BtnVSBB.json'
+
+const ChartWrapper = styled.div`
+  width: 94%;
+  padding: 3%;
+  overflow-x: scroll;
+`
+
+const CanvasWrapper = styled.div`
+  width: 100%;
+  > canvas {
+    width: 100% !important;
+    height: 35px !important;
+  }
+`
+
+const Tooltip = styled.div`
+  position: absolute;
+  width: 18.5px;
+  height: 390px;
+  background: white;
+  opacity: 0.2;
+  border-radius: 5px;
+  left: ${({ left }) => `${left}px`};
+  top: 40px;
+  pointer-events: none;
+`
 
 
 function sum(values) {
@@ -24,9 +52,20 @@ const getColor = (text) => {
   }
 }
 
+
+
 const App = () => {
+  const canvasRef = useRef(null);
+  const chartRef = useRef(null);
   const axisBottomRef = useRef(null);
   const axisLeftRef = useRef(null);
+  const chartWrapperRef = useRef(null);
+  const rectTextRef = useRef(null)
+
+  const [chartScrollX, setChartScrollX] = useState(0)
+  const [barX, setBarX] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [rectTextLeft, setRectTextLeft] = useState(0)
 
   const header = "label,value1,value2,value3,value4,value5";
   const body = data.results.data.map(d => ({
@@ -43,9 +82,9 @@ const App = () => {
   const csv = d3.csvParse([header, body].join("\n"));
 
   const margin = { top: 10, right: 0, bottom: 20, left: 30 };
-  const width = 40365 - margin.left - margin.right;
+  const width = 32500 - margin.left - margin.right;
   const height = 350 - margin.top - margin.bottom;
-  const axisHeight = 300;
+  const axisHeight = 35;
 
   const subgroups = header.split(",");
   const labels = csv.map((data) => data.label || "");
@@ -123,47 +162,132 @@ const App = () => {
     }
   }, [scaleX, scaleY]);
 
+  useEffect(() => {
+    const setX = () => {
+      if (chartWrapperRef.current) {
+        setChartScrollX(chartWrapperRef.current.scrollLeft);
+      }
+    }
+    if (chartWrapperRef.current) {
+      chartWrapperRef.current.addEventListener('scroll', setX)
+    }
+    return () => {
+      if (chartWrapperRef.current) {
+        chartWrapperRef.current.removeEventListener('scroll', setX)
+      }
+    }
+  }, [chartWrapperRef.current])
+
+  useEffect(() => {
+    if (rectTextRef.current) {
+      setRectTextLeft(rectTextRef.current.getBoundingClientRect().x)
+    }
+  }, [rectTextRef.current])
+
+  // useEffect(() => {
+  //   d3.selectAll('rect')
+  //     .on("mouseover", function(d) {
+  //       const xPosition = parseFloat(d3.select(this).attr("x")) + scaleX.bandwidth() / 2 + 52 + chartScrollX;
+  //       const yPosition = 40
+  //       // console.log(chartScrollX)
+  //       // d3.select("#chart-tooltip")
+  //       //   .style("left", xPosition + "px")
+  //       //   .style("top", yPosition + "px")
+  //       //   .style('display', 'block')
+  //     })
+  //     .on("mouseout", function() {
+  //       // d3.select("#tooltip").classed("hidden", true);
+  //     })
+  // }, [])
+
+  const onBarMouseOver = (e) => {
+    console.log(rectTextLeft)
+    const x = parseFloat(e.target.getAttribute('x')) + scaleX.bandwidth() / 2 + rectTextLeft - 9;
+    const index = parseInt(e.target.getAttribute('data-index'));
+    setBarX(x);
+    setSelectedIndex(index);
+  }
+
+  const onCanvasClick = (e) => {
+    const rect = canvasRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const index = parseInt((x/rect.width) * data.results.data.length)
+    setSelectedIndex(index);
+    chartWrapperRef.current.scrollLeft = scaleX.bandwidth() * index;
+  }
+
+  useEffect(() => {
+    const fn = async () => {
+      const ctx = canvasRef.current.getContext('2d');
+      const serializer = new XMLSerializer();
+      const svgString = serializer.serializeToString(chartRef.current)
+      const v = await Canvg.from(ctx, svgString);
+      v.start();
+      v.stop();
+    }
+    if (chartRef.current && canvasRef.current) {
+      fn()
+    }
+  }, [chartRef.current, canvasRef.current])
+
+  const content = data.results.data[selectedIndex]
+
   return (
-    <svg
-      width={width + margin.left + margin.right}
-      height={height + margin.top + margin.bottom + axisHeight}
-    >
-      <g transform={`translate(${margin.left}, ${margin.top})`}>
-        <rect
-          height={axisHeight}
-          width={width}
-          x={0}
-          y={height}
-          opacity={0}
-        />
-        <g ref={axisBottomRef} transform={`translate(0, ${height})`} />
-        {stacked.map((data, index) => {
+    <>
+      <ChartWrapper
+        ref={chartWrapperRef}
+      >
+        <Tooltip left={barX - chartScrollX}></Tooltip>
+        <svg
+          width={width + margin.left + margin.right}
+          height={height + margin.top + margin.bottom + axisHeight}
+          ref={chartRef}
+        >
+          <g transform={`translate(${margin.left}, ${margin.top})`}>
+            <rect
+              ref={rectTextRef}
+              height={axisHeight}
+              width={width}
+              x={0}
+              y={height}
+              opacity={0}
+            />
+            <g ref={axisBottomRef} transform={`translate(0, ${height})`} />
+            {stacked.map((data, index) => {
 
-          return (
-            <g key={`group-${index}`} fill={color(data.key)}>
-              {data.map((d, index) => {
-                const label = String(d.data.label);
-                const y0 = scaleY(d[0]);
-                const y1 = scaleY(d[1]);
+              return (
+                <g key={`group-${index}`} fill={color(data.key)}>
+                  {data.map((d, index) => {
+                    const label = String(d.data.label);
+                    const y0 = scaleY(d[0]);
+                    const y1 = scaleY(d[1]);
 
-                return (
-                  <rect
-                    key={`rect-${index}`}
-                    x={scaleX(label)}
-                    y={y1}
-                    width={scaleX.bandwidth()}
-                    height={y0 - y1 || 0}
-                    stroke='black'
-                    strokeWidth='0.7'
-                  />
-                );
-              })}
-            </g>
-          );
-        })}
-        <g ref={axisLeftRef} />
-      </g>
-    </svg>
+                    return (
+                      <rect
+                        onMouseOver={onBarMouseOver}
+                        key={`rect-${index}`}
+                        x={scaleX(label)}
+                        y={y1}
+                        data-index={index}
+                        width={scaleX.bandwidth()}
+                        height={y0 - y1 || 0}
+                        stroke='black'
+                        strokeWidth='0.7'
+                      />
+                    );
+                  })}
+                </g>
+              );
+            })}
+            <g ref={axisLeftRef} />
+          </g>
+        </svg>
+      </ChartWrapper>
+      <CanvasWrapper>
+        <canvas ref={canvasRef} onClick={onCanvasClick}/>
+      </CanvasWrapper>
+      <Content data={content}/>
+    </>
   );
 }
 
