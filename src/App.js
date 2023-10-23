@@ -56,6 +56,19 @@ function sum(values) {
   return values.reduce((prev, value) => prev + value, 0);
 }
 
+const getColors = (number) => {
+  switch (number) {
+    case 7:
+      return ["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50)", "rgb(221, 55, 55)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]
+    case 6:
+      return ["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"];
+    case 3:
+      return ["#FFFFFF", "rgb(125, 31, 31)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]
+    default:
+      return []
+  }
+}
+
 const getColor = (text) => {
   switch (text) {
     case 'h':
@@ -106,12 +119,42 @@ const solutionOptions = [
     ]
   },
   { value: 'check', label: 'SRP - IPD' },
-  { value: 'check', label: 'SRP - OPA' },
+  {
+    label: 'SRP - OPA',
+    options: [
+      { value: 'SRP.OPA.COVSBTN', label: 'CO vs BTN' },
+      { value: 'SRP.OPA.HJVSBTN', label: 'HJ vs BTN' },
+      { value: 'SRP.OPA.LJVSBTN', label: 'LJ vs BTN' },
+      { value: 'SRP.OPA.SBVSBB', label: 'SB vs BB' },
+    ]
+  },
   { value: 'check', label: 'SRP - OPD' },
-  { value: 'flop', label: '3Bet - IPA' },
+  {
+    label: '3Bet - IPA',
+    options: [
+      { value: '3Bet.IPA.BTN3BCO', label: 'BTN 3B CO' },
+      { value: '3Bet.IPA.BTN3BHJ', label: 'BTN 3B HJ' },
+      { value: '3Bet.IPA.BTN3BLJ', label: 'BTN 3B LJ' },
+      { value: '3Bet.IPA.CO3BHJ', label: 'CO 3B HJ' },
+      { value: '3Bet.IPA.CO3BLJ', label: 'CO 3B LJ' },
+      { value: '3Bet.IPA.HJ3BLJ', label: 'HJ 3B LJ' },
+      { value: '3Bet.IPA.BB3BSB', label: 'BB 3B SB' },
+    ]
+  },
   { value: 'check', label: '3Bet - IPD' },
   { value: 'check', label: '3Bet - OPA' },
-  { value: 'check', label: '3Bet - OPD' },
+  {
+    label: '3Bet - OPD',
+    options: [
+      { value: '3Bet.OPD.LJCallHJ3B', label: 'LJ Call HJ 3B' },
+      { value: '3Bet.OPD.LJCallCO3B', label: 'LJ Call CO 3B' },
+      { value: '3Bet.OPD.LJCallBTN3B', label: 'LJ Call BTN 3B' },
+      { value: '3Bet.OPD.HJCallCO3B', label: 'HJ Call CO 3B' },
+      { value: '3Bet.OPD.HJCallBTN3B', label: 'HJ Call BTN 3B' },
+      { value: '3Bet.OPD.COCallBTN3B', label: 'CO Call BTN 3B' },
+      { value: '3Bet.OPD.SBCallBB3B', label: 'SB Call BB 3B' },
+    ]
+  },
   { value: 'flop', label: '4Bet - IPA' },
   { value: 'check', label: '4Bet - IPD' },
   { value: 'check', label: '4Bet - OPA' },
@@ -167,7 +210,7 @@ const App = () => {
   const prevSolution = usePrevious(solution)
 
 
-  const header = "label,value1,value2,value3,value4,value5,value6";
+  const header = "label,value1,value2,value3,value4,value5,value6,value7,value8,value9";
   const body = data.map(d => ({
     label: d.flop,
     values: [...d.actions].reverse().map((a) => {
@@ -190,7 +233,7 @@ const App = () => {
   const labels = csv.map((data) => data.label || "");
   const max = Math.max(
     ...csv.map((data) =>
-      sum([data.value1, data.value2, data.value3, data.value4, data.value5, data.value6].map(Number))
+      sum([data.value1, data.value2, data.value3, data.value4, data.value5, data.value6, data.value7].map(Number))
     )
   );
 
@@ -202,7 +245,7 @@ const App = () => {
   const color = d3
     .scaleOrdinal()
     .domain(subgroups)
-    .range(["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]);
+    .range(getColors(data[0].actions.length));
   const stacked = d3.stack().keys(subgroups)(csv);
 
   useEffect(() => {

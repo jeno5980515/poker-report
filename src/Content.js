@@ -2,6 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Flop from './Flop';
 
+const getColors = (number) => {
+  switch (number) {
+    case 7:
+      return ["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50)", "rgb(221, 55, 55)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]
+    case 6:
+      return ["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"];
+    case 3:
+      return ["#FFFFFF", "rgb(125, 31, 31)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]
+    default:
+      return []
+  }
+}
+
+
 const Wrapper = styled.div`
 	width: 100%;
 	height: 230px;
@@ -34,22 +48,19 @@ const TextWrapper = styled.div`
 	justify-content: space-between;
 	margin-top: 30px;
 	padding: 2%;
-	font-size: 25px;
+	font-size: 20px;
 `
 
 const Content = ({ data }) => {
 	const { actions, flop } = data;
 	const reverseActions = [...actions].reverse();
-	console.log(reverseActions)
+
   return (
 		<Wrapper>
 			<Flop data={flop}/>
-			<ColorBlock color="rgb(106, 26, 26)" width={reverseActions[0].frequency * 100} />
-			<ColorBlock color="rgb(125, 31, 31)" width={reverseActions[1].frequency * 100} />
-			<ColorBlock color="rgb(163, 41, 41)" width={reverseActions[2].frequency * 100} />
-			<ColorBlock color="rgb(202, 50, 50)" width={reverseActions[3].frequency * 100}/>
-			<ColorBlock color="rgb(240, 60, 60)" width={reverseActions[4].frequency * 100}/>
-			<ColorBlock color="rgb(90, 185, 102)" width={reverseActions[5].frequency * 100}/>
+			{
+				reverseActions.map((a, index) => <ColorBlock color={getColors(reverseActions.length)[index+1]} width={reverseActions[index].frequency * 100} />)
+			}
 			<TextWrapper>
 				<Left>
 					{
