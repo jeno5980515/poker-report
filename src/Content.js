@@ -40,14 +40,16 @@ const TextWrapper = styled.div`
 const Content = ({ data }) => {
 	const { actions, flop } = data;
 	const reverseActions = [...actions].reverse();
+	console.log(reverseActions)
   return (
 		<Wrapper>
 			<Flop data={flop}/>
-			<ColorBlock color="#000000" width={reverseActions[0].frequency * 100} />
-			<ColorBlock color="#7D1F1F" width={reverseActions[1].frequency * 100} />
-			<ColorBlock color="#CA3232" width={reverseActions[2].frequency * 100} />
-			<ColorBlock color="#F03C3C" width={reverseActions[3].frequency * 100} />
-			<ColorBlock color="#5AB966" width={reverseActions[4].frequency * 100}/>
+			<ColorBlock color="rgb(106, 26, 26)" width={reverseActions[0].frequency * 100} />
+			<ColorBlock color="rgb(125, 31, 31)" width={reverseActions[1].frequency * 100} />
+			<ColorBlock color="rgb(163, 41, 41)" width={reverseActions[2].frequency * 100} />
+			<ColorBlock color="rgb(202, 50, 50)" width={reverseActions[3].frequency * 100}/>
+			<ColorBlock color="rgb(240, 60, 60)" width={reverseActions[4].frequency * 100}/>
+			<ColorBlock color="rgb(90, 185, 102)" width={reverseActions[5].frequency * 100}/>
 			<TextWrapper>
 				<Left>
 					{

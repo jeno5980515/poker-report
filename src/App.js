@@ -8,7 +8,7 @@ import { ReactComponent as ArrowSVG } from './arrow.svg';
 import Content from './Content';
 import './App.css';
 
-import DATA from './BtnVSBB.json'
+import DATA from './reports'
 
 const ChartWrapper = styled.div`
   width: 94%;
@@ -46,6 +46,11 @@ const ArrowWrapper = styled.div`
   right: 5px;
 `
 
+const Control = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
 
 function sum(values) {
   return values.reduce((prev, value) => prev + value, 0);
@@ -81,9 +86,36 @@ const getValue = (text) => {
   }
 }
 
-const options = [
+const orderOptions = [
   { value: 'flop', label: 'Flop' },
   { value: 'check', label: 'Check' },
+]
+
+const solutionOptions = [
+  {
+    label: 'SRP - IPA',
+    options: [
+      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
+      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
+      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
+      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
+      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
+      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
+      { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB' },
+      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' }
+    ]
+  },
+  { value: 'check', label: 'SRP - IPD' },
+  { value: 'check', label: 'SRP - OPA' },
+  { value: 'check', label: 'SRP - OPD' },
+  { value: 'flop', label: '3Bet - IPA' },
+  { value: 'check', label: '3Bet - IPD' },
+  { value: 'check', label: '3Bet - OPA' },
+  { value: 'check', label: '3Bet - OPD' },
+  { value: 'flop', label: '4Bet - IPA' },
+  { value: 'check', label: '4Bet - IPD' },
+  { value: 'check', label: '4Bet - OPA' },
+  { value: 'check', label: '4Bet - OPD' },
 ]
 
 const useOutsideOver = (ref, callback) => {
@@ -110,6 +142,8 @@ const usePrevious = (value) => {
   return ref.current;
 }
 
+const DEFAULT_DATA = DATA.SRP.IPA.BTNVSBB
+
 const App = () => {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
@@ -117,7 +151,8 @@ const App = () => {
   const axisLeftRef = useRef(null);
   const chartWrapperRef = useRef(null);
   const rectTextRef = useRef(null)
-  const selectDivRef = useRef(null)
+  const orderSelectDivRef = useRef(null)
+  const solutionSelectDivRef = useRef(null)
 
   const [chartScrollX, setChartScrollX] = useState(0)
   const [barX, setBarX] = useState(0)
@@ -125,10 +160,14 @@ const App = () => {
   const [rectTextLeft, setRectTextLeft] = useState(0)
   const [order, setOrder] = useState('asc')
   const [type, setType] = useState('flop')
-  const [menuIsOpen, setMenuIsOpen] = useState(false)
-  const [data, setData] = useState(DATA.results.data)
+  const [solution, setSolution] = useState('SRP.IPA.BTNVSBB')
+  const [orderMenuIsOpen, setOrderMenuIsOpen] = useState(false)
+  const [solutionMenuIsOpen, setSolutionMenuIsOpen] = useState(false)
+  const [data, setData] = useState(DEFAULT_DATA.results.data)
+  const prevSolution = usePrevious(solution)
 
-  const header = "label,value1,value2,value3,value4,value5";
+
+  const header = "label,value1,value2,value3,value4,value5,value6";
   const body = data.map(d => ({
     label: d.flop,
     values: [...d.actions].reverse().map((a) => {
@@ -151,7 +190,7 @@ const App = () => {
   const labels = csv.map((data) => data.label || "");
   const max = Math.max(
     ...csv.map((data) =>
-      sum([data.value1, data.value2, data.value3, data.value4, data.value5].map(Number))
+      sum([data.value1, data.value2, data.value3, data.value4, data.value5, data.value6].map(Number))
     )
   );
 
@@ -163,7 +202,7 @@ const App = () => {
   const color = d3
     .scaleOrdinal()
     .domain(subgroups)
-    .range(["#000000", "#000000", "#7D1F1F", "#CA3232", "#F03C3C", "#5AB966"]);
+    .range(["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]);
   const stacked = d3.stack().keys(subgroups)(csv);
 
   useEffect(() => {
@@ -239,8 +278,12 @@ const App = () => {
     }
   }, [chartWrapperRef.current])
 
-  useOutsideOver(selectDivRef, () => {
-    setMenuIsOpen(false);
+  useOutsideOver(orderSelectDivRef, () => {
+    setOrderMenuIsOpen(false);
+  });
+
+  useOutsideOver(solutionSelectDivRef, () => {
+    setSolutionMenuIsOpen(false);
   });
 
   useEffect(() => {
@@ -248,22 +291,6 @@ const App = () => {
       setRectTextLeft(rectTextRef.current.getBoundingClientRect().x)
     }
   }, [rectTextRef.current])
-
-  // useEffect(() => {
-  //   d3.selectAll('rect')
-  //     .on("mouseover", function(d) {
-  //       const xPosition = parseFloat(d3.select(this).attr("x")) + scaleX.bandwidth() / 2 + 52 + chartScrollX;
-  //       const yPosition = 40
-  //       // console.log(chartScrollX)
-  //       // d3.select("#chart-tooltip")
-  //       //   .style("left", xPosition + "px")
-  //       //   .style("top", yPosition + "px")
-  //       //   .style('display', 'block')
-  //     })
-  //     .on("mouseout", function() {
-  //       // d3.select("#tooltip").classed("hidden", true);
-  //     })
-  // }, [])
 
   const onBarMouseOver = (e) => {
     const x = parseFloat(e.target.getAttribute('x')) + scaleX.bandwidth() / 2 + rectTextLeft - 9;
@@ -280,7 +307,7 @@ const App = () => {
     chartWrapperRef.current.scrollLeft = scaleX.bandwidth() * index;
   }
 
-  const ValueContainer = ({ children, ...props }) => {
+  const OrderValueContainer = ({ children, ...props }) => {
     return (
       components.ValueContainer && (
         <components.ValueContainer {...props}>
@@ -299,14 +326,18 @@ const App = () => {
 
   const onOrderChange = () => {
     setOrder(order === 'asc' ? 'desc' : 'asc');
-    setMenuIsOpen(true);
+    setOrderMenuIsOpen(true);
   }
 
-  const onSelectClick = (e) => {
-    if (selectDivRef.current && !selectDivRef.current.contains(e.target)) { 
+  const onOrderSelectClick = (e) => {
+    if (orderSelectDivRef.current && !orderSelectDivRef.current.contains(e.target)) { 
       setOrder(order === 'asc' ? 'desc' : 'asc');
     }
   }
+
+  const onSolutionSelectClick = (e) => {
+  }
+
 
   const syncCanvas = async () => {
     const ctx = canvasRef.current.getContext('2d');
@@ -319,6 +350,10 @@ const App = () => {
 
   useEffect(() => {
     let newData = [...data]
+    if (prevSolution !== solution) {
+      const solutionPath = solution.split('.')
+      newData = [...DATA[solutionPath[0]][solutionPath[1]][solutionPath[2]].results.data];
+    }
     if (type === 'flop') {
       newData = [...newData].sort((a, b) => {
         const flopA = a.flop;
@@ -355,7 +390,7 @@ const App = () => {
       })
     }
     setData(newData)
-  }, [type, order])
+  }, [type, order, solution])
 
   useEffect(() => {
     syncCanvas()
@@ -367,34 +402,57 @@ const App = () => {
     }
   }, [chartRef.current, canvasRef.current])
 
+
   const content = data[selectedIndex]
 
   return (
     <>
-      <SelectWrapper 
-        ref={selectDivRef}
-        onClick={onSelectClick}
-        onMouseEnter={() => setMenuIsOpen(true)}
-      >
-        <Select
-          defaultValue={options[0]}
-          options={options}
-          components={{ ValueContainer }}
-          menuIsOpen={menuIsOpen}
-          onChange={(e) => {
-            if (e.value === type) {
-              onOrderChange();
-            }
-            setType(e.value);
-          }}
-          styles={{
-            menu: base => ({
-              ...base,
-              marginTop: 0
-            })
-          }}
-        />
-      </SelectWrapper>
+      <Control>
+        <SelectWrapper 
+          ref={orderSelectDivRef}
+          onClick={onOrderSelectClick}
+          onMouseEnter={() => setOrderMenuIsOpen(true)}
+        >
+          <Select
+            defaultValue={orderOptions[0]}
+            options={orderOptions}
+            components={{ ValueContainer: OrderValueContainer }}
+            menuIsOpen={orderMenuIsOpen}
+            onChange={(e) => {
+              if (e.value === type) {
+                onOrderChange();
+              }
+              setType(e.value);
+            }}
+            styles={{
+              menu: base => ({
+                ...base,
+                marginTop: 0
+              })
+            }}
+          />
+        </SelectWrapper>
+        <SelectWrapper 
+          ref={solutionSelectDivRef}
+          onClick={onSolutionSelectClick}
+          onMouseEnter={() => setSolutionMenuIsOpen(true)}
+        >
+          <Select
+            defaultValue={solutionOptions[0]}
+            options={solutionOptions}
+            menuIsOpen={solutionMenuIsOpen}
+            onChange={(e) => {
+              setSolution(e.value);
+            }}
+            styles={{
+              menu: base => ({
+                ...base,
+                marginTop: 0
+              })
+            }}
+          />
+        </SelectWrapper>
+      </Control>
       <ChartWrapper
         ref={chartWrapperRef}
       >
