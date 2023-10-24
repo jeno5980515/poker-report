@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as HeartSVG } from './heart.svg';
-import { ReactComponent as DiamondSVG } from './diamond.svg';
-import { ReactComponent as ClubSVG } from './club.svg';
+import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
+import { ReactComponent as DiamondSVG } from '../../assets/diamond.svg';
+import { ReactComponent as ClubSVG } from '../../assets/club.svg';
 
 const Wrapper = styled.div`
 	width: 125px;
