@@ -14,24 +14,34 @@ const BoardWrapper = styled.div`
 `
 
 const Board = styled.div`
-	max-width: 600px;
-	height: 600px;
 	display: flex;
   flex-wrap: wrap;
+	width: 100%;
+	padding: 5%;
 `
 
-const HandDiv = styled.div`
+const HandDivWrapper = styled.div`
 	flex-basis: 7%;
 	background: rgb(30, 30, 30);
 	color: rgb(245, 245, 245);
 	width: 10%;
+  aspect-ratio: 1/1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	border: black 1px solid;
 	font-size: 0.7em;
-	background: ${({ color }) => color};
 	user-select: none;
+`
+
+const ColorBlock = styled.div`
+	width: ${({ width }) => width}%;
+	background: ${({ color }) => color};
+	height: 100%;
+`
+
+const TextBlock = styled.div`
+	position: absolute;
 `
 
 
@@ -51,43 +61,103 @@ const RANGE = [
 	['A2o', 'K2o', 'Q2o', 'J2o', 'T2o', '92o', '82o', '72o', '62o', '52o', '42o', '32o', '22'],
 ]
 
-const value_map = {
-	'-1': "rgb(30, 30, 30)",
-	"0": "rgb(90, 185, 102)",
-	"1": "rgb(240, 60, 60)"
+const ACTIVE_VALUE = 83;
+
+const HandDiv = ({
+	value,
+	hand,
+	onMouseEnter,
+	onMouseDown,
+	onMouseUp,
+	indexX,
+	indexY
+}) => {
+	return <HandDivWrapper
+		onMouseEnter={onMouseEnter}
+		onMouseDown={onMouseDown}
+		onMouseUp={onMouseUp}
+		data-x={indexX}
+		data-y={indexY}
+	>
+		{
+			value === -1 ? null : (
+				<>
+					<ColorBlock color={'rgb(240, 60, 60)'} width={value}></ColorBlock>
+					<ColorBlock color={'rgb(90, 185, 102)'} width={100-value}></ColorBlock>
+				</>
+			)
+		}
+		<TextBlock>{hand}</TextBlock>
+	</HandDivWrapper>
 }
 
 const RangePage = () => {
 	const handData = DATA.players_info[1].simple_hand_counters;
-		// -1 no, 0 check, 1 bet
 	const rangeData = RANGE.map(row => {
 		return row.map(v => ({ key: v, value : handData[v].total_frequency > 0 ? 0 : -1 }))
 	})
 	const [data, setData] = useState(rangeData)
+	const [mouseMode, setMouseMode] = useState('none')
 
-	const onHandClick = (e) => {
-		const x = e.target.getAttribute('data-x')
-		const y = e.target.getAttribute('data-y')
-		if (data[x][y].value !== -1) {
+	const onHandEnter = ({ x, y }) => {
+		if (data[x][y].value !== -1 && mouseMode !== 'none') {
 			const newData = [...data];
 			const newRow = [...newData[x]]
 			const newHand = {
 				...newRow[y],
-				value: newRow[y].value === 1 ? 0 : 1
+				value: mouseMode === 'bet' ? ACTIVE_VALUE : 0
 			}
-			console.log(newHand)
 			newRow[y] = newHand;
 			newData[x] = newRow;
 			setData(newData)
 		}
 	}
+
+	const onHandDown = ({ x, y }) => {
+		let newMouseMode = 'none'
+		switch (data[x][y].value) {
+			case 0: {
+				newMouseMode = 'bet';
+				break;
+			}
+			case ACTIVE_VALUE: {
+				newMouseMode = 'check';
+				break;
+			}
+			default: {
+				newMouseMode = 'none';
+			}
+		}
+		setMouseMode(newMouseMode);
+		if (data[x][y].value !== -1 && newMouseMode !== 'none') {
+			const newData = [...data];
+			const newRow = [...newData[x]]
+			const newHand = {
+				...newRow[y],
+				value: newMouseMode === 'bet' ? ACTIVE_VALUE : 0
+			}
+			newRow[y] = newHand;
+			newData[x] = newRow;
+			setData(newData)
+		}
+	}
+
+	const onHandUp = () => {
+		setMouseMode('none')
+	}
+
 	return (
 		<BoardWrapper>
 			<Board>
 				{
 					data.map((row, x) => {
 						return row.map((v, y) => {
-							return <HandDiv onClick={onHandClick} data-x={x} data-y={y} color={value_map[v.value]} >{v.key}</HandDiv>
+							return <HandDiv
+								onMouseEnter={() => onHandEnter({ x, y })}
+								onMouseDown={() => onHandDown({ x, y })}
+								onMouseUp={onHandUp}
+								value={v.value}
+								hand={v.key} />
 						})
 					})
 				}
