@@ -38,7 +38,7 @@ const Tooltip = styled.div`
 `
 
 const SelectWrapper = styled.div`
-  width: 150px;
+  width: 200px;
 `
 
 const ArrowWrapper = styled.div`
@@ -63,6 +63,8 @@ const getColors = (number) => {
       return ["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50)", "rgb(221, 55, 55)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]
     case 6:
       return ["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(163, 41, 41)", "rgb(202, 50, 50)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"];
+    case 5:
+      return ["#FFFFFF", "rgb(106, 26, 26)", "rgb(125, 31, 31)", "rgb(202, 50, 50)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"];
     case 3:
       return ["#FFFFFF", "rgb(125, 31, 31)", "rgb(240, 60, 60)", "rgb(90, 185, 102)"]
     default:
@@ -109,27 +111,43 @@ const solutionOptions = [
   {
     label: 'SRP - IPA',
     options: [
-      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
-      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
-      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
-      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
-      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
-      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
-      { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB' },
-      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' }
+      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB NL500' },
+      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB NL50GG' },
+      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB NL500' },
+      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB NL50GG' },
+      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB NL500' },
+      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB NL50GG' },
+      { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB NL500' },
+      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB NL50GG' }
     ]
   },
-  { value: 'check', label: 'SRP - IPD' },
+  {
+    label: 'SRP - IPD vs X',
+    options: [
+      { value: 'SRP.IPD.BTNCallLJ', label: 'BTN Call LJ NL50GG' },
+      { value: 'SRP.IPD.BTNCallHJ', label: 'BTN Call HJ NL50GG' },
+      { value: 'SRP.IPD.BTNCallCO', label: 'BTN Call CO NL50GG' },
+      { value: 'SRP.IPD.BBCallSB', label: 'BB Call SB NL50GG' },
+    ]
+  },
   {
     label: 'SRP - OPA',
     options: [
-      { value: 'SRP.OPA.COVSBTN', label: 'CO vs BTN' },
-      { value: 'SRP.OPA.HJVSBTN', label: 'HJ vs BTN' },
-      { value: 'SRP.OPA.LJVSBTN', label: 'LJ vs BTN' },
-      { value: 'SRP.OPA.SBVSBB', label: 'SB vs BB' },
+      { value: 'SRP.OPA.COVSBTN', label: 'CO vs BTN NL50GG' },
+      { value: 'SRP.OPA.HJVSBTN', label: 'HJ vs BTN NL50GG' },
+      { value: 'SRP.OPA.LJVSBTN', label: 'LJ vs BTN NL50GG' },
+      { value: 'SRP.OPA.SBVSBB', label: 'SB vs BB NL50GG' },
     ]
   },
-  { value: 'check', label: 'SRP - OPD' },
+  {
+    label: 'SRP - OPD',
+    options: [
+      { value: 'SRP.OPD.BBCallLJ', label: 'BB Call LJ NL50GG' },
+      { value: 'SRP.OPD.BBCallHJ', label: 'BB Call HJ NL50GG' },
+      { value: 'SRP.OPD.BBCallCO', label: 'BB Call CO NL50GG' },
+      { value: 'SRP.OPD.BBCallBTN', label: 'BB Call BTN NL50GG' },
+    ]
+  },
   {
     label: '3Bet - IPA',
     options: [
