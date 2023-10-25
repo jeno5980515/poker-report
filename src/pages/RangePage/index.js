@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Canvg } from 'canvg';
 import styled from 'styled-components';
 import Select, { components } from "react-select";
+import Frequency from './Frequency';
 
 import DATA from './ranges/A42.json'
 
@@ -17,6 +18,7 @@ const Board = styled.div`
 	display: flex;
   flex-wrap: wrap;
 	width: 100%;
+	max-width: 600px;
 	padding: 5%;
 `
 
@@ -44,6 +46,11 @@ const TextBlock = styled.div`
 	position: absolute;
 `
 
+const Page = styled.div`
+	display: flex;
+	flex-direction: column;
+`
+
 
 const RANGE = [
 	['AA', 'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s'],
@@ -62,6 +69,10 @@ const RANGE = [
 ]
 
 const ACTIVE_VALUE = 83;
+
+const FrequencyWrapper = styled.div`
+	display: flex;
+`
 
 const HandDiv = ({
 	value,
@@ -94,10 +105,18 @@ const HandDiv = ({
 const RangePage = () => {
 	const handData = DATA.players_info[1].simple_hand_counters;
 	const rangeData = RANGE.map(row => {
-		return row.map(v => ({ key: v, value : handData[v].total_frequency > 0 ? 0 : -1 }))
+		return row.map(v => ({ key: v, value : handData[v].total_frequency > 0 ? 0 : -1, combo: handData[v].total_combos }))
 	})
 	const [data, setData] = useState(rangeData)
 	const [mouseMode, setMouseMode] = useState('none')
+	const [currentCombos, setCurrentCombos] = useState(0)
+
+	const answerCheckFreq = DATA.solutions[0].total_frequency;
+
+	const totalCombos = Object.values(DATA.players_info[1].simple_hand_counters)
+		.reduce((cal, val) => {
+			return cal + val.total_combos
+		}, 0)
 
 	const onHandEnter = ({ x, y }) => {
 		if (data[x][y].value !== -1 && mouseMode !== 'none') {
@@ -142,27 +161,43 @@ const RangePage = () => {
 		}
 	}
 
+	useEffect(() => {
+		const newCombo = data.reduce((cal, row) => {
+			return cal + row.reduce((c, v) => {
+				const r = v.value === -1 ? 0 : v.value /100 * v.combo
+				return c + r
+			}, 0)
+		}, 0)
+		setCurrentCombos(newCombo);
+	}, [JSON.stringify(data)])
+
 	const onHandUp = () => {
 		setMouseMode('none')
 	}
 
 	return (
-		<BoardWrapper>
-			<Board>
-				{
-					data.map((row, x) => {
-						return row.map((v, y) => {
-							return <HandDiv
-								onMouseEnter={() => onHandEnter({ x, y })}
-								onMouseDown={() => onHandDown({ x, y })}
-								onMouseUp={onHandUp}
-								value={v.value}
-								hand={v.key} />
+		<Page>
+			<BoardWrapper>
+				<Board>
+					{
+						data.map((row, x) => {
+							return row.map((v, y) => {
+								return <HandDiv
+									onMouseEnter={() => onHandEnter({ x, y })}
+									onMouseDown={() => onHandDown({ x, y })}
+									onMouseUp={onHandUp}
+									value={v.value}
+									hand={v.key} />
+							})
 						})
-					})
-				}
-			</Board>
-		</BoardWrapper>
+					}
+				</Board>
+			</BoardWrapper>
+			<FrequencyWrapper>
+				<Frequency freqB={(currentCombos/totalCombos * 100).toFixed(1)} freqX={((1-(currentCombos/totalCombos)) * 100).toFixed(1)}/>
+				<Frequency freqX={(answerCheckFreq * 100).toFixed(1)} freqB={((1-answerCheckFreq) * 100).toFixed(1)}/>
+			</FrequencyWrapper>
+		</Page>
 	)
 }
 
