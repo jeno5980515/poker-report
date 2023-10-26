@@ -38,7 +38,7 @@ const Tooltip = styled.div`
 `
 
 const SelectWrapper = styled.div`
-  width: 200px;
+  width: 250px;
 `
 
 const ArrowWrapper = styled.div`
@@ -107,18 +107,24 @@ const orderOptions = [
   { value: 'check', label: 'Check' },
 ]
 
+const settingOptions = [
+  { value: 'NL50GG', label: 'NL50GG' },
+  { value: 'NL50', label: 'NL50 Simple 2.5 Smaller' },
+  { value: 'NL500', label: 'NL500 Simple 2.5 Smaller' },
+]
+
 const solutionOptions = [
   {
     label: 'SRP - IPA',
     options: [
-      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB NL500' },
-      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB NL50GG' },
-      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB NL500' },
-      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB NL50GG' },
-      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB NL500' },
-      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB NL50GG' },
-      { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB NL500' },
-      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB NL50GG' }
+      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
+      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
+      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
+      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
+      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
+      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
+      { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB' },
+      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' }
     ]
   },
   {
@@ -204,7 +210,7 @@ const usePrevious = (value) => {
   return ref.current;
 }
 
-const DEFAULT_DATA = DATA.SRP.IPA.BTNVSBB
+const DEFAULT_DATA = DATA.NL50GG.SRP.IPA.BTNVSBB
 
 const ReportPage = () => {
   const canvasRef = useRef(null);
@@ -215,6 +221,7 @@ const ReportPage = () => {
   const rectTextRef = useRef(null)
   const orderSelectDivRef = useRef(null)
   const solutionSelectDivRef = useRef(null)
+  const settingSelectDivRef = useRef(null)
 
   const [chartScrollX, setChartScrollX] = useState(0)
   const [barX, setBarX] = useState(0)
@@ -223,10 +230,13 @@ const ReportPage = () => {
   const [order, setOrder] = useState('asc')
   const [type, setType] = useState('flop')
   const [solution, setSolution] = useState('SRP.IPA.BTNVSBB')
+  const [setting, setSetting] = useState('NL50GG')
   const [orderMenuIsOpen, setOrderMenuIsOpen] = useState(false)
   const [solutionMenuIsOpen, setSolutionMenuIsOpen] = useState(false)
+  const [settingMenuIsOpen, setSettingMenuIsOpen] = useState(false)
   const [data, setData] = useState(DEFAULT_DATA.results.data)
   const prevSolution = usePrevious(solution)
+  const prevSetting = usePrevious(setting)
 
 
   const header = "label,value1,value2,value3,value4,value5,value6,value7,value8,value9";
@@ -348,6 +358,10 @@ const ReportPage = () => {
     setSolutionMenuIsOpen(false);
   });
 
+  useOutsideOver(settingSelectDivRef, () => {
+    setSettingMenuIsOpen(false);
+  });
+
   useEffect(() => {
     if (rectTextRef.current) {
       setRectTextLeft(rectTextRef.current.getBoundingClientRect().x)
@@ -400,6 +414,9 @@ const ReportPage = () => {
   const onSolutionSelectClick = (e) => {
   }
 
+  const onSettingSelectClick = (e) => {
+
+  }
 
   const syncCanvas = async () => {
     const ctx = canvasRef.current.getContext('2d');
@@ -412,9 +429,9 @@ const ReportPage = () => {
 
   useEffect(() => {
     let newData = [...data]
-    if (prevSolution !== solution) {
+    if (prevSolution !== solution || prevSetting !== setting) {
       const solutionPath = solution.split('.')
-      newData = [...DATA[solutionPath[0]][solutionPath[1]][solutionPath[2]].results.data];
+      newData = [...DATA[setting][solutionPath[0]][solutionPath[1]][solutionPath[2]].results.data];
     }
     if (type === 'flop') {
       newData = [...newData].sort((a, b) => {
@@ -452,7 +469,7 @@ const ReportPage = () => {
       })
     }
     setData(newData)
-  }, [type, order, solution])
+  }, [type, order, solution, setting])
 
   useEffect(() => {
     syncCanvas()
@@ -485,6 +502,26 @@ const ReportPage = () => {
                 onOrderChange();
               }
               setType(e.value);
+            }}
+            styles={{
+              menu: base => ({
+                ...base,
+                marginTop: 0
+              })
+            }}
+          />
+        </SelectWrapper>
+        <SelectWrapper 
+          ref={settingSelectDivRef}
+          onClick={onSettingSelectClick}
+          onMouseEnter={() => setSettingMenuIsOpen(true)}
+        >
+          <Select
+            defaultValue={settingOptions[0]}
+            options={settingOptions}
+            menuIsOpen={settingMenuIsOpen}
+            onChange={(e) => {
+              setSetting(e.value);
             }}
             styles={{
               menu: base => ({
