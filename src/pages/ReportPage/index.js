@@ -113,45 +113,31 @@ const settingOptions = [
   { value: 'NL500', label: 'NL500 Simple 2.5 Smaller' },
 ]
 
-const solutionOptions = [
+const SOLUTION_OPTIONS = [
   {
     label: 'SRP - IPA',
     options: [
       { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
-      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
       { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
-      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
       { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
-      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
       { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB' },
-      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' }
     ]
   },
   {
     label: 'SRP - IPD vs X',
     options: [
-      { value: 'SRP.IPD.BTNCallLJ', label: 'BTN Call LJ NL50GG' },
-      { value: 'SRP.IPD.BTNCallHJ', label: 'BTN Call HJ NL50GG' },
-      { value: 'SRP.IPD.BTNCallCO', label: 'BTN Call CO NL50GG' },
-      { value: 'SRP.IPD.BBCallSB', label: 'BB Call SB NL50GG' },
+      { value: 'SRP.IPD.BBCallSB', label: 'BB Call SB' },
     ]
   },
   {
     label: 'SRP - OPA',
     options: [
-      { value: 'SRP.OPA.COVSBTN', label: 'CO vs BTN NL50GG' },
-      { value: 'SRP.OPA.HJVSBTN', label: 'HJ vs BTN NL50GG' },
-      { value: 'SRP.OPA.LJVSBTN', label: 'LJ vs BTN NL50GG' },
-      { value: 'SRP.OPA.SBVSBB', label: 'SB vs BB NL50GG' },
+      { value: 'SRP.OPA.SBVSBB', label: 'SB vs BB' },
     ]
   },
   {
     label: 'SRP - OPD',
     options: [
-      { value: 'SRP.OPD.BBCallLJ', label: 'BB Call LJ NL50GG' },
-      { value: 'SRP.OPD.BBCallHJ', label: 'BB Call HJ NL50GG' },
-      { value: 'SRP.OPD.BBCallCO', label: 'BB Call CO NL50GG' },
-      { value: 'SRP.OPD.BBCallBTN', label: 'BB Call BTN NL50GG' },
     ]
   },
   {
@@ -185,6 +171,80 @@ const solutionOptions = [
   { value: 'check', label: '4Bet - OPA' },
   { value: 'check', label: '4Bet - OPD' },
 ]
+
+const SOLUTION_NL50GG_OPTIONS = [
+  {
+    label: 'SRP - IPA',
+    options: [
+      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
+      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
+      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
+      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
+      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
+      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
+      { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB' },
+      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' }
+    ]
+  },
+  {
+    label: 'SRP - IPD vs X',
+    options: [
+      { value: 'SRP.IPD.BTNCallLJ', label: 'BTN Call LJ' },
+      { value: 'SRP.IPD.BTNCallHJ', label: 'BTN Call HJ' },
+      { value: 'SRP.IPD.BTNCallCO', label: 'BTN Call CO' },
+      { value: 'SRP.IPD.BBCallSB', label: 'BB Call SB' },
+    ]
+  },
+  {
+    label: 'SRP - OPA',
+    options: [
+      { value: 'SRP.OPA.COVSBTN', label: 'CO vs BTN' },
+      { value: 'SRP.OPA.HJVSBTN', label: 'HJ vs BTN' },
+      { value: 'SRP.OPA.LJVSBTN', label: 'LJ vs BTN' },
+      { value: 'SRP.OPA.SBVSBB', label: 'SB vs BB ' },
+    ]
+  },
+  {
+    label: 'SRP - OPD',
+    options: [
+      { value: 'SRP.OPD.BBCallLJ', label: 'BB Call LJ' },
+      { value: 'SRP.OPD.BBCallHJ', label: 'BB Call HJ' },
+      { value: 'SRP.OPD.BBCallCO', label: 'BB Call CO' },
+      { value: 'SRP.OPD.BBCallBTN', label: 'BB Call BTN' },
+    ]
+  },
+  {
+    label: '3Bet - IPA',
+    options: [
+      { value: '3Bet.IPA.BTN3BCO', label: 'BTN 3B CO' },
+      { value: '3Bet.IPA.BTN3BHJ', label: 'BTN 3B HJ' },
+      { value: '3Bet.IPA.BTN3BLJ', label: 'BTN 3B LJ' },
+      { value: '3Bet.IPA.CO3BHJ', label: 'CO 3B HJ' },
+      { value: '3Bet.IPA.CO3BLJ', label: 'CO 3B LJ' },
+      { value: '3Bet.IPA.HJ3BLJ', label: 'HJ 3B LJ' },
+      { value: '3Bet.IPA.BB3BSB', label: 'BB 3B SB' },
+    ]
+  },
+  { value: 'check', label: '3Bet - IPD' },
+  { value: 'check', label: '3Bet - OPA' },
+  {
+    label: '3Bet - OPD',
+    options: [
+      { value: '3Bet.OPD.LJCallHJ3B', label: 'LJ Call HJ 3B' },
+      { value: '3Bet.OPD.LJCallCO3B', label: 'LJ Call CO 3B' },
+      { value: '3Bet.OPD.LJCallBTN3B', label: 'LJ Call BTN 3B' },
+      { value: '3Bet.OPD.HJCallCO3B', label: 'HJ Call CO 3B' },
+      { value: '3Bet.OPD.HJCallBTN3B', label: 'HJ Call BTN 3B' },
+      { value: '3Bet.OPD.COCallBTN3B', label: 'CO Call BTN 3B' },
+      { value: '3Bet.OPD.SBCallBB3B', label: 'SB Call BB 3B' },
+    ]
+  },
+  { value: 'flop', label: '4Bet - IPA' },
+  { value: 'check', label: '4Bet - IPD' },
+  { value: 'check', label: '4Bet - OPA' },
+  { value: 'check', label: '4Bet - OPD' },
+]
+
 
 const useOutsideOver = (ref, callback) => {
   const handleOver = (e) => {
@@ -235,6 +295,7 @@ const ReportPage = () => {
   const [solutionMenuIsOpen, setSolutionMenuIsOpen] = useState(false)
   const [settingMenuIsOpen, setSettingMenuIsOpen] = useState(false)
   const [data, setData] = useState(DEFAULT_DATA.results.data)
+  const [solutions, setSolutions] = useState(SOLUTION_NL50GG_OPTIONS)
   const prevSolution = usePrevious(solution)
   const prevSetting = usePrevious(setting)
 
@@ -431,7 +492,11 @@ const ReportPage = () => {
     let newData = [...data]
     if (prevSolution !== solution || prevSetting !== setting) {
       const solutionPath = solution.split('.')
-      newData = [...DATA[setting][solutionPath[0]][solutionPath[1]][solutionPath[2]].results.data];
+      const newSolution = DATA[setting][solutionPath[0]][solutionPath[1]][solutionPath[2]];
+      if (!newSolution) {
+        return;
+      }
+      newData = [...newSolution.results.data];
     }
     if (type === 'flop') {
       newData = [...newData].sort((a, b) => {
@@ -480,6 +545,14 @@ const ReportPage = () => {
       syncCanvas()
     }
   }, [chartRef.current, canvasRef.current])
+
+  useEffect(() => {
+    if (setting === 'NL50GG') {
+      setSolutions(SOLUTION_NL50GG_OPTIONS);
+      return
+    }
+    setSolutions(SOLUTION_OPTIONS)
+  }, [setting])
 
 
   const content = data[selectedIndex]
@@ -537,8 +610,8 @@ const ReportPage = () => {
           onMouseEnter={() => setSolutionMenuIsOpen(true)}
         >
           <Select
-            defaultValue={solutionOptions[0]}
-            options={solutionOptions}
+            defaultValue={solutions[0]}
+            options={solutions}
             menuIsOpen={solutionMenuIsOpen}
             onChange={(e) => {
               setSolution(e.value);
