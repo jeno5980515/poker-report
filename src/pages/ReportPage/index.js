@@ -152,8 +152,32 @@ const SOLUTION_OPTIONS = [
       { value: '3Bet.IPA.BB3BSB', label: 'BB 3B SB' },
     ]
   },
-  { value: 'check', label: '3Bet - IPD' },
-  { value: 'check', label: '3Bet - OPA' },
+  {
+    label: '3Bet - IPD vs X',
+    options: [
+      { value: '3Bet.IPD.BTNCallSB3B', label: 'BTN Call SB 3B' },
+      { value: '3Bet.IPD.COCallSB3B', label: 'CO Call SB 3B' },
+      { value: '3Bet.IPD.HJCallSB3B', label: 'HJ Call SB 3B' },
+      { value: '3Bet.IPD.LJCallSB3B', label: 'LJ Call SB 3B' },
+      { value: '3Bet.IPD.BTNCallBB3B', label: 'BTN Call BB 3B' },
+      { value: '3Bet.IPD.COCallBB3B', label: 'CO Call BB 3B' },
+      { value: '3Bet.IPD.HJCallBB3B', label: 'HJ Call BB 3B' },
+      { value: '3Bet.IPD.LJCallBB3B', label: 'LJ Call BB 3B' },
+    ]
+  },
+  {
+    label: '3Bet - OPA',
+    options: [
+      { value: '3Bet.OPA.SB3BBTN', label: 'SB 3B BTN' },
+      { value: '3Bet.OPA.SB3BCO', label: 'SB 3B CO' },
+      { value: '3Bet.OPA.SB3BHJ', label: 'SB 3B HJ' },
+      { value: '3Bet.OPA.SB3BLJ', label: 'SB 3B LJ' },
+      { value: '3Bet.OPA.BB3BBTN', label: 'BB 3B BTN' },
+      { value: '3Bet.OPA.BB3BCO', label: 'BB 3B CO' },
+      { value: '3Bet.OPA.BB3BHJ', label: 'BB 3B HJ' },
+      { value: '3Bet.OPA.BB3BLJ', label: 'BB 3B LJ' },
+    ]
+  },
   {
     label: '3Bet - OPD',
     options: [
@@ -225,8 +249,32 @@ const SOLUTION_NL50GG_OPTIONS = [
       { value: '3Bet.IPA.BB3BSB', label: 'BB 3B SB' },
     ]
   },
-  { value: 'check', label: '3Bet - IPD' },
-  { value: 'check', label: '3Bet - OPA' },
+  {
+    label: '3Bet - IPD vs X',
+    options: [
+      { value: '3Bet.IPD.BTNCallSB3B', label: 'BTN Call SB 3B' },
+      { value: '3Bet.IPD.COCallSB3B', label: 'CO Call SB 3B' },
+      { value: '3Bet.IPD.HJCallSB3B', label: 'HJ Call SB 3B' },
+      { value: '3Bet.IPD.LJCallSB3B', label: 'LJ Call SB 3B' },
+      { value: '3Bet.IPD.BTNCallBB3B', label: 'BTN Call BB 3B' },
+      { value: '3Bet.IPD.COCallBB3B', label: 'CO Call BB 3B' },
+      { value: '3Bet.IPD.HJCallBB3B', label: 'HJ Call BB 3B' },
+      { value: '3Bet.IPD.LJCallBB3B', label: 'LJ Call BB 3B' },
+    ]
+  },
+  {
+    label: '3Bet - OPA',
+    options: [
+      { value: '3Bet.OPA.SB3BBTN', label: 'SB 3B BTN' },
+      { value: '3Bet.OPA.SB3BCO', label: 'SB 3B CO' },
+      { value: '3Bet.OPA.SB3BHJ', label: 'SB 3B HJ' },
+      { value: '3Bet.OPA.SB3BLJ', label: 'SB 3B LJ' },
+      { value: '3Bet.OPA.BB3BBTN', label: 'BB 3B BTN' },
+      { value: '3Bet.OPA.BB3BCO', label: 'BB 3B CO' },
+      { value: '3Bet.OPA.BB3BHJ', label: 'BB 3B HJ' },
+      { value: '3Bet.OPA.BB3BLJ', label: 'BB 3B LJ' },
+    ]
+  },
   {
     label: '3Bet - OPD',
     options: [
