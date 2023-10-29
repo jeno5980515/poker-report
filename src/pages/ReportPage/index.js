@@ -192,7 +192,18 @@ const SOLUTION_OPTIONS = [
   },
   { value: 'flop', label: '4Bet - IPA' },
   { value: 'check', label: '4Bet - IPD' },
-  { value: 'check', label: '4Bet - OPA' },
+  {
+    label: '4Bet - OPA',
+    options: [
+      { value: '4Bet.OPA.LJ4BHJ', label: 'LJ 4B HJ' },
+      { value: '4Bet.OPA.LJ4BCO', label: 'LJ 4B CO' },
+      { value: '4Bet.OPA.LJ4BBTN', label: 'LJ 4B BTN' },
+      { value: '4Bet.OPA.HJ4BCO', label: 'HJ 4B CO' },
+      { value: '4Bet.OPA.HJ4BBTN', label: 'HJ 4B BTN' },
+      { value: '4Bet.OPA.CO4BBTN', label: 'CO 4B BTN' },
+      { value: '4Bet.OPA.SB4BBB', label: 'SB 4B BB' },
+    ]
+  },
   { value: 'check', label: '4Bet - OPD' },
 ]
 
@@ -289,7 +300,18 @@ const SOLUTION_NL50GG_OPTIONS = [
   },
   { value: 'flop', label: '4Bet - IPA' },
   { value: 'check', label: '4Bet - IPD' },
-  { value: 'check', label: '4Bet - OPA' },
+  {
+    label: '4Bet - OPA',
+    options: [
+      { value: '4Bet.OPA.LJ4BHJ', label: 'LJ 4B HJ' },
+      { value: '4Bet.OPA.LJ4BCO', label: 'LJ 4B CO' },
+      { value: '4Bet.OPA.LJ4BBTN', label: 'LJ 4B BTN' },
+      { value: '4Bet.OPA.HJ4BCO', label: 'HJ 4B CO' },
+      { value: '4Bet.OPA.HJ4BBTN', label: 'HJ 4B BTN' },
+      { value: '4Bet.OPA.CO4BBTN', label: 'CO 4B BTN' },
+      { value: '4Bet.OPA.SB4BBB', label: 'SB 4B BB' },
+    ]
+  },
   { value: 'check', label: '4Bet - OPD' },
 ]
 
