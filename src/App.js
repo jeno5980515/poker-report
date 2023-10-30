@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import ReportPage from "./pages/ReportPage";
 import RangePage from "./pages/RangePage";
+import SolutionPage from "./pages/SolutionPage";
 
 function Layout() {
   return (
@@ -14,6 +15,9 @@ function Layout() {
           </li>
           <li>
             <Link to="/range">Range</Link>
+          </li>
+          <li>
+            <Link to="/range">Solution</Link>
           </li>
         </ul>
       </nav>
@@ -32,6 +36,7 @@ export default function App() {
         <Route index element={<ReportPage />} />
         <Route path="report" element={<ReportPage />} />
         <Route path="range" element={<RangePage />} />
+        <Route path="solution" element={<SolutionPage />} />
       </Route>
     </Routes>
   );
