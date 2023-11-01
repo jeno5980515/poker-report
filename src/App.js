@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import ReportPage from "./pages/ReportPage";
 import RangePage from "./pages/RangePage";
 import SolutionPage from "./pages/SolutionPage";
+import TurnReportPage from "./pages/TurnReportPage";
 
 function Layout() {
   return (
@@ -18,6 +19,9 @@ function Layout() {
           </li>
           <li>
             <Link to="/range">Solution</Link>
+          </li>
+          <li>
+            <Link to="/turn-report">Turn Report</Link>
           </li>
         </ul>
       </nav>
@@ -37,6 +41,7 @@ export default function App() {
         <Route path="report" element={<ReportPage />} />
         <Route path="range" element={<RangePage />} />
         <Route path="solution" element={<SolutionPage />} />
+        <Route path="turn-report" element={<TurnReportPage />} />
       </Route>
     </Routes>
   );
