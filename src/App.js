@@ -18,7 +18,7 @@ function Layout() {
             <Link to="/range">Range</Link>
           </li>
           <li>
-            <Link to="/range">Solution</Link>
+            <Link to="/solution">Solution</Link>
           </li>
           <li>
             <Link to="/turn-report">Turn Report</Link>

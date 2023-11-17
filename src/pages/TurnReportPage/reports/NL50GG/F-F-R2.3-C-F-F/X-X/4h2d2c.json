@@ -1,0 +1,2776 @@
+{
+  "solutions": [
+    {
+      "name": "2h",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9391852617263794
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0000012585508102347376
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 1.5116671647774638e-7
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 2.7420938408795337e-7
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0005707555683329701
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.06024228036403656
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "2s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9340963363647461
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0000019045742192247417
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0005205172346904874
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0653812512755394
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "3c",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9368077516555786
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.00044110341696068645
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.00034548266557976604
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.003310472471639514
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0449875183403492
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.011340053752064705
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.00276760826818645
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "3d",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9369264245033264
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0004326988128013909
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.0004904181696474552
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0032175229862332344
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.04481886327266693
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.011389411985874176
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0027246850077062845
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "3h",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9387132525444031
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0003377673274371773
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.0006574331200681627
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.003217351855710149
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.04007818177342415
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.01454818807542324
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.002447826322168112
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "3s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.951949954032898
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0012193014845252037
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.001164297922514379
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0014367974363267422
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.01897646114230156
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.02343492954969406
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0018182572675868869
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "4c",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8988460898399353
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 7.025970489848987e-7
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.00006105057400418445
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0017727460945025086
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0025097657926380634
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.09680967032909393
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "4d",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8988616466522217
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 7.025978447927628e-7
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.000037517314922297373
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0018252168083563447
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.002388644963502884
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.09688624739646912
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "4s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8977944850921631
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0000012488432048485265
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0004690310452133417
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0015865243040025234
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.10014870762825012
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "5c",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9277852773666382
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.00019192264880985022
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.00006404118903446943
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0006364828441292048
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.010759602300822735
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.02422015555202961
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.036342497915029526
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "5d",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9276145100593567
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.00017179832502733916
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.00003842532532871701
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0008009614539332688
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.010647906921803951
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0246015302836895
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.03612486645579338
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "5h",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9308993220329285
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.00014199108409229666
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.00005694795254385099
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0004504444950725883
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.010195690207183361
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.01814604178071022
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0401095487177372
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "5s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.930087149143219
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.00030913433874957263
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.00014193050446920097
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.00007845198706490919
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0032672611996531487
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.01619233936071396
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.04992370679974556
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "6c",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.951454758644104
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0010952516458928585
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.0017916894285008311
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.002215268788859248
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.010396189987659454
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.015380263328552246
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.017666567116975784
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "6d",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9515058994293213
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0011815630132332444
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.0017274884739890695
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0020658986177295446
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.010560569353401661
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.01510664913803339
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.017851943150162697
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "6h",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.956206738948822
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0013860977487638593
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.0017867780989035964
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.002610218245536089
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.009130430407822132
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.014776097610592842
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.014103666879236698
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "6s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9641717076301575
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.002247573807835579
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.00242140656337142
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.001884492114186287
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.004837769083678722
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.012470519170165062
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.011966541409492493
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "7c",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.967376708984375
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.008354132995009422
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.012364604510366917
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.003384500974789262
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.004710077308118343
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0021005284506827593
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0017094701761379838
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "7d",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9676099419593811
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.008400323800742626
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.012368462979793549
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0034276782535016537
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.004614354111254215
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0020460367668420076
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0015332158654928207
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "7h",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9711636304855347
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.008908036164939404
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.011272897943854332
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0030156837310642004
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.002567314775660634
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0018363595008850098
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0012360857799649239
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "7s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.9867829084396362
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.006023563910275698
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.004407860338687897
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0022409274242818356
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0004804405034519732
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.000060279893659753725
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0000040411800910078455
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "8c",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8763572573661804
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.023436274379491806
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.08891644328832626
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.009069394320249557
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0014791216235607862
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0007134321494959295
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.000028081492928322405
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "8d",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8765735626220703
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.023883480578660965
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.08905380964279175
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.00833695288747549
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0013610514579340816
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0007389526581391692
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.000052181774663040414
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "8h",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8746533989906311
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.021802527830004692
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.09425986558198929
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.007386160548776388
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0013293110532686114
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0004963275860063732
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.00007241998537210748
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "8s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8882414698600769
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.013038678094744682
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.08925237506628036
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.009257595054805279
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.00013574270997196436
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0000712249384378083
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.000002886958782255533
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "9c",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8405795693397522
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.004066769499331713
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.04128767177462578
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.10874386876821518
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.003259444609284401
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0016059917397797108
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.00045669908286072314
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "9d",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8410392999649048
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.003942028619349003
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.041777756065130234
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.10775185376405716
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0031079540494829416
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.001564515521749854
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0008166174520738423
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "9h",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8444189429283142
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.003624476958066225
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.037136513739824295
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.10950949788093567
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.003122157184407115
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0016046210657805204
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.000583796703722328
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "9s",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.8703614473342896
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.003241847036406398
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.014218270778656006
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.10857979953289032
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0017387856496497989
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0010478597832843661
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0008119779522530735
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Tc",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7449080944061279
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.005579588934779167
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.08693335205316544
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.15050096809864044
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.006929323077201843
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0034471224062144756
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0017015563789755106
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Td",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7452473640441895
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.005166225600987673
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.08737055957317352
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.15016432106494904
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.006947812158614397
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.003484355751425028
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.001619363552890718
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Th",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7432774901390076
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0048970626667141914
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.08651566505432129
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.15334005653858185
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.006838258355855942
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.003585315775126219
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0015461258590221405
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Ts",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7645677328109741
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.003230436472222209
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.0584966242313385
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.13781258463859558
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.02155599556863308
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.013226847164332867
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.0011097530368715525
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Jc",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6668886542320251
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.002504688687622547
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.009758268482983112
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.1502203643321991
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.04007743299007416
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.007836810313165188
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.12271380424499512
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Jd",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.666566014289856
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0028833725955337286
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.010432954877614975
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.15021701157093048
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.03936556354165077
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.007335480768233538
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.12319962680339813
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Jh",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6682438850402832
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.00264521106146276
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.008737816475331783
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.1270541548728943
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.06931454688310623
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.007772543001919985
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.11623185873031616
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Js",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7388497591018677
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0019206920405849814
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.002631603041663766
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.08774217218160629
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.06094532459974289
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0033891107887029648
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.10452134907245636
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Qc",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7128664255142212
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0036144275218248367
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.061843592673540115
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.11239943653345108
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0021690360736101866
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.002464542631059885
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.10464254766702652
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Qd",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7131782174110413
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.003498590551316738
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.062193162739276886
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.11144882440567017
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0021439269185066223
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.002455994253978133
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.10508128255605698
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Qh",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7077879309654236
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.004242843948304653
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.060195762664079666
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.11493619531393051
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.002507223282009363
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.002431205241009593
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.10789883881807327
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Qs",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7204549908638
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0020507241133600473
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.043278928846120834
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.14569123089313507
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0027743373066186905
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0008571345824748278
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.084892638027668
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Kc",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.629326581954956
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.004640543833374977
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.04917667433619499
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.1616046130657196
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.012830067425966263
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.002242062008008361
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.14017945528030396
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Kd",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6288303136825562
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.004701551981270313
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.0456894114613533
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.16594848036766052
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.012968461960554123
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0027277839835733175
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.1391340047121048
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Kh",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6184459924697876
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.004092121496796608
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.05324031040072441
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.15604892373085022
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.02378825657069683
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0030469868797808886
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.14133740961551666
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Ks",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6481480598449707
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.0033460468985140324
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.05576130002737045
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.14476457238197327
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.028940455988049507
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0016987738199532032
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.11734077334403992
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Ac",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6834580302238464
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.12723799049854279
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.05663582682609558
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.003222927451133728
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.001675743842497468
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0022206578869372606
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.1255488097667694
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Ad",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6836490035057068
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.12705819308757782
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.05667264759540558
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.0032351743429899216
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.001604553428478539
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0022019660100340843
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.12557844817638397
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "Ah",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.6864908337593079
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.11826453357934952
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.06872506439685822
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.003908846992999315
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.0014519680989906192
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.002595047000795603
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.11856372654438019
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    },
+    {
+      "name": "As",
+      "solutions": [
+        {
+          "action_code": "X",
+          "frequency": 0.7474262118339539
+        },
+        {
+          "action_code": "R2",
+          "frequency": 0.09042620658874512
+        },
+        {
+          "action_code": "R3.05",
+          "frequency": 0.03958955779671669
+        },
+        {
+          "action_code": "R4.6",
+          "frequency": 0.005846332758665085
+        },
+        {
+          "action_code": "R7.6",
+          "frequency": 0.00029272877145558596
+        },
+        {
+          "action_code": "R10.7",
+          "frequency": 0.0012482296442613006
+        },
+        {
+          "action_code": "R15.25",
+          "frequency": 0.11517073214054108
+        },
+        {
+          "action_code": "RAI",
+          "frequency": 0
+        }
+      ]
+    }
+  ],
+  "player_solutions": [
+    {
+      "position": "CO",
+      "is_hero": true,
+      "relative_position": "OOP",
+      "solutions": [
+        {
+          "name": "2h",
+          "ev": 1.9303295982640496,
+          "eq": 0.385298023,
+          "eqr": 0.8213057327970097
+        },
+        {
+          "name": "2s",
+          "ev": 1.9427989898036344,
+          "eq": 0.385915694,
+          "eqr": 0.8252881202409119
+        },
+        {
+          "name": "3c",
+          "ev": 1.8727569003258207,
+          "eq": 0.388138627,
+          "eqr": 0.7909785488118031
+        },
+        {
+          "name": "3d",
+          "ev": 1.8729618588348824,
+          "eq": 0.388147628,
+          "eqr": 0.791046770683472
+        },
+        {
+          "name": "3h",
+          "ev": 1.869825302384773,
+          "eq": 0.387856526,
+          "eqr": 0.7903147621547678
+        },
+        {
+          "name": "3s",
+          "ev": 1.8854458771408427,
+          "eq": 0.388880477,
+          "eqr": 0.7948187330984884
+        },
+        {
+          "name": "4c",
+          "ev": 1.9087047982349952,
+          "eq": 0.390556878,
+          "eqr": 0.8011699282893262
+        },
+        {
+          "name": "4d",
+          "ev": 1.9087753305219768,
+          "eq": 0.390556318,
+          "eqr": 0.8012006826891485
+        },
+        {
+          "name": "4s",
+          "ev": 1.9344698359579802,
+          "eq": 0.391012561,
+          "eqr": 0.8110384019506277
+        },
+        {
+          "name": "5c",
+          "ev": 1.8579659824083532,
+          "eq": 0.388807997,
+          "eqr": 0.7833804593274811
+        },
+        {
+          "name": "5d",
+          "ev": 1.8578986128609478,
+          "eq": 0.388813303,
+          "eqr": 0.7833413639449437
+        },
+        {
+          "name": "5h",
+          "ev": 1.8482798383807573,
+          "eq": 0.388331519,
+          "eqr": 0.7802526449482396
+        },
+        {
+          "name": "5s",
+          "ev": 1.87086353143884,
+          "eq": 0.389364456,
+          "eqr": 0.787691158897508
+        },
+        {
+          "name": "6c",
+          "ev": 1.8118194213892163,
+          "eq": 0.388677501,
+          "eqr": 0.7641800117391429
+        },
+        {
+          "name": "6d",
+          "ev": 1.8119107115936275,
+          "eq": 0.388675675,
+          "eqr": 0.764222105960712
+        },
+        {
+          "name": "6h",
+          "ev": 1.8026464723760003,
+          "eq": 0.388401389,
+          "eqr": 0.7608515919689633
+        },
+        {
+          "name": "6s",
+          "ev": 1.8105172254853483,
+          "eq": 0.38909537,
+          "eqr": 0.7628106768234783
+        },
+        {
+          "name": "7c",
+          "ev": 1.8870630957584937,
+          "eq": 0.409237713,
+          "eqr": 0.7559288795606386
+        },
+        {
+          "name": "7d",
+          "ev": 1.8873486552454461,
+          "eq": 0.409253308,
+          "eqr": 0.7560144605909846
+        },
+        {
+          "name": "7h",
+          "ev": 1.8749938931039911,
+          "eq": 0.409086506,
+          "eqr": 0.7513717601084466
+        },
+        {
+          "name": "7s",
+          "ev": 1.888721432216126,
+          "eq": 0.41165284,
+          "eqr": 0.7521543257122327
+        },
+        {
+          "name": "8c",
+          "ev": 2.019903984817798,
+          "eq": 0.420751673,
+          "eqr": 0.7870005564774142
+        },
+        {
+          "name": "8d",
+          "ev": 2.0202891991096843,
+          "eq": 0.420765113,
+          "eqr": 0.7871255017136336
+        },
+        {
+          "name": "8h",
+          "ev": 2.0189534776792732,
+          "eq": 0.420872894,
+          "eqr": 0.7864036498093456
+        },
+        {
+          "name": "8s",
+          "ev": 2.042019981756208,
+          "eq": 0.42252683,
+          "eqr": 0.7922748339043812
+        },
+        {
+          "name": "9c",
+          "ev": 2.036758234788177,
+          "eq": 0.410702703,
+          "eqr": 0.8129841614123143
+        },
+        {
+          "name": "9d",
+          "ev": 2.0367886948018303,
+          "eq": 0.41071072,
+          "eqr": 0.8129804501647461
+        },
+        {
+          "name": "9h",
+          "ev": 2.034055208651876,
+          "eq": 0.410527524,
+          "eqr": 0.8122516860757135
+        },
+        {
+          "name": "9s",
+          "ev": 2.0403199616902254,
+          "eq": 0.408669971,
+          "eqr": 0.818456715637419
+        },
+        {
+          "name": "Tc",
+          "ev": 2.184130590081548,
+          "eq": 0.42570897,
+          "eqr": 0.8410774034085675
+        },
+        {
+          "name": "Td",
+          "ev": 2.1841344978263963,
+          "eq": 0.42571572,
+          "eqr": 0.8410655723712653
+        },
+        {
+          "name": "Th",
+          "ev": 2.1819717532777125,
+          "eq": 0.425225037,
+          "eqr": 0.8412023194734318
+        },
+        {
+          "name": "Ts",
+          "ev": 2.1694611288885106,
+          "eq": 0.419094883,
+          "eqr": 0.848612998674
+        },
+        {
+          "name": "Jc",
+          "ev": 2.4011370446535363,
+          "eq": 0.421849881,
+          "eqr": 0.9331021328738849
+        },
+        {
+          "name": "Jd",
+          "ev": 2.4010451268088917,
+          "eq": 0.42185029,
+          "eqr": 0.9330655081796255
+        },
+        {
+          "name": "Jh",
+          "ev": 2.3845471211677385,
+          "eq": 0.420211985,
+          "eqr": 0.9302670511072139
+        },
+        {
+          "name": "Js",
+          "ev": 2.2986072660969405,
+          "eq": 0.411667033,
+          "eqr": 0.9153535092390563
+        },
+        {
+          "name": "Qc",
+          "ev": 2.397399159338673,
+          "eq": 0.419498535,
+          "eqr": 0.9368715808013267
+        },
+        {
+          "name": "Qd",
+          "ev": 2.3971127175300175,
+          "eq": 0.419481488,
+          "eqr": 0.9367977114540526
+        },
+        {
+          "name": "Qh",
+          "ev": 2.4080453946072145,
+          "eq": 0.419680129,
+          "eqr": 0.9406248064214243
+        },
+        {
+          "name": "Qs",
+          "ev": 2.35901115679144,
+          "eq": 0.415146527,
+          "eqr": 0.9315340856931056
+        },
+        {
+          "name": "Kc",
+          "ev": 2.637202850242241,
+          "eq": 0.422599515,
+          "eqr": 1.0230213730966669
+        },
+        {
+          "name": "Kd",
+          "ev": 2.637416322256591,
+          "eq": 0.422613118,
+          "eqr": 1.0230712514642624
+        },
+        {
+          "name": "Kh",
+          "ev": 2.652845100356464,
+          "eq": 0.423691278,
+          "eqr": 1.026437554852614
+        },
+        {
+          "name": "Ks",
+          "ev": 2.5561270277041346,
+          "eq": 0.414287247,
+          "eqr": 1.0114654039939963
+        },
+        {
+          "name": "Ac",
+          "ev": 2.5220575295819083,
+          "eq": 0.425195524,
+          "eqr": 0.9723810122465473
+        },
+        {
+          "name": "Ad",
+          "ev": 2.5217628305474182,
+          "eq": 0.425185957,
+          "eqr": 0.9722892675702635
+        },
+        {
+          "name": "Ah",
+          "ev": 2.496350597762834,
+          "eq": 0.424787369,
+          "eqr": 0.963394471627851
+        },
+        {
+          "name": "As",
+          "ev": 2.4566472182569257,
+          "eq": 0.419705773,
+          "eqr": 0.959550899894976
+        }
+      ],
+      "total_ev": 2.119024460016292,
+      "total_eq": 0.4080506937959185,
+      "total_eqr": 0.8493882569374983
+    },
+    {
+      "position": "BTN",
+      "is_hero": false,
+      "relative_position": "IP",
+      "solutions": [
+        {
+          "name": "2h",
+          "ev": 3.507607398492947,
+          "eq": 0.614701979,
+          "eqr": 0.9354412804165044
+        },
+        {
+          "name": "2s",
+          "ev": 3.4949050848213425,
+          "eq": 0.614084352,
+          "eqr": 0.9329911402900842
+        },
+        {
+          "name": "3c",
+          "ev": 3.6302612475443166,
+          "eq": 0.611861442,
+          "eqr": 0.9726463441365147
+        },
+        {
+          "name": "3d",
+          "ev": 3.629983049744402,
+          "eq": 0.611852408,
+          "eqr": 0.972586167353433
+        },
+        {
+          "name": "3h",
+          "ev": 3.6327392882488727,
+          "eq": 0.612143487,
+          "eqr": 0.9728618265287057
+        },
+        {
+          "name": "3s",
+          "ev": 3.6213385631017285,
+          "eq": 0.611119629,
+          "eqr": 0.9714334663023457
+        },
+        {
+          "name": "4c",
+          "ev": 3.542115225306628,
+          "eq": 0.609443058,
+          "eqr": 0.9527955392666845
+        },
+        {
+          "name": "4d",
+          "ev": 3.5422456231524713,
+          "eq": 0.609443654,
+          "eqr": 0.9528296832433456
+        },
+        {
+          "name": "4s",
+          "ev": 3.50302388749272,
+          "eq": 0.608987386,
+          "eqr": 0.942985395537208
+        },
+        {
+          "name": "5c",
+          "ev": 3.627631530522965,
+          "eq": 0.611192066,
+          "eqr": 0.9730062391358906
+        },
+        {
+          "name": "5d",
+          "ev": 3.627454049789832,
+          "eq": 0.611186751,
+          "eqr": 0.9729670961506199
+        },
+        {
+          "name": "5h",
+          "ev": 3.63735938946116,
+          "eq": 0.611668505,
+          "eqr": 0.9748555297968621
+        },
+        {
+          "name": "5s",
+          "ev": 3.6088446195513866,
+          "eq": 0.610635603,
+          "eqr": 0.968849292689546
+        },
+        {
+          "name": "6c",
+          "ev": 3.687691536140791,
+          "eq": 0.611322632,
+          "eqr": 0.9889043271812882
+        },
+        {
+          "name": "6d",
+          "ev": 3.687894632580048,
+          "eq": 0.61132447,
+          "eqr": 0.9889558168461555
+        },
+        {
+          "name": "6h",
+          "ev": 3.698102391813973,
+          "eq": 0.611598749,
+          "eqr": 0.9912484201958294
+        },
+        {
+          "name": "6s",
+          "ev": 3.690412881015008,
+          "eq": 0.61090479,
+          "eqr": 0.990310974970718
+        },
+        {
+          "name": "7c",
+          "ev": 3.621067262424648,
+          "eq": 0.590762423,
+          "eqr": 1.0048330105180718
+        },
+        {
+          "name": "7d",
+          "ev": 3.620998897205378,
+          "eq": 0.590746796,
+          "eqr": 1.0048406197213562
+        },
+        {
+          "name": "7h",
+          "ev": 3.6321871969350084,
+          "eq": 0.590913594,
+          "eqr": 1.0076609002291905
+        },
+        {
+          "name": "7s",
+          "ev": 3.622967284303833,
+          "eq": 0.58834728,
+          "eqr": 1.009487224961129
+        },
+        {
+          "name": "8c",
+          "ev": 3.4668598331112066,
+          "eq": 0.579248468,
+          "eqr": 0.9811638855455967
+        },
+        {
+          "name": "8d",
+          "ev": 3.466768335503525,
+          "eq": 0.579235025,
+          "eqr": 0.9811607610423723
+        },
+        {
+          "name": "8h",
+          "ev": 3.4662897603878084,
+          "eq": 0.579127258,
+          "eqr": 0.9812078695394353
+        },
+        {
+          "name": "8s",
+          "ev": 3.452197392848623,
+          "eq": 0.577473334,
+          "eqr": 0.9800175445462962
+        },
+        {
+          "name": "9c",
+          "ev": 3.4433886373101594,
+          "eq": 0.589297334,
+          "eqr": 0.9579034351148943
+        },
+        {
+          "name": "9d",
+          "ev": 3.443561234076008,
+          "eq": 0.589289324,
+          "eqr": 0.9579644702581231
+        },
+        {
+          "name": "9h",
+          "ev": 3.4459500188064736,
+          "eq": 0.589472486,
+          "eqr": 0.9583311393919787
+        },
+        {
+          "name": "9s",
+          "ev": 3.4528970362242646,
+          "eq": 0.591330076,
+          "eqr": 0.957246582639565
+        },
+        {
+          "name": "Tc",
+          "ev": 3.284874759550107,
+          "eq": 0.574291028,
+          "eqr": 0.9376849588230736
+        },
+        {
+          "name": "Td",
+          "ev": 3.284927956946437,
+          "eq": 0.574284278,
+          "eqr": 0.9377111658057349
+        },
+        {
+          "name": "Th",
+          "ev": 3.286340348790253,
+          "eq": 0.574775,
+          "eqr": 0.9373134173786474
+        },
+        {
+          "name": "Ts",
+          "ev": 3.311501366668674,
+          "eq": 0.58090513,
+          "eqr": 0.9345227791378969
+        },
+        {
+          "name": "Jc",
+          "ev": 3.0298514038549706,
+          "eq": 0.578150191,
+          "eqr": 0.8591140488815208
+        },
+        {
+          "name": "Jd",
+          "ev": 3.029852454533262,
+          "eq": 0.578149753,
+          "eqr": 0.859114997656978
+        },
+        {
+          "name": "Jh",
+          "ev": 3.045861507375857,
+          "eq": 0.579788044,
+          "eqr": 0.8612139621599478
+        },
+        {
+          "name": "Js",
+          "ev": 3.151146870402309,
+          "eq": 0.588333032,
+          "eqr": 0.8780425814410384
+        },
+        {
+          "name": "Qc",
+          "ev": 3.0634609359960794,
+          "eq": 0.580501495,
+          "eqr": 0.8651256114663916
+        },
+        {
+          "name": "Qd",
+          "ev": 3.063590475714675,
+          "eq": 0.580518472,
+          "eqr": 0.8651368923855214
+        },
+        {
+          "name": "Qh",
+          "ev": 3.049835452414849,
+          "eq": 0.580319888,
+          "eqr": 0.8615472868061362
+        },
+        {
+          "name": "Qs",
+          "ev": 3.108624794553218,
+          "eq": 0.584853469,
+          "eqr": 0.8713475239007339
+        },
+        {
+          "name": "Kc",
+          "ev": 2.791334762384094,
+          "eq": 0.577400557,
+          "eqr": 0.792510255035859
+        },
+        {
+          "name": "Kd",
+          "ev": 2.791154299975143,
+          "eq": 0.577386935,
+          "eqr": 0.7924777145926408
+        },
+        {
+          "name": "Kh",
+          "ev": 2.7705374316291937,
+          "eq": 0.576308826,
+          "eqr": 0.788095624621767
+        },
+        {
+          "name": "Ks",
+          "ev": 2.8882456101320604,
+          "eq": 0.585712833,
+          "eqr": 0.8083874216682823
+        },
+        {
+          "name": "Ac",
+          "ev": 2.9954855321928697,
+          "eq": 0.574804626,
+          "eqr": 0.8543132392932953
+        },
+        {
+          "name": "Ad",
+          "ev": 2.9957711341602664,
+          "eq": 0.574814142,
+          "eqr": 0.8543805486147664
+        },
+        {
+          "name": "Ah",
+          "ev": 3.0223705819403444,
+          "eq": 0.575212749,
+          "eqr": 0.8613692726120978
+        },
+        {
+          "name": "As",
+          "ev": 3.087421661516974,
+          "eq": 0.58029436,
+          "eqr": 0.8722033738348587
+        }
+      ],
+      "total_ev": 3.3583047475234524,
+      "total_eq": 0.591949370755102,
+      "total_eqr": 0.929165278768713
+    }
+  ],
+  "totals": [
+    {
+      "action_code": "X",
+      "frequency": 0.8285035977558214
+    },
+    {
+      "action_code": "R2",
+      "frequency": 0.013466952127160136
+    },
+    {
+      "action_code": "R3.05",
+      "frequency": 0.03165068389875953
+    },
+    {
+      "action_code": "R4.6",
+      "frequency": 0.055894597647064684
+    },
+    {
+      "action_code": "R7.6",
+      "frequency": 0.012158212012261235
+    },
+    {
+      "action_code": "R10.7",
+      "frequency": 0.0061089079064579575
+    },
+    {
+      "action_code": "R15.25",
+      "frequency": 0.05221705002112945
+    },
+    {
+      "action_code": "RAI",
+      "frequency": 0
+    }
+  ],
+  "game_point": {
+    "game": {
+      "players": [
+        {
+          "position": "UTG",
+          "relative_postflop_position": null,
+          "hand": null,
+          "is_dealer": false,
+          "is_folded": true,
+          "is_hero": false,
+          "is_active": false,
+          "stack": "100.000",
+          "current_stack": "100.000",
+          "chips_on_table": "0.00",
+          "bounty": null,
+          "chips_by_denomination": []
+        },
+        {
+          "position": "HJ",
+          "relative_postflop_position": null,
+          "hand": null,
+          "is_dealer": false,
+          "is_folded": true,
+          "is_hero": false,
+          "is_active": false,
+          "stack": "100.000",
+          "current_stack": "100.000",
+          "chips_on_table": "0.00",
+          "bounty": null,
+          "chips_by_denomination": []
+        },
+        {
+          "position": "CO",
+          "relative_postflop_position": "OOP",
+          "hand": null,
+          "is_dealer": false,
+          "is_folded": false,
+          "is_hero": false,
+          "is_active": true,
+          "stack": "100.000",
+          "current_stack": "97.700",
+          "chips_on_table": "0.00",
+          "bounty": null,
+          "chips_by_denomination": []
+        },
+        {
+          "position": "BTN",
+          "relative_postflop_position": "IP",
+          "hand": null,
+          "is_dealer": true,
+          "is_folded": false,
+          "is_hero": false,
+          "is_active": false,
+          "stack": "100.000",
+          "current_stack": "97.700",
+          "chips_on_table": "0.00",
+          "bounty": null,
+          "chips_by_denomination": []
+        },
+        {
+          "position": "SB",
+          "relative_postflop_position": null,
+          "hand": null,
+          "is_dealer": false,
+          "is_folded": true,
+          "is_hero": false,
+          "is_active": false,
+          "stack": "100.000",
+          "current_stack": "99.500",
+          "chips_on_table": "0.00",
+          "bounty": null,
+          "chips_by_denomination": []
+        },
+        {
+          "position": "BB",
+          "relative_postflop_position": null,
+          "hand": null,
+          "is_dealer": false,
+          "is_folded": true,
+          "is_hero": false,
+          "is_active": false,
+          "stack": "100.000",
+          "current_stack": "99.000",
+          "chips_on_table": "0.00",
+          "bounty": null,
+          "chips_by_denomination": []
+        }
+      ],
+      "current_street": {
+        "type": "TURN",
+        "start_pot": "6.100",
+        "start_pot_by_denomination": [
+          {
+            "denomination": "5.0",
+            "amount": 1
+          },
+          {
+            "denomination": "1.0",
+            "amount": 1
+          }
+        ],
+        "end_pot": "6.100",
+        "end_pot_by_denomination": [
+          {
+            "denomination": "5.0",
+            "amount": 1
+          },
+          {
+            "denomination": "1.0",
+            "amount": 1
+          }
+        ]
+      },
+      "pot": "6.100",
+      "pot_by_denomination": [
+        {
+          "denomination": "5.0",
+          "amount": 1
+        },
+        {
+          "denomination": "1.0",
+          "amount": 1
+        }
+      ],
+      "pot_odds": null,
+      "active_position": "CO",
+      "board": "4h2d2c",
+      "bet_display_name": "BET"
+    },
+    "available_actions": [
+      {
+        "action": {
+          "code": "X",
+          "position": "CO",
+          "type": "CHECK",
+          "betsize": "0.000",
+          "allin": false,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "CHECK",
+          "simple_group": "CHECK",
+          "advanced_group": "CHECK",
+          "betsize_by_pot": null,
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      },
+      {
+        "action": {
+          "code": "R2",
+          "position": "CO",
+          "type": "RAISE",
+          "betsize": "2.000",
+          "allin": false,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "BET",
+          "simple_group": "RAISE",
+          "advanced_group": "BET_SMALL",
+          "betsize_by_pot": "0.32786885",
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      },
+      {
+        "action": {
+          "code": "R3.05",
+          "position": "CO",
+          "type": "RAISE",
+          "betsize": "3.050",
+          "allin": false,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "BET",
+          "simple_group": "RAISE",
+          "advanced_group": "BET_MEDIUM",
+          "betsize_by_pot": "0.50000000",
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      },
+      {
+        "action": {
+          "code": "R4.6",
+          "position": "CO",
+          "type": "RAISE",
+          "betsize": "4.600",
+          "allin": false,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "BET",
+          "simple_group": "RAISE",
+          "advanced_group": "BET_LARGE",
+          "betsize_by_pot": "0.75409836",
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      },
+      {
+        "action": {
+          "code": "R7.6",
+          "position": "CO",
+          "type": "RAISE",
+          "betsize": "7.600",
+          "allin": false,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "BET",
+          "simple_group": "RAISE",
+          "advanced_group": "BET_OVERBET",
+          "betsize_by_pot": "1.24590164",
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      },
+      {
+        "action": {
+          "code": "R10.7",
+          "position": "CO",
+          "type": "RAISE",
+          "betsize": "10.700",
+          "allin": false,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "BET",
+          "simple_group": "RAISE",
+          "advanced_group": "BET_OVERBET",
+          "betsize_by_pot": "1.75409836",
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      },
+      {
+        "action": {
+          "code": "R15.25",
+          "position": "CO",
+          "type": "RAISE",
+          "betsize": "15.250",
+          "allin": false,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "BET",
+          "simple_group": "RAISE",
+          "advanced_group": "BET_OVERBET",
+          "betsize_by_pot": "2.50000000",
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      },
+      {
+        "action": {
+          "code": "RAI",
+          "position": "CO",
+          "type": "RAISE",
+          "betsize": "97.700",
+          "allin": true,
+          "is_hand_end": false,
+          "is_showdown": false,
+          "next_street": false,
+          "display_name": "ALLIN",
+          "simple_group": "RAISE",
+          "advanced_group": "BET_OVERBET",
+          "betsize_by_pot": "16.01639344",
+          "next_position": "BTN"
+        },
+        "frequency": null,
+        "is_solution_end": false,
+        "can_be_solved_by_ai": false,
+        "next_position": "BTN",
+        "selected": false
+      }
+    ],
+    "custom_solution_id": null,
+    "is_node_locked": false,
+    "is_edited": false,
+    "forced_fold": false,
+    "available_node_edits": null,
+    "merged_actions": [],
+    "preset_action_code": "X"
+  }
+}

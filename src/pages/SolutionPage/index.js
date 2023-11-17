@@ -6,9 +6,11 @@ import styled from 'styled-components';
 import Select, { components } from "react-select";
 import Action from './Action';
 import Hand from './Hand';
+import Filter from './Filter';
 
 import INDEX_MAP from '../../indexMap.json';
-import DATA from './solutions/NL50GG'
+// import DATA from './solutions/NL50GG'
+import DATA from './solutions/NL500'
 // import DATA from './solutions/A42.json'
 
 const Wrapper = styled.div`
@@ -37,6 +39,7 @@ const HandDivWrapper = styled.div`
 	border: black 1px solid;
 	font-size: 0.7em;
 	user-select: none;
+	filter: ${({ highlight }) => highlight ? 'brightness(100%)' : 'brightness(30%)'};
 `
 
 const ColorBlock = styled.div`
@@ -62,6 +65,10 @@ const Detail = styled.div`
 	justify-content: space-between;
 `
 
+const DetailControlWrapper = styled.div`
+	display: flex;
+	margin-top: 70px;
+`
 
 const sortBySize = (a, b) => {
 	if (a[0] === 'X') {
@@ -97,8 +104,10 @@ const getColors = (number) => {
 const COLOR_MAP = {
 	'R1.8': "rgb(240, 60, 60)",
 	'R2.75': "rgb(202, 50, 50)",
+	"R3.65": "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
+	"R7.15": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
@@ -133,7 +142,8 @@ const HandDiv = ({
 	onMouseDown,
 	onMouseUp,
 	indexX,
-	indexY
+	indexY,
+	highlight,
 }) => {
 	return <HandDivWrapper
 		onMouseEnter={onMouseEnter}
@@ -141,6 +151,7 @@ const HandDiv = ({
 		onMouseUp={onMouseUp}
 		data-x={indexX}
 		data-y={indexY}
+		highlight={highlight}
 	>
 		{
 			[...Object.entries(data.actions_total_frequencies)]
@@ -156,17 +167,19 @@ const HandDiv = ({
 const RangePage = () => {
 	const [mouseMode, setMouseMode] = useState('none')
 	const [currentCombos, setCurrentCombos] = useState(0)
-	const [setting, setSetting] = useState('NL50GG');
+	const [setting, setSetting] = useState('NL500');
 	const [preflop, setPreflop] = useState('F-F-F-R2.5-F-C');
 	const [action, setAction] = useState('X');
 	const [board, setBoard] = useState('2h2d2c');
 	const [data, setData] = useState(DATA[preflop][action][board])
 	const [selectedKey, setSelectedKey] = useState('AA')
+	const [detailState, setDetailState] = useState('filters')
+	const [filterState, setFilterState] = useState({ type: 'none' })
 
 	const handData = data.players_info[1].simple_hand_counters;
-	const rangeData = RANGE.map(row => {
-		return row.map(v => ({ key: v, value : handData[v].total_frequency > 0 ? 0 : -1, combo: handData[v].total_combos }))
-	})
+	const [rangeData, setRangeData] = useState(RANGE.map(row => {
+		return row.map(v => ({ key: v, value : handData[v].total_frequency > 0 ? 0 : -1, combo: handData[v].total_combos, highlight: true }))
+	}))
 
 	const answerCheckFreq = data.solutions[0].total_frequency;
 
@@ -223,7 +236,77 @@ const RangePage = () => {
 		setMouseMode('none')
 	}
 
+	useEffect(() => {
+		let newRangeData;
+		const { key, type } = filterState;
+		switch (type) {
+			case 'hands': {
+				const index = (data.players_info[1].hand_categories.find(c => c.name === key) || { index: -1 }).index 
+				newRangeData = rangeData.map((row, x) => {
+					return row.map((v, y) => {
+						return {
+							...v,
+							highlight: v.value === -1 ? false : INDEX_MAP[v.key].some(i => data.hand_categories_range[i] === index)
+						}
+					})
+				})
+				break;
+			}
+			case 'draw': {
+				const index = (data.players_info[1].draw_categories.find(c => c.name === key) || { index: -1 }).index 
+				newRangeData = rangeData.map((row, x) => {
+					return row.map((v, y) => {
+						return {
+							...v,
+							highlight: v.value === -1 ? false : INDEX_MAP[v.key].some(i => data.draw_categories_range[i] === index)
+						}
+					})
+				})
+				break;
+			}
+			case 'eqs': {
+				const index = (data.players_info[1].equity_buckets.find(c => c.name === key) || { index: -1 }).index 
+				newRangeData = rangeData.map((row, x) => {
+					return row.map((v, y) => {
+						return {
+							...v,
+							highlight: v.value === -1 ? false : INDEX_MAP[v.key].some(i => data.players_info[1].equity_buckets_range[i] === index)
+						}
+					})
+				})
+				break;
+			}
+			case 'eqa': {
+				const index = (data.players_info[1].equity_buckets_advanced.find(c => c.name === key) || { index: -1 }).index 
+				newRangeData = rangeData.map((row, x) => {
+					return row.map((v, y) => {
+						return {
+							...v,
+							highlight: v.value === -1 ? false : INDEX_MAP[v.key].some(i => data.players_info[1].equity_buckets_advanced_range[i] === index)
+						}
+					})
+				})
+				break;
+			}
+			case 'none':
+			default: {
+				newRangeData = rangeData.map((row, x) => {
+					return row.map((v, y) => {
+						return {
+							...v,
+							highlight: true
+						}
+					})
+				})
+			}
+		}
+		setRangeData(newRangeData)
+	}, [JSON.stringify(filterState)])
+
 	const currentHand = data.players_info[1].simple_hand_counters[selectedKey]
+	const DetailComp = detailState === 'hands'
+		? () => <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+		: () => <Filter data={data} onSelectFilter={({ type, key }) => setFilterState({ type, key })} hand={selectedKey}></Filter>
 
 	return (
 		<Page>
@@ -237,14 +320,20 @@ const RangePage = () => {
 									// onMouseDown={() => onHandDown({ x, y })}
 									// onMouseUp={onHandUp}
 									data={data.players_info[1].simple_hand_counters[v.key]}
-									hand={v.key} />
+									hand={v.key}
+									highlight={v.highlight}
+								/>
 							})
 						})
 					}
 				</Board>
 				<Detail>
 					<Action data={data.solutions}></Action>
-					<Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+					<DetailControlWrapper>
+						<button onClick={() => setDetailState('hands')}>Hands</button>
+						<button onClick={() => setDetailState('filters')}>Filters</button>
+					</DetailControlWrapper>
+					<DetailComp />
 				</Detail>
 			</Wrapper>
 		</Page>

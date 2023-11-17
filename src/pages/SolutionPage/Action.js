@@ -32,8 +32,10 @@ const ColorBlock = styled.div`
 const COLOR_MAP = {
 	'R1.8': "rgb(240, 60, 60)",
 	'R2.75': "rgb(202, 50, 50)",
+	"R3.65": "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
+	"R7.15": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
@@ -46,7 +48,6 @@ const Wrapper = styled.div`
 `
 
 const Action = ({ data }) => {
-	console.log(data)
 	return <Wrapper>
 		{
 			[...data]
