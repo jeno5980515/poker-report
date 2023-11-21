@@ -11,8 +11,15 @@ import RangeFilter from './RangeFilter';
 
 import INDEX_MAP from '../../indexMap.json';
 // import DATA from './solutions/NL50GG'
-import DATA from './solutions/NL500'
+import DATA from './solutions'
 // import DATA from './solutions/A42.json'
+
+const PREFLOP_MAP = {
+	'F-F-F-R2.5-F-C': 'BTN VS BB',
+	'R2.5-F-F-F-F-C': 'LJ VS BB',
+	'F-F-F-F-R3-C': 'SB VS BB',
+	'F-F-F-R2.5-R10-F-C': 'SB 3B BTN',
+}
 
 const Wrapper = styled.div`
 	display: flex;
@@ -261,6 +268,7 @@ const SolutionRangePage = ({
 	data,
 	player1RangeData,
 	player2RangeData,
+	currentPlayer,
 	chartRef,
 	filteredChartRef,
 	setFilterState,
@@ -308,6 +316,7 @@ const SolutionRangePage = ({
 			</ChartWrapper>
 		</RangeLeft>
 		<RangeDetail>
+			<Action data={data.solutions}></Action>
 			<RangeFilter data={data} onSelectFilter={({ type, key }) => setFilterState({ type, key })} hand={selectedKey}></RangeFilter>
 		</RangeDetail>
 	</SolutionPageWrapper>
@@ -318,9 +327,9 @@ const RangePage = () => {
 	const [currentCombos, setCurrentCombos] = useState(0)
 	const [setting, setSetting] = useState('NL500');
 	const [preflop, setPreflop] = useState('F-F-F-R2.5-F-C');
-	const [action, setAction] = useState('X');
+	const [flopAction, setFlopAction] = useState('X');
 	const [board, setBoard] = useState('2h2d2c');
-	const [data, setData] = useState(DATA[preflop][action][board])
+	const [data, setData] = useState(null)
 	const [selectedKey, setSelectedKey] = useState('AA')
 	const [pageState, setPageState] = useState('range')
 	const [detailState, setDetailState] = useState('hands')
@@ -330,19 +339,19 @@ const RangePage = () => {
   const chartRef = useRef(null);
   const filteredChartRef = useRef(null);
 
-	const player1HandData = data.players_info[0].simple_hand_counters;
-	const player2HandData = data.players_info[1].simple_hand_counters;
+	const player1HandData = data && data.players_info[0].simple_hand_counters;
+	const player2HandData = data && data.players_info[1].simple_hand_counters;
 	const [player1RangeData, setPlayer1RangeData] = useState(RANGE.map(row => {
-		return row.map(v => ({ key: v, value : player1HandData[v].total_frequency > 0 ? 0 : -1, combo: player1HandData[v].total_combos, highlight: true }))
+		return row.map(v => ({ key: v, value : data && player1HandData[v].total_frequency > 0 ? 0 : -1, combo: data && player1HandData[v].total_combos, highlight: true }))
 	}))
 	const [player2RangeData, setPlayer2RangeData] = useState(RANGE.map(row => {
-		return row.map(v => ({ key: v, value : player2HandData[v].total_frequency > 0 ? 0 : -1, combo: player2HandData[v].total_combos, highlight: true }))
+		return row.map(v => ({ key: v, value : data && player2HandData[v].total_frequency > 0 ? 0 : -1, combo: data && player2HandData[v].total_combos, highlight: true }))
 	}))
 
 
-	const answerCheckFreq = data.solutions[0].total_frequency;
+	const answerCheckFreq = data && data.solutions[0].total_frequency;
 
-	const totalCombos = Object.values(data.players_info[1].simple_hand_counters)
+	const totalCombos = data && Object.values(data.players_info[1].simple_hand_counters)
 		.reduce((cal, val) => {
 			return cal + val.total_combos
 		}, 0)
@@ -381,16 +390,6 @@ const RangePage = () => {
 		}
 	}
 
-	// useEffect(() => {
-	// 	const newCombo = data.reduce((cal, row) => {
-	// 		return cal + row.reduce((c, v) => {
-	// 			const r = v.value === -1 ? 0 : v.value /100 * v.combo
-	// 			return c + r
-	// 		}, 0)
-	// 	}, 0)
-	// 	setCurrentCombos(newCombo);
-	// }, [JSON.stringify(data)])
-
 	const onHandUp = () => {
 		setMouseMode('none')
 	}
@@ -401,7 +400,7 @@ const RangePage = () => {
 		let index1, index2;
 		let player1MappedEQS = [], player2MappedEQS = [];
 		const { key, type } = filterState;
-		console.log(data)
+
 		switch (type) {
 			case 'hands': {
 				index1 = (data.players_info[0].hand_categories.find(c => c.name === key) || { index: -1 }).index 
@@ -555,6 +554,7 @@ const RangePage = () => {
 				})
 			}
 		}
+
 		setPlayer1RangeData(newPlayer1RangeData)
 		setPlayer2RangeData(newPlayer2RangeData)
 
@@ -611,6 +611,16 @@ const RangePage = () => {
 
   useEffect(() => {
 		if (!chartRef.current) return;
+		if (data) {
+			setPlayer1RangeData(RANGE.map(row => {
+				return row.map(v => ({ key: v, value : player1HandData[v].total_frequency > 0 ? 0 : -1, combo: player1HandData[v].total_combos, highlight: true }))
+			}))
+			setPlayer2RangeData(RANGE.map(row => {
+				return row.map(v => ({ key: v, value : player2HandData[v].total_frequency > 0 ? 0 : -1, combo: player2HandData[v].total_combos, highlight: true }))
+			}))
+		}
+
+
 		let player1Data = data.players_info[0].hand_eqs
 			.filter(d => d !== 0)
 			.map(d => d * 100).sort()
@@ -685,19 +695,87 @@ const RangePage = () => {
 
   }, [JSON.stringify(data), pageState]);
 
+	useEffect(() => {
+		const fn = async () => {
+			try {
+				const path = `${process.env.PUBLIC_URL}/solutions/${setting}/${preflop}/${flopAction}/${board}.json`;
+				const response = await fetch(path);
+				const data = await response.json()
+				setData(data)
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		fn();
+	}, [setting, preflop, flopAction, board])
+
 	const playerRangeData = currentPlayer === 1 ? player1RangeData : player2RangeData
-	const currentHand = data.players_info[1].simple_hand_counters[selectedKey]
+	const currentHand = data && data.players_info[1].simple_hand_counters[selectedKey]
 	const DetailComp = detailState === 'hands'
 		? () => <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
 		: () => <Filter data={data} onSelectFilter={({ type, key }) => setFilterState({ type, key })} hand={selectedKey}></Filter>
-	
-	
+
+	const settingOptions = Object.keys(DATA)
+		.map(k => ({ value: k, label: k }))
+
+	const preflopOptions = Object.keys(DATA[setting] || settingOptions[0])
+		.map(k => ({ value: k, label: PREFLOP_MAP[k] }))
+
+	const flopActionOptions = Object.keys(DATA[setting][preflop] || preflopOptions[0])
+		.map(k => ({ value: k, label: k }))
+
+	const boardOptions = Object.keys(DATA[setting][preflop][flopAction] || flopActionOptions[0])
+		.map(k => ({ value: k, label: k }))
+
+	if (!data) {
+		return <div>Loading</div>
+	}
+
 	return (
 		<Page>
 			<Wrapper>
 				<SolutionPageControlWrapper>
+					<Select
+						defaultValue={settingOptions[0]}
+						options={settingOptions}
+						onChange={(e) => {
+							setSetting(e.value)
+						}}
+					/>
+					<Select
+						defaultValue={preflopOptions[0]}
+						options={preflopOptions}
+						onChange={(e) => {
+							setPreflop(e.value)
+						}}
+					/>
+					<Select
+						defaultValue={flopActionOptions[0]}
+						options={flopActionOptions}
+						onChange={(e) => {
+							setFlopAction(e.value)
+						}}
+					/>
+					<Select
+						defaultValue={boardOptions[0]}
+						options={boardOptions}
+						onChange={(e) => {
+							setBoard(e.value)
+						}}
+						value={boardOptions.find(o => o.value === board)}
+					/>
 					<button onClick={() => setPageState('strategy')}>Strategy</button>
 					<button onClick={() => setPageState('range')}>Range</button>
+					<button
+						onClick={() => {
+							const list = Object.keys(DATA[setting][preflop][flopAction])
+							const min = 0;
+							const max = list.length - 1
+							const index = Math.floor(Math.random() * (max - min + 1)) + min
+							const newFlop = list[index]
+							setBoard(newFlop)
+						}}
+					>Random</button>
 				</SolutionPageControlWrapper>
 				{
 					pageState === 'strategy'

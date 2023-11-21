@@ -1,5 +1,5 @@
 import ipa from './X'
 
 export default {
-	X: ipa
-}
+	'X': ipa
+};
