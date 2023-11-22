@@ -4,6 +4,14 @@ import { useEffect, useRef, useState, memo } from 'react';
 import { Canvg } from 'canvg';
 import styled from 'styled-components';
 import Select, { components } from "react-select";
+
+import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
+import { ReactComponent as DiamondSVG } from '../../assets/diamond.svg';
+import { ReactComponent as ClubSVG } from '../../assets/club.svg';
+import { ReactComponent as SpadeSVG } from '../../assets/spade.svg';
+import { ReactComponent as ArrowSVG } from '../../assets/arrow.svg';
+
+
 import Action from './Action';
 import Hand from './Hand';
 import Filter from './Filter';
@@ -108,6 +116,39 @@ const Chart = styled.div`
 	height: 300px;
 `
 
+const SuitCharacter = styled.div`
+	color: ${({ color }) => color};
+`
+
+const SuitText = styled.div`
+	border: 1px solid;
+	background: white;
+	display: flex;
+	padding: 7px;
+	> * {
+		width: 13px;
+		font-size: 15px;
+		padding: 2px;
+	}
+	:hover: {
+		background: blue;
+	}
+`
+
+const SuitTextForInput = styled.div`
+	background: white;
+	display: flex;
+	> * {
+		width: 13px;
+		font-size: 15px;
+		padding: 2px;
+	}
+	:hover: {
+		background: blue;
+	}
+`
+
+
 const FilteredChart = styled.div`
 	width: 100%;
 	height: 300px;
@@ -129,6 +170,34 @@ const RangeLeft = styled.div`
 	flex-direction: column;
 `
 
+
+const getSVG = (text) => {
+	switch (text) {
+    case 'h':
+      return <HeartSVG fill="#EF5350"/>;
+    case 'd':
+      return <DiamondSVG fill="#448AFF" />;
+    case 'c':
+      return <ClubSVG fill="#66BB6A"/>;
+		case 's':
+			return <SpadeSVG fill="rgb(80, 79, 79)"/>;
+    default:
+      return <HeartSVG fill="#EF5350" />;
+  }
+}
+
+const getColor = (text) => {
+  switch (text) {
+    case 'h':
+      return '#EF5350';
+    case 'd':
+      return '#448AFF';
+    case 'c':
+      return '#66BB6A';
+    default:
+      return 'black';
+  }
+}
 
 const sortBySize = (a, b) => {
 	if (a[0] === 'X') {
@@ -228,6 +297,37 @@ const HandDiv = ({
 	</HandDivWrapper>
 }
 
+const BoardOption = ({ innerProps, label }) => {
+  return <SuitText {...innerProps}>
+		<SuitCharacter color={getColor(label[1])}>{label[0]}</SuitCharacter>
+		<SuitCharacter color={getColor(label[1])}>{getSVG(label[1])}</SuitCharacter>
+		<SuitCharacter color={getColor(label[3])}>{label[2]}</SuitCharacter>
+		<SuitCharacter color={getColor(label[3])}>{getSVG(label[3])}</SuitCharacter>
+		<SuitCharacter color={getColor(label[5])}>{label[4]}</SuitCharacter>
+		<SuitCharacter color={getColor(label[5])}>{getSVG(label[5])}</SuitCharacter>
+  </SuitText>
+}
+
+const SingleValue = ({
+	children,
+  ...props
+}) => {
+	const label = children
+  return (
+		<components.SingleValue {...props}>
+			<SuitTextForInput>
+				<SuitCharacter color={getColor(label[1])}>{label[0]}</SuitCharacter>
+				<SuitCharacter color={getColor(label[1])}>{getSVG(label[1])}</SuitCharacter>
+				<SuitCharacter color={getColor(label[3])}>{label[2]}</SuitCharacter>
+				<SuitCharacter color={getColor(label[3])}>{getSVG(label[3])}</SuitCharacter>
+				<SuitCharacter color={getColor(label[5])}>{label[4]}</SuitCharacter>
+				<SuitCharacter color={getColor(label[5])}>{getSVG(label[5])}</SuitCharacter>
+			</SuitTextForInput>
+		</components.SingleValue>
+  );
+};
+
+
 const SolutionStrategyPage = ({
 	playerRangeData,
 	currentPlayer,
@@ -235,6 +335,7 @@ const SolutionStrategyPage = ({
 	onHandEnter,
 	setDetailState,
 	DetailComp,
+	setClickedFilter
 }) => {
 	return <SolutionPageWrapper>
 		<Board>
@@ -258,6 +359,7 @@ const SolutionStrategyPage = ({
 			<DetailControlWrapper>
 				<button onClick={() => setDetailState('hands')}>Hands</button>
 				<button onClick={() => setDetailState('filters')}>Filters</button>
+				<button onClick={() => setClickedFilter({ type: 'none' })}>Clear</button>
 			</DetailControlWrapper>
 			<DetailComp />
 		</StrategyDetail>
@@ -328,12 +430,13 @@ const RangePage = () => {
 	const [setting, setSetting] = useState('NL500');
 	const [preflop, setPreflop] = useState('F-F-F-R2.5-F-C');
 	const [flopAction, setFlopAction] = useState('X');
-	const [board, setBoard] = useState('2h2d2c');
+	const [board, setBoard] = useState('QhJh7d');
 	const [data, setData] = useState(null)
 	const [selectedKey, setSelectedKey] = useState('AA')
 	const [pageState, setPageState] = useState('range')
 	const [detailState, setDetailState] = useState('hands')
 	const [filterState, setFilterState] = useState({ type: 'none' })
+	const [clickedFilter, setClickedFilter] = useState({ type: 'none' })
   const [chartData, setChartDate] = useState([10, 25, 18, 32, 12, 7]);
 	const [currentPlayer, setCurrentPlayer] = useState(2)
   const chartRef = useRef(null);
@@ -361,50 +464,29 @@ const RangePage = () => {
 		// setSelectedKey('A3o')
 	}
 
-	const onHandDown = ({ x, y }) => {
-		let newMouseMode = 'none'
-		switch (data[x][y].value) {
-			case 0: {
-				newMouseMode = 'bet';
-				break;
-			}
-			case ACTIVE_VALUE: {
-				newMouseMode = 'check';
-				break;
-			}
-			default: {
-				newMouseMode = 'none';
-			}
-		}
-		setMouseMode(newMouseMode);
-		if (data[x][y].value !== -1 && newMouseMode !== 'none') {
-			const newData = [...data];
-			const newRow = [...newData[x]]
-			const newHand = {
-				...newRow[y],
-				value: newMouseMode === 'bet' ? ACTIVE_VALUE : 0
-			}
-			newRow[y] = newHand;
-			newData[x] = newRow;
-			setData(newData)
-		}
-	}
-
-	const onHandUp = () => {
-		setMouseMode('none')
-	}
 
 	useEffect(() => {
-		let newPlayer1RangeData;
-		let newPlayer2RangeData;
+		if (!data) {
+			return;
+		}
+		let newPlayer1RangeData = RANGE.map(row => {
+			return row.map(v => ({ key: v, value : player1HandData[v].total_frequency > 0 ? 0 : -1, combo: player1HandData[v].total_combos, highlight: true }))
+		});
+		let newPlayer2RangeData = RANGE.map(row => {
+			return row.map(v => ({ key: v, value : player2HandData[v].total_frequency > 0 ? 0 : -1, combo: player2HandData[v].total_combos, highlight: true }))
+		});
 		let index1, index2;
 		let player1MappedEQS = [], player2MappedEQS = [];
-		const { key, type } = filterState;
+
+
+		const finalState = clickedFilter.type !== 'none' ? clickedFilter : filterState
+		const { key, type } = finalState;
+
 
 		switch (type) {
 			case 'hands': {
 				index1 = (data.players_info[0].hand_categories.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer1RangeData = player1RangeData.map((row, x) => {
+				newPlayer1RangeData = newPlayer1RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -413,7 +495,7 @@ const RangePage = () => {
 					})
 				})
 				index2 = (data.players_info[1].hand_categories.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer2RangeData = player2RangeData.map((row, x) => {
+				newPlayer2RangeData = newPlayer2RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -437,7 +519,7 @@ const RangePage = () => {
 			}
 			case 'draw': {
 				index1 = (data.players_info[0].draw_categories.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer1RangeData = player1RangeData.map((row, x) => {
+				newPlayer1RangeData = newPlayer1RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -446,7 +528,7 @@ const RangePage = () => {
 					})
 				})
 				index2 = (data.players_info[1].draw_categories.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer2RangeData = player2RangeData.map((row, x) => {
+				newPlayer2RangeData = newPlayer2RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -470,7 +552,7 @@ const RangePage = () => {
 			}
 			case 'eqs': {
 				index1 = (data.players_info[0].equity_buckets.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer1RangeData = player1RangeData.map((row, x) => {
+				newPlayer1RangeData = newPlayer1RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -479,7 +561,7 @@ const RangePage = () => {
 					})
 				})
 				index2 = (data.players_info[1].equity_buckets.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer2RangeData = player2RangeData.map((row, x) => {
+				newPlayer2RangeData = newPlayer2RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -503,7 +585,7 @@ const RangePage = () => {
 			}
 			case 'eqa': {
 				index1 = (data.players_info[0].equity_buckets_advanced.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer1RangeData = player1RangeData.map((row, x) => {
+				newPlayer1RangeData = newPlayer1RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -512,7 +594,7 @@ const RangePage = () => {
 					})
 				})
 				index2 = (data.players_info[1].equity_buckets_advanced.find(c => c.name === key) || { index: -1 }).index 
-				newPlayer2RangeData = player2RangeData.map((row, x) => {
+				newPlayer2RangeData = newPlayer2RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -536,7 +618,7 @@ const RangePage = () => {
 			}
 			case 'none':
 			default: {
-				newPlayer1RangeData = player1RangeData.map((row, x) => {
+				newPlayer1RangeData = newPlayer1RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -544,7 +626,7 @@ const RangePage = () => {
 						}
 					})
 				})
-				newPlayer2RangeData = player2RangeData.map((row, x) => {
+				newPlayer2RangeData = newPlayer2RangeData.map((row, x) => {
 					return row.map((v, y) => {
 						return {
 							...v,
@@ -575,6 +657,7 @@ const RangePage = () => {
 		let player1FilteredValue = player1MappedEQS.map(({ value, index }) => {
 			return index === index1 ? value * 100 : 0
 		})
+
 		let player2FilteredValue = player2MappedEQS.map(({ value, index }) => {
 			return index === index2 ? value * 100 : 0
 		})
@@ -606,27 +689,18 @@ const RangePage = () => {
 			.attr('fill', 'rgb(37, 179, 54)')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-	}, [JSON.stringify(filterState)])
+	}, [JSON.stringify(filterState), JSON.stringify(clickedFilter), JSON.stringify(data)])
 
 
   useEffect(() => {
 		if (!chartRef.current) return;
-		if (data) {
-			setPlayer1RangeData(RANGE.map(row => {
-				return row.map(v => ({ key: v, value : player1HandData[v].total_frequency > 0 ? 0 : -1, combo: player1HandData[v].total_combos, highlight: true }))
-			}))
-			setPlayer2RangeData(RANGE.map(row => {
-				return row.map(v => ({ key: v, value : player2HandData[v].total_frequency > 0 ? 0 : -1, combo: player2HandData[v].total_combos, highlight: true }))
-			}))
-		}
-
 
 		let player1Data = data.players_info[0].hand_eqs
 			.filter(d => d !== 0)
-			.map(d => d * 100).sort()
+			.map(d => d * 100).sort((a,b) => a - b)
 		let player2Data = data.players_info[1].hand_eqs
 			.filter(d => d !== 0)
-			.map(d => d * 100).sort()
+			.map(d => d * 100).sort((a,b) => a - b)
 
     const width = 500;
     const height = 250;
@@ -695,6 +769,15 @@ const RangePage = () => {
 
   }, [JSON.stringify(data), pageState]);
 
+	const handleClickFilter = ({ type, key }) => {
+		if (key === clickedFilter.key || type === 'none') {
+			setClickedFilter({ type: 'none' })
+		} else {
+			setClickedFilter({ type, key })
+		}
+		setFilterState({ type: 'none' })
+	}
+
 	useEffect(() => {
 		const fn = async () => {
 			try {
@@ -713,7 +796,11 @@ const RangePage = () => {
 	const currentHand = data && data.players_info[1].simple_hand_counters[selectedKey]
 	const DetailComp = detailState === 'hands'
 		? () => <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
-		: () => <Filter data={data} onSelectFilter={({ type, key }) => setFilterState({ type, key })} hand={selectedKey}></Filter>
+		: () => <Filter
+			data={data}
+			onSelectFilter={({ type, key }) => setFilterState({ type, key })}
+			onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
+			hand={selectedKey}></Filter>
 
 	const settingOptions = Object.keys(DATA)
 		.map(k => ({ value: k, label: k }))
@@ -758,6 +845,7 @@ const RangePage = () => {
 					/>
 					<Select
 						defaultValue={boardOptions[0]}
+						components={{ Option: BoardOption, SingleValue }}
 						options={boardOptions}
 						onChange={(e) => {
 							setBoard(e.value)
@@ -792,6 +880,7 @@ const RangePage = () => {
 								chartRef={chartRef}
 								filteredChartRef={filteredChartRef}
 								selectedKey={selectedKey}
+								setClickedFilter={setClickedFilter}
 							/>
 						: <SolutionRangePage
 								data={data}
@@ -806,6 +895,7 @@ const RangePage = () => {
 								chartRef={chartRef}
 								filteredChartRef={filteredChartRef}
 								selectedKey={selectedKey}
+								setClickedFilter={setClickedFilter}
 							/>
 				}
 			</Wrapper>

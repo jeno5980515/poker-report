@@ -206,7 +206,7 @@ const getSuitList = (length) => {
 	}
 }
 
-const Hand = ({ data, onSelectFilter }) => {
+const Hand = ({ data, onSelectFilter, onClickFilter }) => {
 	return <HandWrapper>
 		<Title>Hands</Title>
 		{
@@ -217,6 +217,7 @@ const Hand = ({ data, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'hands' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'hands' })}
 					>
 						<Left>{d.name}</Left>
 						<Right>
@@ -239,7 +240,7 @@ const Hand = ({ data, onSelectFilter }) => {
 	</HandWrapper>
 }
 
-const EQSimple = ({ data, onSelectFilter }) => {
+const EQSimple = ({ data, onSelectFilter, onClickFilter }) => {
 	return <HandWrapper>
 		<Title>EQ Simple</Title>
 		{
@@ -250,6 +251,7 @@ const EQSimple = ({ data, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'eqs' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'eqs' })}
 					>
 						<Left>{d.name}</Left>
 						<Right>
@@ -272,7 +274,7 @@ const EQSimple = ({ data, onSelectFilter }) => {
 	</HandWrapper>
 }
 
-const Draw = ({ data, onSelectFilter }) => {
+const Draw = ({ data, onSelectFilter, onClickFilter }) => {
 	return <HandWrapper>
 		<Title>Draw</Title>
 		{
@@ -283,6 +285,7 @@ const Draw = ({ data, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'draw' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'draw' })}
 					>
 						<Left>{d.name}</Left>
 						<Right>
@@ -305,7 +308,7 @@ const Draw = ({ data, onSelectFilter }) => {
 	</HandWrapper>
 }
 
-const EQAdv = ({ data, onSelectFilter }) => {
+const EQAdv = ({ data, onSelectFilter, onClickFilter }) => {
 	return <HandWrapper>
 		<Title>EQ Advanced</Title>
 		{
@@ -316,6 +319,7 @@ const EQAdv = ({ data, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'eqa' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'eqa' })}
 					>
 						<Left>{d.name}</Left>
 						<Right>
@@ -338,16 +342,16 @@ const EQAdv = ({ data, onSelectFilter }) => {
 	</HandWrapper>
 }
 
-const Filter = ({ data, onSelectFilter, hand }) => {
+const Filter = ({ data, onSelectFilter, hand, onClickFilter }) => {
 	const { solutions, blocker_rate, unblocker_rate } = data
 
 	return <Wrapper>
 		{
 			<>
-				<Hand data={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} />
-				<EQSimple data={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter} />
-				<Draw data={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter} />
-				<EQAdv data={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter} />
+				<Hand data={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} />
+				<EQSimple data={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
+				<Draw data={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
+				<EQAdv data={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
 			</>
 		}
 	</Wrapper>
