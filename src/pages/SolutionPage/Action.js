@@ -42,9 +42,16 @@ const COLOR_MAP = {
 
 const Wrapper = styled.div`
 	width: 100%;
-	height: 70px;
 	display: flex;
 	flex-wrap: wrap;
+	@media (max-width: 767px) {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		width: 100%;
+	}
+	@media (min-width: 769px) {
+		height: 70px;
+	}
 `
 
 const Action = ({ data }) => {

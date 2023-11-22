@@ -77,6 +77,14 @@ const Wrapper = styled.div`
 	display: flex;
 	flex-wrap: no-wrap;
 	flex-direction: column;
+	@media (max-width: 767px) {
+		font-size: 0.7rem;
+		height: 230px;
+		overflow: scroll;
+	}
+
+	@media (min-width: 768px) {
+	}
 `
 
 const SuitText = styled.div`
@@ -173,6 +181,12 @@ const ColorBar = styled.div`
 	display: flex;
 	width: 100%;
 	background: rgb(63, 63, 63);
+	@media (max-width: 767px) {
+		height: 8px;
+	}
+
+	@media (min-width: 768px) {
+	}
 `
 
 const LeftComparedColorBar = styled.div`
@@ -183,6 +197,12 @@ const LeftComparedColorBar = styled.div`
 	width: ${({ width }) => width}%;
 	background: ${({ bigger }) => bigger ? 'rgb(0, 172, 141)' : 'rgb(79, 79, 79)'};
 	top: 0;
+	@media (max-width: 767px) {
+		height: 8px;
+	}
+
+	@media (min-width: 768px) {
+	}
 `
 
 const RightComparedColorBar = styled.div`
@@ -193,6 +213,12 @@ const RightComparedColorBar = styled.div`
 	width: ${({ width }) => width}%;
 	background: ${({ bigger }) => bigger ? 'rgb(0, 172, 141)' : 'rgb(79, 79, 79)'};
 	top: 0;
+	@media (max-width: 767px) {
+		height: 8px;
+	}
+
+	@media (min-width: 768px) {
+	}
 `
 
 

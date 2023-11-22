@@ -11,7 +11,8 @@ import { ReactComponent as ClubSVG } from '../../assets/club.svg';
 import { ReactComponent as SpadeSVG } from '../../assets/spade.svg';
 import { ReactComponent as ArrowSVG } from '../../assets/arrow.svg';
 
-
+import SolutionRangePage from './SolutionRangePage';
+import SolutionStrategyPage from './SolutionStrategyPage';
 import Action from './Action';
 import Hand from './Hand';
 import Filter from './Filter';
@@ -37,12 +38,6 @@ const Wrapper = styled.div`
 	width: 100%;
 `
 
-const SolutionPageWrapper = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-`
 
 
 const Board = styled.div`
@@ -81,40 +76,31 @@ const TextBlock = styled.div`
 const Page = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 100%;
+	width: 100vw;
 `
 
-const StrategyDetail = styled.div`
-	width: 450px;
-	display: flex;
-	flex-direction: column;
-	height: 550px;
-	justify-content: space-between;
-`
-
-const RangeDetail = styled.div`
-	width: 450px;
-	display: flex;
-	flex-direction: column;
-	height: 550px;
-	justify-content: space-between;
-`
-
-
-const DetailControlWrapper = styled.div`
-	display: flex;
-	margin-top: 70px;
-`
 
 const SolutionPageControlWrapper = styled.div`
-	display: flex;
-	margin-top: 70px;
+	@media (max-width: 767px) {
+		display: flex;
+		flex-wrap: wrap;
+		> div:nth-child(-n+4) {
+			flex: 1 0 48%;
+		}
+		> div:nth-child(n+5) {
+			flex-basis: 100%;
+		}
+		> *:nth-child(n+5) {
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+	}
+	@media (min-width: 769px) {
+		display: flex;
+		margin-top: 70px;
+	}
 `
 
-const Chart = styled.div`
-	width: 100%;
-	height: 300px;
-`
 
 const SuitCharacter = styled.div`
 	color: ${({ color }) => color};
@@ -148,28 +134,19 @@ const SuitTextForInput = styled.div`
 	}
 `
 
-
-const FilteredChart = styled.div`
-	width: 100%;
-	height: 300px;
-	position: absolute;
-	top: 0;
-`
-
-const ChartWrapper = styled.div`
-	position: relative;
-`
-
-const BoardWrapper = styled.div`
+const SolutionPageWrapper = styled.div`
 	display: flex;
-`
+	align-items: center;
+	justify-content: center;
 
-const RangeLeft = styled.div`
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-`
+	@media (max-width: 767px) {
+		flex-wrap: wrap;
+	}
 
+	@media (min-width: 768px) {
+
+	}
+`
 
 const getSVG = (text) => {
 	switch (text) {
@@ -258,7 +235,9 @@ const RANGE = [
 	['A2o', 'K2o', 'Q2o', 'J2o', 'T2o', '92o', '82o', '72o', '62o', '52o', '42o', '32o', '22'],
 ]
 
-const ACTIVE_VALUE = 83;
+const ChartWidth = window.innerWidth < 768 ? 350 : 500;
+const ChartHeight = window.innerWidth < 768 ? 200 : 250;
+const ChartMargin = window.innerWidth < 768 ? { top: 10, right: 10, bottom: 10, left: 20 } : { top: 20, right: 20, bottom: 20, left: 40 };
 
 const FrequencyWrapper = styled.div`
 	display: flex;
@@ -327,102 +306,6 @@ const SingleValue = ({
   );
 };
 
-
-const SolutionStrategyPage = ({
-	playerRangeData,
-	currentPlayer,
-	data,
-	onHandEnter,
-	setDetailState,
-	DetailComp,
-	setClickedFilter
-}) => {
-	return <SolutionPageWrapper>
-		<Board>
-			{
-				playerRangeData.map((row, x) => {
-					return row.map((v, y) => {
-						return <HandDiv
-							onMouseEnter={() => onHandEnter({ key: v.key })}
-							// onMouseDown={() => onHandDown({ x, y })}
-							// onMouseUp={onHandUp}
-							data={data.players_info[currentPlayer === 2 ? 1 : 0].simple_hand_counters[v.key]}
-							hand={v.key}
-							highlight={v.highlight}
-						/>
-					})
-				})
-			}
-		</Board>
-		<StrategyDetail>
-			<Action data={data.solutions}></Action>
-			<DetailControlWrapper>
-				<button onClick={() => setDetailState('hands')}>Hands</button>
-				<button onClick={() => setDetailState('filters')}>Filters</button>
-				<button onClick={() => setClickedFilter({ type: 'none' })}>Clear</button>
-			</DetailControlWrapper>
-			<DetailComp />
-		</StrategyDetail>
-	</SolutionPageWrapper>
-}
-
-const SolutionRangePage = ({
-	data,
-	player1RangeData,
-	player2RangeData,
-	currentPlayer,
-	chartRef,
-	filteredChartRef,
-	setFilterState,
-	selectedKey
-}) => {
-	return <SolutionPageWrapper>
-		<RangeLeft>
-			<BoardWrapper>
-				<Board>
-					{
-						player1RangeData.map((row, x) => {
-							return row.map((v, y) => {
-								return <HandDiv
-									// onMouseDown={() => onHandDown({ x, y })}
-									// onMouseUp={onHandUp}
-									data={data.players_info[0].simple_hand_counters[v.key]}
-									hand={v.key}
-									highlight={v.highlight}
-									isFreq={false}
-								/>
-							})
-						})
-					}
-				</Board>
-				<Board>
-					{
-						player2RangeData.map((row, x) => {
-							return row.map((v, y) => {
-								return <HandDiv
-									// onMouseDown={() => onHandDown({ x, y })}
-									// onMouseUp={onHandUp}
-									data={data.players_info[1].simple_hand_counters[v.key]}
-									hand={v.key}
-									highlight={v.highlight}
-									isFreq={false}
-								/>
-							})
-						})
-					}
-				</Board>
-			</BoardWrapper>
-			<ChartWrapper>
-				<Chart ref={chartRef}></Chart>
-				<FilteredChart ref={filteredChartRef}></FilteredChart>
-			</ChartWrapper>
-		</RangeLeft>
-		<RangeDetail>
-			<Action data={data.solutions}></Action>
-			<RangeFilter data={data} onSelectFilter={({ type, key }) => setFilterState({ type, key })} hand={selectedKey}></RangeFilter>
-		</RangeDetail>
-	</SolutionPageWrapper>
-}
 
 const RangePage = () => {
 	const [mouseMode, setMouseMode] = useState('none')
@@ -640,9 +523,9 @@ const RangePage = () => {
 		setPlayer1RangeData(newPlayer1RangeData)
 		setPlayer2RangeData(newPlayer2RangeData)
 
-    const width = 500;
-    const height = 250;
-    const margin = { top: 20, right: 20, bottom: 20, left: 40 };
+    const width = ChartWidth;
+    const height = ChartHeight;
+    const margin = ChartMargin;
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -702,9 +585,9 @@ const RangePage = () => {
 			.filter(d => d !== 0)
 			.map(d => d * 100).sort((a,b) => a - b)
 
-    const width = 500;
-    const height = 250;
-    const margin = { top: 20, right: 20, bottom: 20, left: 40 };
+		const width = ChartWidth;
+		const height = ChartHeight;
+    const margin = ChartMargin;
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 

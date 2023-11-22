@@ -76,6 +76,16 @@ const Wrapper = styled.div`
 	height: 400px;
 	display: flex;
 	flex-wrap: wrap;
+	@media (max-width: 767px) {
+		margin: 5px;
+		width: 100%;
+		> * {
+			width: 40%;
+			margin: 5px;
+		}
+	}
+	@media (min-width: 769px) {
+	}
 `
 
 const SuitText = styled.div`
@@ -171,6 +181,13 @@ const Right = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	@media (max-width: 767px) {
+		width: 60%;
+		font-size: 0.8rem;
+	}
+	@media (min-width: 769px) {
+		width: 150px;
+	}
 `
 
 const Left = styled.div`
@@ -179,6 +196,17 @@ const Left = styled.div`
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
+	width: 150px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	@media (max-width: 767px) {
+		font-size: 0.8rem;
+		width: 30px;
+		text-overflow: ellipsis;
+	}
+	@media (min-width: 769px) {
+	}
 `
 
 

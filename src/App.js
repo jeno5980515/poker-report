@@ -6,6 +6,8 @@ import RangePage from "./pages/RangePage";
 import SolutionPage from "./pages/SolutionPage";
 import TurnReportPage from "./pages/TurnReportPage";
 
+import './App.css';
+
 function Layout() {
   return (
     <div>

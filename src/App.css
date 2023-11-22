@@ -1,3 +1,10 @@
+#root {
+  @media (max-width: 767px) {
+    overflow: hidden;
+  }
+}
+
+
 body {
   background-color: black;
   overflow-x: hidden;
