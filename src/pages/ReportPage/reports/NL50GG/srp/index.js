@@ -7,5 +7,5 @@ export default {
 	IPA,
 	OPA,
 	IPD,
-	OPD
+	OPD,
 }

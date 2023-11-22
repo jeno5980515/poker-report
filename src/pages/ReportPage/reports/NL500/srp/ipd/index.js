@@ -1,5 +1,6 @@
-import BBCallSB from './BBCallSB.json';
-
 export default {
-	BBCallSB,
+	BTNCallCO: 'BTNCallCO',
+	BTNCallHJ: 'BTNCallHJ',
+	BTNCallLJ: 'BTNCallLJ',
+	BBCallSB: 'BBCallSB',
 }

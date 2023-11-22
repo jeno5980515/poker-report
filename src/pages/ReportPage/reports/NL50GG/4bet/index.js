@@ -1,7 +1,11 @@
-import OPA from './opa';
-import IPA from './ipa';
+import IPA from './ipa'
+import OPA from './opa'
+// import IPD from './ipd'
+// import OPD from './opd'
 
 export default {
-	OPA,
 	IPA,
+	OPA,
+	// IPD,
+	// OPD,
 }

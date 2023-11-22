@@ -1,5 +1,6 @@
-import SBVSBB from './SBVSBB.json';
-
 export default {
-	SBVSBB,
+	COVSBTN: 'COVSBTN',
+	HJVSBTN: 'HJVSBTN',
+	LJVSBTN: 'LJVSBTN',
+	SBVSBB: 'SBVSBB',
 }

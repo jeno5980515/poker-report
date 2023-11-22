@@ -388,14 +388,13 @@ const ReportPage = () => {
   const [orderMenuIsOpen, setOrderMenuIsOpen] = useState(false)
   const [solutionMenuIsOpen, setSolutionMenuIsOpen] = useState(false)
   const [settingMenuIsOpen, setSettingMenuIsOpen] = useState(false)
-  const [data, setData] = useState(DEFAULT_DATA.results.data)
+  const [data, setData] = useState(null)
   const [solutions, setSolutions] = useState(SOLUTION_NL50GG_OPTIONS)
   const prevSolution = usePrevious(solution)
   const prevSetting = usePrevious(setting)
 
-
   const header = "label,value1,value2,value3,value4,value5,value6,value7,value8,value9";
-  const body = data.map(d => ({
+  const body = (data || []).map(d => ({
     label: d.flop,
     values: [...d.actions].reverse().map((a) => {
       return a.frequency * 100
@@ -425,12 +424,6 @@ const ReportPage = () => {
   const scaleY = d3.scaleLinear().domain([0, max]).range([height, 0]);
   const yAxis = d3.axisLeft(scaleY).tickValues([0,25,50,75,100])
   yAxis.tickSize(-width)
-
-  const color = d3
-    .scaleOrdinal()
-    .domain(subgroups)
-    .range(getColors(data[0].actions.length));
-  const stacked = d3.stack().keys(subgroups)(csv);
 
   useEffect(() => {
     if (axisBottomRef.current) {
@@ -574,6 +567,9 @@ const ReportPage = () => {
   }
 
   const syncCanvas = async () => {
+    if (!canvasRef.current) {
+      return
+    }
     const ctx = canvasRef.current.getContext('2d');
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(chartRef.current)
@@ -582,16 +578,33 @@ const ReportPage = () => {
     v.stop();
   }
 
+	useEffect(() => {
+		const fn = async () => {
+			try {
+				const path = `${process.env.PUBLIC_URL}/reports/${setting}/${solution.split('.').join('/')}.json`;
+        const response = await fetch(path);
+				const data = await response.json()
+				setData(data.results.data)
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		fn();
+	}, [setting, solution])
+
   useEffect(() => {
-    let newData = [...data]
-    if (prevSolution !== solution || prevSetting !== setting) {
-      const solutionPath = solution.split('.')
-      const newSolution = DATA[setting][solutionPath[0]][solutionPath[1]][solutionPath[2]];
-      if (!newSolution) {
-        return;
-      }
-      newData = [...newSolution.results.data];
+    if (!data) {
+      return;
     }
+    let newData = [...data]
+    // if (prevSolution !== solution || prevSetting !== setting) {
+    //   const solutionPath = solution.split('.')
+    //   const newSolution = DATA[setting][solutionPath[0]][solutionPath[1]][solutionPath[2]];
+    //   if (!newSolution) {
+    //     return;
+    //   }
+    //   newData = [...newSolution.results.data];
+    // }
     if (type === 'flop') {
       newData = [...newData].sort((a, b) => {
         const flopA = a.flop;
@@ -648,7 +661,15 @@ const ReportPage = () => {
     setSolutions(SOLUTION_OPTIONS)
   }, [setting])
 
+  if (!data) {
+    return <div>Loading</div>
+  }
 
+  const color = d3
+    .scaleOrdinal()
+    .domain(subgroups)
+    .range(getColors(data[0].actions.length));
+  const stacked = d3.stack().keys(subgroups)(csv);
   const content = data[selectedIndex]
 
   return (
