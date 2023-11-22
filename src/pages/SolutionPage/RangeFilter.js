@@ -80,7 +80,8 @@ const Wrapper = styled.div`
 	@media (max-width: 767px) {
 		font-size: 0.7rem;
 		height: 230px;
-		overflow: scroll;
+		overflow-y: scroll;
+		overflow-x: hidden;
 	}
 
 	@media (min-width: 768px) {

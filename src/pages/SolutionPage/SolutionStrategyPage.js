@@ -35,6 +35,15 @@ const Board = styled.div`
   flex-wrap: wrap;
 	width: 100%;
 	padding: 2.5%;
+
+	@media (max-width: 767px) {
+		padding: 4.8%;
+		width: 90%;
+	}
+
+	@media (min-width: 768px) {
+		width: 60vw;
+	}
 `
 
 const HandDivWrapper = styled.div`
@@ -77,6 +86,7 @@ const StrategyDetail = styled.div`
 	@media (max-width: 767px) {
 		height: 200px;
 		overflow: scroll;
+		width: 100%;
 	}
 
 	@media (min-width: 768px) {

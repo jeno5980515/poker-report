@@ -78,7 +78,9 @@ const Wrapper = styled.div`
 	flex-wrap: wrap;
 	@media (max-width: 767px) {
 		margin: 5px;
-		width: 100%;
+		width: 99%;
+		overflow-y: scroll;
+		overflow-x: hidden;
 		> * {
 			width: 40%;
 			margin: 5px;
