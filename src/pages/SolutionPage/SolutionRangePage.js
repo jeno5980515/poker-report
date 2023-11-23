@@ -134,11 +134,17 @@ const TopWrapper = styled.div`
 
 const COLOR_MAP = {
 	'R1.8': "rgb(240, 60, 60)",
+	'R2': "rgb(240, 60, 60)",
+	'R6.95': "rgb(240, 60, 60)",
 	'R2.75': "rgb(202, 50, 50)",
 	"R3.65": "rgb(202, 50, 50)",
+	"R13.85": "rgb(202, 50, 50)",
+	"R3.95": "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
 	"R7.15": "rgb(125, 31, 31)",
+	"R7.8": "rgb(125, 31, 31)",
+	"R27.3": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
@@ -200,7 +206,9 @@ const SolutionRangeDesktopPage = ({
 	chartRef,
 	filteredChartRef,
 	setFilterState,
-	selectedKey
+	selectedKey,
+	setClickedFilter,
+	handleClickFilter
 }) => {
 	return <SolutionPageWrapper>
 		<RangeLeft>
@@ -245,7 +253,12 @@ const SolutionRangeDesktopPage = ({
 		</RangeLeft>
 		<RangeDetail>
 			<Action data={data.solutions}></Action>
-			<RangeFilter data={data} onSelectFilter={({ type, key }) => setFilterState({ type, key })} hand={selectedKey}></RangeFilter>
+			<RangeFilter
+				data={data}
+				onSelectFilter={({ type, key }) => setFilterState({ type, key })}
+				hand={selectedKey}
+				handleClickFilter={handleClickFilter}
+			></RangeFilter>
 		</RangeDetail>
 	</SolutionPageWrapper>
 }
@@ -258,7 +271,9 @@ const SolutionRangeMobilePage = ({
 	chartRef,
 	filteredChartRef,
 	setFilterState,
-	selectedKey
+	selectedKey,
+	setClickedFilter,
+	handleClickFilter,
 }) => {
 	const [rangePlayer, setRangePlayer] = useState(2)
 	return <SolutionPageWrapper>
@@ -302,7 +317,13 @@ const SolutionRangeMobilePage = ({
 				</Board>
 			</BoardWrapper>
 			<RangeDetail>
-				<RangeFilter data={data} onSelectFilter={({ type, key }) => setFilterState({ type, key })} hand={selectedKey}></RangeFilter>
+				<RangeFilter
+					data={data}
+					onSelectFilter={({ type, key }) => setFilterState({ type, key })}
+					hand={selectedKey}
+					handleClickFilter={handleClickFilter}
+				>	
+				</RangeFilter>
 			</RangeDetail>
 		</TopWrapper>
 	</SolutionPageWrapper>

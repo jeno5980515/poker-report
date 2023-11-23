@@ -58,18 +58,23 @@ const sortBySize2 = (a, b) => {
 }
 
 
-
-
 const COLOR_MAP = {
 	'R1.8': "rgb(240, 60, 60)",
+	'R2': "rgb(240, 60, 60)",
+	'R6.95': "rgb(240, 60, 60)",
 	'R2.75': "rgb(202, 50, 50)",
 	"R3.65": "rgb(202, 50, 50)",
+	"R13.85": "rgb(202, 50, 50)",
+	"R3.95": "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
 	"R7.15": "rgb(125, 31, 31)",
+	"R7.8": "rgb(125, 31, 31)",
+	"R27.3": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
+
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -419,7 +424,7 @@ const Common = ({ data }) => {
 	</HandWrapper>
 }
 
-const RangeFilter = ({ data, onSelectFilter, hand }) => {
+const RangeFilter = ({ data, onSelectFilter, hand, handleClickFilter }) => {
 	const { solutions, blocker_rate, unblocker_rate } = data
 	const [type, setType] = useState('hands');
 
@@ -443,7 +448,10 @@ const RangeFilter = ({ data, onSelectFilter, hand }) => {
 	return <Wrapper>
 		{
 			<>
-				<Title>BB - BTN</Title>
+				<div style={{ display: 'flex' }}>
+					<Title>BB - BTN</Title>
+					<button onClick={() => handleClickFilter({ type: 'none' })}>Clear</button>
+				</div>
 				<Common data={data}/>
 				<Control>
 					<button onClick={() => setType('hands')}>Hands</button>

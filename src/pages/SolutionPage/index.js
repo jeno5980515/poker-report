@@ -206,17 +206,23 @@ const getColors = (number) => {
       return []
   }
 }
-
 const COLOR_MAP = {
 	'R1.8': "rgb(240, 60, 60)",
+	'R2': "rgb(240, 60, 60)",
+	'R6.95': "rgb(240, 60, 60)",
 	'R2.75': "rgb(202, 50, 50)",
 	"R3.65": "rgb(202, 50, 50)",
+	"R13.85": "rgb(202, 50, 50)",
+	"R3.95": "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
 	"R7.15": "rgb(125, 31, 31)",
+	"R7.8": "rgb(125, 31, 31)",
+	"R27.3": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
+
 
 
 const RANGE = [
@@ -243,37 +249,21 @@ const FrequencyWrapper = styled.div`
 	display: flex;
 `
 
-const HandDiv = ({
+const DetailComp = ({
+	detailState,
 	data,
-	hand,
-	onMouseEnter,
-	onMouseDown,
-	onMouseUp,
-	indexX,
-	indexY,
-	highlight,
-	isFreq = true
+	currentHand,
+	selectedKey,
+	setFilterState,
+	handleClickFilter
 }) => {
-	return <HandDivWrapper
-		onMouseEnter={onMouseEnter}
-		onMouseDown={onMouseDown}
-		onMouseUp={onMouseUp}
-		data-x={indexX}
-		data-y={indexY}
-		highlight={highlight}
-		isFreq={isFreq}
-	>
-		{
-			isFreq
-				? [...Object.entries(data.actions_total_frequencies)]
-					.sort(sortBySize)
-					.map(([key, value]) => {
-						return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
-					})
-				: <ColorBlock color={'rgb(255, 143, 0)'} width={data.total_frequency * 100}></ColorBlock>
-		}
-		<TextBlock>{hand}</TextBlock>
-	</HandDivWrapper>
+	return detailState === 'hands'
+		? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+		: <Filter
+				data={data}
+				onSelectFilter={({ type, key }) => setFilterState({ type, key })}
+				onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
+				hand={selectedKey}></Filter>
 }
 
 const BoardOption = ({ innerProps, label }) => {
@@ -572,7 +562,7 @@ const RangePage = () => {
 			.attr('fill', 'rgb(37, 179, 54)')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-	}, [JSON.stringify(filterState), JSON.stringify(clickedFilter), JSON.stringify(data)])
+	}, [JSON.stringify(filterState), JSON.stringify(clickedFilter), JSON.stringify(data), pageState])
 
 
   useEffect(() => {
@@ -677,13 +667,13 @@ const RangePage = () => {
 
 	const playerRangeData = currentPlayer === 1 ? player1RangeData : player2RangeData
 	const currentHand = data && data.players_info[1].simple_hand_counters[selectedKey]
-	const DetailComp = detailState === 'hands'
-		? () => <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
-		: () => <Filter
-			data={data}
-			onSelectFilter={({ type, key }) => setFilterState({ type, key })}
-			onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
-			hand={selectedKey}></Filter>
+	// const DetailComp = detailState === 'hands'
+	// 	? () => <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+	// 	: () => <Filter
+	// 		data={data}
+	// 		onSelectFilter={({ type, key }) => setFilterState({ type, key })}
+	// 		onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
+	// 		hand={selectedKey}></Filter>
 
 	const settingOptions = Object.keys(DATA)
 		.map(k => ({ value: k, label: k }))
@@ -717,6 +707,9 @@ const RangePage = () => {
 						options={preflopOptions}
 						onChange={(e) => {
 							setPreflop(e.value)
+							if (DATA[setting][e.value] && !DATA[setting][e.value][flopAction]) {
+								setFlopAction(Object.keys(DATA[setting][e.value])[0])
+							}
 						}}
 					/>
 					<Select
@@ -725,6 +718,7 @@ const RangePage = () => {
 						onChange={(e) => {
 							setFlopAction(e.value)
 						}}
+						value={flopActionOptions.find(o => o.value === flopAction)}
 					/>
 					<Select
 						defaultValue={boardOptions[0]}
@@ -758,12 +752,15 @@ const RangePage = () => {
 								currentPlayer={currentPlayer}
 								onHandEnter={onHandEnter}
 								setDetailState={setDetailState}
-								DetailComp={DetailComp}
 								setFilterState={setFilterState}
 								chartRef={chartRef}
 								filteredChartRef={filteredChartRef}
 								selectedKey={selectedKey}
 								setClickedFilter={setClickedFilter}
+								setFilterState={setFilterState}
+								handleClickFilter={handleClickFilter}
+								currentHand={currentHand}
+								detailState={detailState}
 							/>
 						: <SolutionRangePage
 								data={data}
@@ -773,12 +770,12 @@ const RangePage = () => {
 								currentPlayer={currentPlayer}
 								onHandEnter={onHandEnter}
 								setDetailState={setDetailState}
-								DetailComp={DetailComp}
 								setFilterState={setFilterState}
 								chartRef={chartRef}
 								filteredChartRef={filteredChartRef}
 								selectedKey={selectedKey}
 								setClickedFilter={setClickedFilter}
+								handleClickFilter={handleClickFilter}
 							/>
 				}
 			</Wrapper>

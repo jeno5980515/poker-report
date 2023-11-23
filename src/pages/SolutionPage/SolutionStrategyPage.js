@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { useEffect, useRef, useState, memo } from 'react';
 
+import INDEX_MAP from '../../indexMap.json';
 import Action from './Action';
 import Filter from './Filter';
+import Hand from './Hand';
 
 const DetailControlWrapper = styled.div`
 	display: flex;
@@ -93,17 +95,23 @@ const StrategyDetail = styled.div`
 		justify-content: space-between;
 	}
 `
-
 const COLOR_MAP = {
 	'R1.8': "rgb(240, 60, 60)",
+	'R2': "rgb(240, 60, 60)",
+	'R6.95': "rgb(240, 60, 60)",
 	'R2.75': "rgb(202, 50, 50)",
 	"R3.65": "rgb(202, 50, 50)",
+	"R13.85": "rgb(202, 50, 50)",
+	"R3.95": "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
 	"R7.15": "rgb(125, 31, 31)",
+	"R7.8": "rgb(125, 31, 31)",
+	"R27.3": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
+
 
 const sortBySize = (a, b) => {
 	if (a[0] === 'X') {
@@ -161,7 +169,12 @@ const SolutionStrategyDesktopPage = ({
 	onHandEnter,
 	setDetailState,
 	DetailComp,
-	setClickedFilter
+	setClickedFilter,
+	selectedKey,
+	setFilterState,
+	handleClickFilter,
+	currentHand,
+	detailState,
 }) => {
 	return <SolutionPageWrapper>
 		<Board>
@@ -185,9 +198,18 @@ const SolutionStrategyDesktopPage = ({
 			<DetailControlWrapper>
 				<button onClick={() => setDetailState('hands')}>Hands</button>
 				<button onClick={() => setDetailState('filters')}>Filters</button>
-				<button onClick={() => setClickedFilter({ type: 'none' })}>Clear</button>
+			<button onClick={() => handleClickFilter({ type: 'none' })}>Clear</button>
 			</DetailControlWrapper>
-			<DetailComp />
+			{
+				detailState === 'hands'
+					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+					: <Filter
+							data={data}
+							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
+							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
+							hand={selectedKey}>
+						></Filter>
+			}
 		</StrategyDetail>
 	</SolutionPageWrapper>
 }
@@ -198,8 +220,12 @@ const SolutionStrategyMobilePage = ({
 	data,
 	onHandEnter,
 	setDetailState,
-	DetailComp,
-	setClickedFilter
+	selectedKey,
+	setClickedFilter,
+	setFilterState,
+	handleClickFilter,
+	currentHand,
+	detailState,
 }) => {
 	return <SolutionPageWrapper>
 		<Action data={data.solutions}></Action>
@@ -222,10 +248,19 @@ const SolutionStrategyMobilePage = ({
 		<DetailControlWrapper>
 			<button onClick={() => setDetailState('hands')}>Hands</button>
 			<button onClick={() => setDetailState('filters')}>Filters</button>
-			<button onClick={() => setClickedFilter({ type: 'none' })}>Clear</button>
+			<button onClick={() => handleClickFilter({ type: 'none' })}>Clear</button>
 		</DetailControlWrapper>
 		<StrategyDetail>
-			<DetailComp />
+			{
+				detailState === 'hands'
+					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+					: <Filter
+							data={data}
+							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
+							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
+							hand={selectedKey}>
+						></Filter>
+			}
 		</StrategyDetail>
 	</SolutionPageWrapper>
 }
