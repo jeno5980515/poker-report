@@ -346,6 +346,8 @@ const TurnReportPage = () => {
 						onChange={(e) => {
 							setSetting(e.value)
 						}}
+						isClearable={false}
+						isSearchable={false}
 						value={settingOptions.find(o => o.value === setting)}
 					/>
 					<Select
@@ -359,6 +361,8 @@ const TurnReportPage = () => {
 								setTurnAction(Object.keys(DATA[setting][e.value][flop])[0])
 							}
 						}}
+						isClearable={false}
+						isSearchable={false}
 						value={preflopOptions.find(o => o.value === preflop)}
 					/>
 					<Select
@@ -367,6 +371,8 @@ const TurnReportPage = () => {
 						onChange={(e) => {
 							setFlopAction(e.value)
 						}}
+						isClearable={false}
+						isSearchable={false}
 						value={flopActionOptions.find(o => o.value === flopAction)}
 					/>
 					<Select
@@ -375,6 +381,8 @@ const TurnReportPage = () => {
 						onChange={(e) => {
 							setTurnAction(e.value)
 						}}
+						isClearable={false}
+						isSearchable={false}
 						value={turnActionOptions.find(o => o.value === turnAction)}
 					/>
 					<Select
@@ -384,6 +392,8 @@ const TurnReportPage = () => {
 						onChange={(e) => {
 							setBoard(e.value)
 						}}
+						isClearable={false}
+						isSearchable={false}
 						value={boardOptions.find(o => o.value === board)}
 					/>
 					<button
