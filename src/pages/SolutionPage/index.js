@@ -1,7 +1,6 @@
 import * as d3 from "d3";
-import { Routes, Route, Outlet, Link } from "react-router-dom";
-import { useEffect, useRef, useState, memo } from 'react';
-import { Canvg } from 'canvg';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Select, { components } from "react-select";
 
@@ -9,14 +8,9 @@ import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
 import { ReactComponent as DiamondSVG } from '../../assets/diamond.svg';
 import { ReactComponent as ClubSVG } from '../../assets/club.svg';
 import { ReactComponent as SpadeSVG } from '../../assets/spade.svg';
-import { ReactComponent as ArrowSVG } from '../../assets/arrow.svg';
 
 import SolutionRangePage from './SolutionRangePage';
 import SolutionStrategyPage from './SolutionStrategyPage';
-import Action from './Action';
-import Hand from './Hand';
-import Filter from './Filter';
-import RangeFilter from './RangeFilter';
 
 import INDEX_MAP from '../../indexMap.json';
 // import DATA from './solutions/NL50GG'
@@ -245,27 +239,6 @@ const ChartWidth = window.innerWidth < 768 ? 350 : 500;
 const ChartHeight = window.innerWidth < 768 ? 200 : 250;
 const ChartMargin = window.innerWidth < 768 ? { top: 10, right: 10, bottom: 10, left: 20 } : { top: 20, right: 20, bottom: 20, left: 40 };
 
-const FrequencyWrapper = styled.div`
-	display: flex;
-`
-
-const DetailComp = ({
-	detailState,
-	data,
-	currentHand,
-	selectedKey,
-	setFilterState,
-	handleClickFilter
-}) => {
-	return detailState === 'hands'
-		? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
-		: <Filter
-				data={data}
-				onSelectFilter={({ type, key }) => setFilterState({ type, key })}
-				onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
-				hand={selectedKey}></Filter>
-}
-
 const BoardOption = ({ innerProps, label }) => {
   return <SuitText {...innerProps}>
 		<SuitCharacter color={getColor(label[1])}>{label[0]}</SuitCharacter>
@@ -314,6 +287,7 @@ const RangePage = () => {
 	const [currentPlayer, setCurrentPlayer] = useState(2)
   const chartRef = useRef(null);
   const filteredChartRef = useRef(null);
+	const navigate = useNavigate();
 
 	const player1HandData = data && data.players_info[0].simple_hand_counters;
 	const player2HandData = data && data.players_info[1].simple_hand_counters;
@@ -701,6 +675,8 @@ const RangePage = () => {
 						onChange={(e) => {
 							setSetting(e.value)
 						}}
+						isClearable={false}
+						isSearchable={false}
 					/>
 					<Select
 						defaultValue={preflopOptions[0]}
@@ -711,6 +687,8 @@ const RangePage = () => {
 								setFlopAction(Object.keys(DATA[setting][e.value])[0])
 							}
 						}}
+						isClearable={false}
+						isSearchable={false}
 					/>
 					<Select
 						defaultValue={flopActionOptions[0]}
@@ -718,6 +696,8 @@ const RangePage = () => {
 						onChange={(e) => {
 							setFlopAction(e.value)
 						}}
+						isClearable={false}
+						isSearchable={false}
 						value={flopActionOptions.find(o => o.value === flopAction)}
 					/>
 					<Select
@@ -727,6 +707,8 @@ const RangePage = () => {
 						onChange={(e) => {
 							setBoard(e.value)
 						}}
+						isClearable={false}
+						isSearchable={false}
 						value={boardOptions.find(o => o.value === board)}
 					/>
 					<button onClick={() => setPageState('strategy')}>Strategy</button>
@@ -741,6 +723,11 @@ const RangePage = () => {
 							setBoard(newFlop)
 						}}
 					>Random</button>
+					<button
+						onClick={() => {
+							navigate(`/turn-report?board=${board}&preflop=${preflop}&setting=${setting}&flopAction=${flopAction}`);
+						}}
+					>Turn</button>
 				</SolutionPageControlWrapper>
 				{
 					pageState === 'strategy'

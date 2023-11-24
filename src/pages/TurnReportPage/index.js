@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import { useLocation } from 'react-router-dom';
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from 'react';
 import { Canvg } from 'canvg';
@@ -7,8 +7,28 @@ import Select, { components } from "react-select";
 import Action from './Action';
 import Solutions from './Solutions';
 
+import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
+import { ReactComponent as DiamondSVG } from '../../assets/diamond.svg';
+import { ReactComponent as ClubSVG } from '../../assets/club.svg';
+import { ReactComponent as SpadeSVG } from '../../assets/spade.svg';
+import { ReactComponent as ArrowSVG } from '../../assets/arrow.svg';
+
 import INDEX_MAP from '../../indexMap.json';
-import DATA from './reports/NL50'
+import DATA from './turn_reports'
+
+const PREFLOP_MAP = {
+	'F-F-F-R2.5-F-C': 'BTN VS BB',
+	'R2.5-F-F-F-F-C': 'LJ VS BB',
+	'F-F-F-F-R3-C': 'SB VS BB',
+	'F-F-F-R2.5-R10-F-C': 'SB 3B BTN',
+}
+
+const FLOP_MAP = {
+	'X-R1.8-C': 'Small',
+	'X-X': 'Check',
+	'R6.95-C': 'Small',
+}
+
 // import DATA from './solutions/A42.json'
 
 const Wrapper = styled.div`
@@ -40,6 +60,34 @@ const HandDivWrapper = styled.div`
 	user-select: none;
 `
 
+const getSVG = (text) => {
+	switch (text) {
+    case 'h':
+      return <HeartSVG fill="#EF5350"/>;
+    case 'd':
+      return <DiamondSVG fill="#448AFF" />;
+    case 'c':
+      return <ClubSVG fill="#66BB6A"/>;
+		case 's':
+			return <SpadeSVG fill="rgb(80, 79, 79)"/>;
+    default:
+      return <HeartSVG fill="#EF5350" />;
+  }
+}
+
+const getColor = (text) => {
+  switch (text) {
+    case 'h':
+      return '#EF5350';
+    case 'd':
+      return '#448AFF';
+    case 'c':
+      return '#66BB6A';
+    default:
+      return 'black';
+  }
+}
+
 const ColorBlock = styled.div`
 	width: ${({ width }) => width}%;
 	background: ${({ color }) => color};
@@ -61,6 +109,48 @@ const Detail = styled.div`
 	flex-direction: column;
 	height: 550px;
 	justify-content: space-between;
+`
+
+
+const ControlWrapper = styled.div`
+	@media (max-width: 767px) {
+		display: flex;
+		flex-wrap: wrap;
+		> div:nth-child(-n+4) {
+			flex: 1 0 48%;
+		}
+		> div:nth-child(n+5) {
+			flex-basis: 100%;
+		}
+		> *:nth-child(n+5) {
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+	}
+	@media (min-width: 769px) {
+		display: flex;
+		margin-top: 70px;
+	}
+`
+
+
+const SuitCharacter = styled.div`
+	color: ${({ color }) => color};
+`
+
+const SuitText = styled.div`
+	border: 1px solid;
+	background: white;
+	display: flex;
+	padding: 7px;
+	> * {
+		width: 13px;
+		font-size: 15px;
+		padding: 2px;
+	}
+	:hover: {
+		background: blue;
+	}
 `
 
 
@@ -97,9 +187,15 @@ const getColors = (number) => {
 
 const COLOR_MAP = {
 	'R1.8': "rgb(240, 60, 60)",
+	'R3': "rgb(240, 60, 60)",
 	'R2.75': "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
+	'R6': "rgb(163, 41, 41)",
+	'R11.5': "rgb(240, 60, 60)",
+	'R23.05': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
+	"R11.85": "rgb(125, 31, 31)",
+	"R45.35": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
@@ -127,59 +223,180 @@ const FrequencyWrapper = styled.div`
 	display: flex;
 `
 
-const HandDiv = ({
-	data,
-	hand,
-	onMouseEnter,
-	onMouseDown,
-	onMouseUp,
-	indexX,
-	indexY
+const SuitTextForInput = styled.div`
+	background: white;
+	display: flex;
+	> * {
+		width: 13px;
+		font-size: 15px;
+		padding: 2px;
+	}
+	:hover: {
+		background: blue;
+	}
+`
+
+
+const SingleValue = ({
+	children,
+  ...props
 }) => {
-	return <HandDivWrapper
-		onMouseEnter={onMouseEnter}
-		onMouseDown={onMouseDown}
-		onMouseUp={onMouseUp}
-		data-x={indexX}
-		data-y={indexY}
-	>
-		{
-			[...Object.entries(data.actions_total_frequencies)]
-				.sort(sortBySize)
-				.map(([key, value]) => {
-					return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
-				})
-		}
-		<TextBlock>{hand}</TextBlock>
-	</HandDivWrapper>
+	const label = children
+  return (
+		<components.SingleValue {...props}>
+			<SuitTextForInput>
+				<SuitCharacter color={getColor(label[1])}>{label[0]}</SuitCharacter>
+				<SuitCharacter color={getColor(label[1])}>{getSVG(label[1])}</SuitCharacter>
+				<SuitCharacter color={getColor(label[3])}>{label[2]}</SuitCharacter>
+				<SuitCharacter color={getColor(label[3])}>{getSVG(label[3])}</SuitCharacter>
+				<SuitCharacter color={getColor(label[5])}>{label[4]}</SuitCharacter>
+				<SuitCharacter color={getColor(label[5])}>{getSVG(label[5])}</SuitCharacter>
+			</SuitTextForInput>
+		</components.SingleValue>
+  );
+};
+
+
+const BoardOption = ({ innerProps, label }) => {
+  return <SuitText {...innerProps}>
+		<SuitCharacter color={getColor(label[1])}>{label[0]}</SuitCharacter>
+		<SuitCharacter color={getColor(label[1])}>{getSVG(label[1])}</SuitCharacter>
+		<SuitCharacter color={getColor(label[3])}>{label[2]}</SuitCharacter>
+		<SuitCharacter color={getColor(label[3])}>{getSVG(label[3])}</SuitCharacter>
+		<SuitCharacter color={getColor(label[5])}>{label[4]}</SuitCharacter>
+		<SuitCharacter color={getColor(label[5])}>{getSVG(label[5])}</SuitCharacter>
+  </SuitText>
 }
 
+
 const TurnReportPage = () => {
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
 	const [mouseMode, setMouseMode] = useState('none')
 	const [currentCombos, setCurrentCombos] = useState(0)
-	const [setting, setSetting] = useState('NL50GG');
-	const [preflop, setPreflop] = useState('F-F-F-R2.5-F-C');
-	const [flopAction, setFlopAction] = useState('X-R1.8-C');
+	const [setting, setSetting] = useState(queryParams.get('setting') || 'NL500');
+	const [preflop, setPreflop] = useState(queryParams.get('preflop') || 'F-F-F-R2.5-F-C');
+	const [flopAction, setFlopAction] = useState(queryParams.get('flopAction') || 'X-R1.8-C');
 	const [turnAction, setTurnAction] = useState('X');
-	const [board, setBoard] = useState('2h2d2c');
-	const [data, setData] = useState(DATA[preflop][flopAction][turnAction][board])
+	const [board, setBoard] = useState(queryParams.get('board') || '2h2d2c');
+	const [data, setData] = useState(null)
 	const [selectedKey, setSelectedKey] = useState('2s')
 
-	const solutions = data.solutions;
+	useEffect(() => {
+		if (DATA[setting][preflop] && !DATA[setting][preflop][flopAction]) {
+			const flop = Object.keys(DATA[setting][preflop])[0]
+			setFlopAction(flop)
+			setTurnAction(Object.keys(DATA[setting][preflop][flop])[0])
+		}
+	}, [])
 
-	const answerCheckFreq = data.solutions[0].total_frequency;
+	useEffect(() => {
+		let finalFlopAction = flopAction
+		let finalTurnAction = turnAction
+		if (DATA[setting][preflop] && !DATA[setting][preflop][flopAction]) {
+			finalFlopAction = Object.keys(DATA[setting][preflop])[0]
+			finalTurnAction = Object.keys(DATA[setting][preflop][finalFlopAction])[0]
+			setFlopAction(finalFlopAction)
+			setTurnAction(finalTurnAction)
+		}
+		if (DATA[setting][preflop][flopAction] && DATA[setting][preflop][flopAction][turnAction]) {
+			finalTurnAction = Object.keys(DATA[setting][preflop][finalFlopAction])[0]
+			setTurnAction(finalTurnAction)
+		}
+		const fn = async () => {
+			try {
+				const path = `${process.env.PUBLIC_URL}/turn_reports/${setting}/${preflop}/${finalFlopAction}/${finalTurnAction}/${board}.json`;
+				console.log(path)
+				const response = await fetch(path);
+				const data = await response.json()
+				setData(data)
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		fn();
+	}, [setting, preflop, flopAction, turnAction, board])
 
-	const onHandEnter = ({ key }) => {
-		setSelectedKey(key)
-		// setSelectedKey('A3o')
+	if (!data) {
+		return <div>Loading</div>
 	}
 
-	const onHandUp = () => {
-		setMouseMode('none')
-	}
+	const settingOptions = Object.keys(DATA)
+		.map(k => ({ value: k, label: k }))
+
+	const preflopOptions = Object.keys(DATA[setting] || settingOptions[0])
+		.map(k => ({ value: k, label: PREFLOP_MAP[k] }))
+
+	const flopActionOptions = Object.keys(DATA[setting][preflop] || preflopOptions[0])
+		.map(k => ({ value: k, label: FLOP_MAP[k] || k }))
+
+	const turnActionOptions = Object.keys(DATA[setting][preflop][flopAction] || flopActionOptions[0])
+		.map(k => ({ value: k, label: k }))
+
+	const boardOptions = Object.keys(DATA[setting][preflop][flopAction][turnAction] || turnActionOptions[0])
+		.map(k => ({ value: k, label: k }))
+
 	return (
 		<Page>
 			<Wrapper>
+				<ControlWrapper>
+					<Select
+						defaultValue={settingOptions[0]}
+						options={settingOptions}
+						onChange={(e) => {
+							setSetting(e.value)
+						}}
+						value={settingOptions.find(o => o.value === setting)}
+					/>
+					<Select
+						defaultValue={preflopOptions[0]}
+						options={preflopOptions}
+						onChange={(e) => {
+							setPreflop(e.value)
+							if (DATA[setting][e.value] && !DATA[setting][e.value][flopAction]) {
+								const flop = Object.keys(DATA[setting][e.value])[0]
+								setFlopAction(flop)
+								setTurnAction(Object.keys(DATA[setting][e.value][flop])[0])
+							}
+						}}
+						value={preflopOptions.find(o => o.value === preflop)}
+					/>
+					<Select
+						defaultValue={flopActionOptions[0]}
+						options={flopActionOptions}
+						onChange={(e) => {
+							setFlopAction(e.value)
+						}}
+						value={flopActionOptions.find(o => o.value === flopAction)}
+					/>
+					<Select
+						defaultValue={turnActionOptions[0]}
+						options={turnActionOptions}
+						onChange={(e) => {
+							setTurnAction(e.value)
+						}}
+						value={turnActionOptions.find(o => o.value === turnAction)}
+					/>
+					<Select
+						defaultValue={boardOptions[0]}
+						components={{ Option: BoardOption, SingleValue }}
+						options={boardOptions}
+						onChange={(e) => {
+							setBoard(e.value)
+						}}
+						value={boardOptions.find(o => o.value === board)}
+					/>
+					<button
+						onClick={() => {
+							const list = Object.keys(DATA[setting][preflop][flopAction][turnAction])
+							const min = 0;
+							const max = list.length - 1
+							const index = Math.floor(Math.random() * (max - min + 1)) + min
+							const newFlop = list[index]
+							setBoard(newFlop)
+						}}
+					>Random</button>
+				</ControlWrapper>
 				<Action data={data.totals}></Action>
 				<Solutions data={data.solutions}></Solutions>
 			</Wrapper>

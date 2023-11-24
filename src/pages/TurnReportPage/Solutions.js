@@ -58,15 +58,19 @@ const COLOR_MAP = {
 	'R2.75': "rgb(202, 50, 50)",
 	'R4.1': "rgb(163, 41, 41)",
 	'R6': "rgb(163, 41, 41)",
+	'R3.65': "rgb(163, 41, 41)",
+	'R11.5': "rgb(240, 60, 60)",
+	'R23.05': "rgb(163, 41, 41)",
 	"R6.9": "rgb(125, 31, 31)",
 	"R11.85": "rgb(125, 31, 31)",
+	"R7.15": "rgb(125, 31, 31)",
+	"R45.35": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
 	"X": "rgb(90, 185, 102)"
 }
 
 const Wrapper = styled.div`
 	width: 100%;
-	height: 400px;
 	display: flex;
 	flex-wrap: wrap;
 	margin-top: 100px;
@@ -102,11 +106,22 @@ const BlockerText = styled.div`
 
 
 const Block = styled.div`
-	width: 150px;
-	height: 150px;
-	display: flex;
-	margin: 1px;
-	position: relative;
+	@media (max-width: 767px) {
+		font-size: 0.5rem;
+		width: 85px;
+		height: 100px;
+		display: flex;
+		margin: 1px;
+		position: relative;
+	}
+
+	@media (min-width: 768px) {
+		width: 150px;
+		height: 150px;
+		display: flex;
+		margin: 1px;
+		position: relative;
+	}
 `
 
 
@@ -115,7 +130,7 @@ const Left = styled.div`
 `
 
 const Right = styled.div`
-
+	text-align: right;
 `
 
 const Text = styled.div`
@@ -169,7 +184,6 @@ const getSuitList = (length) => {
 */
 
 const Hand = ({ data }) => {
-	console.log(data)
 	return <Wrapper>
 		{
 			data.map((d) => {
