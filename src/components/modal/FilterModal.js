@@ -1997,6 +1997,18 @@ const FilterModal = ({ onSave, onCancel, state = {} }) => {
 				})
 				break;
 			}
+			case 'top-paired': {
+				finalFlops = finalFlops.filter(f => {
+					return f[0] === f[2] && f[0] !== f[4]
+				})
+				break;
+			}
+			case 'bottom-paired': {
+				finalFlops = finalFlops.filter(f => {
+					return f[2] === f[4] && f[2] !== f[0]
+				})
+				break;
+			}
 			default: {
 				
 			}
@@ -2054,7 +2066,7 @@ const FilterModal = ({ onSave, onCancel, state = {} }) => {
 				return !lowNot.includes(f[4])
 			})
 		}
-		console.log(finalFlops.length)
+
 		onSave({
 			flops: finalFlops,
 			state: {
@@ -2113,6 +2125,14 @@ const FilterModal = ({ onSave, onCancel, state = {} }) => {
 				<Item>
 					<input type="radio" name="pairing" value="tripled" onChange={(e) => setPair(e.target.value)}  checked={pair === 'tripled'} />
 					<label for="pairing">Tripled</label>
+				</Item>
+				<Item>
+					<input type="radio" name="pairing" value="top-paired" onChange={(e) => setPair(e.target.value)}  checked={pair === 'top-paired'} />
+					<label for="pairing">Top Paired</label>
+				</Item>
+				<Item>
+					<input type="radio" name="pairing" value="bottom-paired" onChange={(e) => setPair(e.target.value)}  checked={pair === 'bottom-paired'} />
+					<label for="pairing">Bottom Paired</label>
 				</Item>
 			</Field>
 			<Field>
