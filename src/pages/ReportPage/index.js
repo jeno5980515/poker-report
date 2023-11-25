@@ -2161,6 +2161,7 @@ const ReportPage = () => {
   const [solutions, setSolutions] = useState(SOLUTION_OPTIONS)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [filteredFlop, setFilteredFlop] = useState(flops)
+  const [filterState, setFilterState] = useState({})
 	const navigate = useNavigate();
 
   const header = "label,value1,value2,value3,value4,value5,value6,value7,value8,value9";
@@ -2458,7 +2459,7 @@ const ReportPage = () => {
   const color = d3
     .scaleOrdinal()
     .domain(subgroups)
-    .range(getColors(data[0].actions.length));
+    .range(getColors((data[0] || { actions: [] }).actions.length));
   const stacked = d3.stack().keys(subgroups)(csv);
   const content = data[selectedIndex]
 
@@ -2584,10 +2585,12 @@ const ReportPage = () => {
         isFilterModalOpen
           ? <FilterModal
               onCancel={() => setIsFilterModalOpen(false)}
-              onSave={(flops) => {
+              onSave={({ flops, state }) => {
                 setFilteredFlop(flops)
                 setIsFilterModalOpen(false)
+                setFilterState(state)
               }}
+              state={filterState}
             />
           : null
       }

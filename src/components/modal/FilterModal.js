@@ -1767,7 +1767,7 @@ const Wrapper = styled.div`
 	top: 100px;
 	left: 10%;
 	width: 300px;
-	height: 600px;
+	height: 700px;
 	display: flex;
 	position: absolute;
 	flex-direction: column;
@@ -1795,7 +1795,12 @@ const Item = styled.div`
 
 const Field = styled.fieldset`
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: row;
+	> div {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
 `
 
 
@@ -1843,19 +1848,26 @@ const CardMap = {
 
 const CardList = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']
 
-function findStraightPossibilities(publicCards) {
-  const allCombinations = generateCombinations(publicCards, 2);
+function findCompletedStraightPossibilities(cards) {
+	for (let card1 = 1; card1 <= 13; card1++) {
+		for (let card2 = card1 + 1; card2 <= 13; card2++) {
+				const playerCards = [card1, card2];
+				const allCards = cards.concat(playerCards);
+				allCards.sort((a, b) => a - b);
 
-  for (const combination of allCombinations) {
-    const possibleStraight = [...publicCards, ...combination];
-    possibleStraight.sort((a, b) => a - b);
-
-    if (hasStraight(possibleStraight)) {
-      return true
-    }
-  }
-
-  return false;
+				for (let i = 0; i <= allCards.length - 5; i++) {
+						if (
+								allCards[i] + 1 === allCards[i + 1] &&
+								allCards[i + 1] + 1 === allCards[i + 2] &&
+								allCards[i + 2] + 1 === allCards[i + 3] &&
+								allCards[i + 3] + 1 === allCards[i + 4]
+						) {
+								return true;
+						}
+				}
+		}
+	}
+	return false
 }
 
 function generateCombinations(arr, k) {
@@ -1878,22 +1890,14 @@ function generateCombinations(arr, k) {
   return result;
 }
 
-function hasStraight(cards) {
-  cards.sort((a, b) => a - b);
-
-  for (let i = 0; i < cards.length - 1; i++) {
-    if (cards[i + 1] - cards[i] !== 1) {
-      continue;
-    }
-
-    if (cards[i] === 1 && cards.includes(13)) {
-      return true; // 存在A-2-3的顺子
-    }
-
-    return true;
-  }
-
-  return false;
+function isStraight(combination) {
+	combination.sort((a, b) => a - b);
+	for (let i = 0; i < combination.length - 1; i++) {
+		if (combination[i + 1] - combination[i] !== 1) {
+			return false;
+		}
+	}
+	return true;
 }
 
 function findOESDPossibilities(publicCards) {
@@ -1926,13 +1930,28 @@ function hasOESD(cards) {
 
 
 
-const FilterModal = ({ onSave, onCancel }) => {
-	const [suits, setSuits] = useState('any')
-	const [pair, setPair] = useState('any')
-	const [connect, setConnect] = useState('any')
-	const [high, setHigh] = useState('any')
-	const [middle, setMiddle] = useState('any')
-	const [low, setLow] = useState('any')
+const FilterModal = ({ onSave, onCancel, state = {} }) => {
+	const [suits, setSuits] = useState(state.suits || 'any')
+	const [pair, setPair] = useState(state.pair || 'any')
+	const [connect, setConnect] = useState(state.connect || 'any')
+	const [high, setHigh] = useState(state.high || 'any')
+	const [highNot, setHighNot] = useState(state.highNot || [])
+	const [middle, setMiddle] = useState(state.middle ||'any')
+	const [middleNot, setMiddleNot] = useState(state.middleNot || [])
+	const [low, setLow] = useState(state.low || 'any')
+	const [lowNot, setLowNot] = useState(state.lowNot || [])
+
+	const handleDefault = () => {
+		setSuits('any');
+		setPair('any');
+		setConnect('any');
+		setHigh('any');
+		setHighNot([]);
+		setMiddle('any');
+		setMiddleNot([]);
+		setLow('any');
+		setLowNot([]);
+	}
 
 	const handleSave = () => {
 		let finalFlops = [...flops];
@@ -1985,7 +2004,7 @@ const FilterModal = ({ onSave, onCancel }) => {
 		switch (connect) {
 			case 'disconnect': {
 				finalFlops = finalFlops.filter((f) => {
-					return !findStraightPossibilities([CardMap[f[0]], CardMap[f[2]], CardMap[f[4]]]);
+					return !findCompletedStraightPossibilities([CardMap[f[0]], CardMap[f[2]], CardMap[f[4]]]);
 				})
 				break;
 			}
@@ -1997,7 +2016,7 @@ const FilterModal = ({ onSave, onCancel }) => {
 			}
 			case 'connect': {
 				finalFlops = finalFlops.filter((f) => {
-					return findStraightPossibilities([CardMap[f[0]], CardMap[f[2]], CardMap[f[4]]]);
+					return findCompletedStraightPossibilities([CardMap[f[0]], CardMap[f[2]], CardMap[f[4]]]);
 				})
 				break;
 			}
@@ -2020,7 +2039,36 @@ const FilterModal = ({ onSave, onCancel }) => {
 				return low.includes(f[4]) 
 			})
 		}
-		onSave(finalFlops)
+		if (highNot.length) {
+			finalFlops = finalFlops.filter(f => {
+				return !highNot.includes(f[0])
+			})
+		}
+		if (middleNot.length) {
+			finalFlops = finalFlops.filter(f => {
+				return !middleNot.includes(f[2])
+			})
+		}
+		if (lowNot.length) {
+			finalFlops = finalFlops.filter(f => {
+				return !lowNot.includes(f[4])
+			})
+		}
+		console.log(finalFlops.length)
+		onSave({
+			flops: finalFlops,
+			state: {
+				suits,
+				pair,
+				connect,
+				high,
+				highNot,
+				middle,
+				middleNot,
+				low,
+				lowNot
+			}
+		})
 	}
 
 	const handleCancel = () => {
@@ -2032,131 +2080,207 @@ const FilterModal = ({ onSave, onCancel }) => {
 			<Field>
 				<legend>Suits</legend>
 				<Item>
-					<input defaultChecked type="radio" name="suits" value="any" onChange={(e) => setSuits(e.target.value)}/>
+					<input defaultChecked type="radio" name="suits" value="any" onChange={(e) => setSuits(e.target.value)} checked={suits === 'any'}/>
 					<label for="suits">Any</label>
 				</Item>
 				<Item>
-					<input type="radio" name="suits" value="rainbow" onChange={(e) => setSuits(e.target.value)} />
+					<input type="radio" name="suits" value="rainbow" onChange={(e) => setSuits(e.target.value)} checked={suits === 'rainbow'} />
 					<label for="suits">Rainbow</label>
 				</Item>
 				<Item>
-					<input type="radio" name="suits" value="two-tone" onChange={(e) => setSuits(e.target.value)} />
+					<input type="radio" name="suits" value="two-tone" onChange={(e) => setSuits(e.target.value)}  checked={suits === 'two-tone'}/>
 					<label for="suits">Two Tone</label>
 				</Item>
 				<Item>
-					<input type="radio" name="suits" value="monotone" onChange={(e) => setSuits(e.target.value)} />
+					<input type="radio" name="suits" value="monotone" onChange={(e) => setSuits(e.target.value)} checked={suits === 'monotone'} />
 					<label for="suits">Monotone</label>
 				</Item>
 			</Field>
 			<Field>
 				<legend>Pairing</legend>
 				<Item>
-					<input defaultChecked type="radio" name="pairing" value="any" onChange={(e) => setPair(e.target.value)} />
+					<input defaultChecked type="radio" name="pairing" value="any" onChange={(e) => setPair(e.target.value)} checked={pair === 'any'} />
 					<label for="pairing">Any</label>
 				</Item>
 				<Item>
-					<input type="radio" name="pairing" value="not" onChange={(e) => setPair(e.target.value)}  />
+					<input type="radio" name="pairing" value="not" onChange={(e) => setPair(e.target.value)} checked={pair === 'not'} />
 					<label for="pairing">Not Paired</label>
 				</Item>
 				<Item>
-					<input type="radio" name="pairing" value="paired" onChange={(e) => setPair(e.target.value)}  />
+					<input type="radio" name="pairing" value="paired" onChange={(e) => setPair(e.target.value)}   checked={pair === 'paired'}/>
 					<label for="pairing">Paired</label>
 				</Item>
 				<Item>
-					<input type="radio" name="pairing" value="tripled" onChange={(e) => setPair(e.target.value)}  />
+					<input type="radio" name="pairing" value="tripled" onChange={(e) => setPair(e.target.value)}  checked={pair === 'tripled'} />
 					<label for="pairing">Tripled</label>
 				</Item>
 			</Field>
 			<Field>
 				<legend>Connect</legend>
 				<Item>
-					<input defaultChecked type="radio" name="connect" value="any" onChange={(e) => setConnect(e.target.value)}  />
+					<input defaultChecked type="radio" name="connect" value="any" onChange={(e) => setConnect(e.target.value)}  checked={connect === 'any'} />
 					<label for="connect">Any</label>
 				</Item>
 				<Item>
-					<input type="radio" name="connect" value="disconnect"onChange={(e) => setConnect(e.target.value)}   />
+					<input type="radio" name="connect" value="disconnect" onChange={(e) => setConnect(e.target.value)}  checked={connect === 'disconnect'}  />
 					<label for="connect">Disconnect</label>
 				</Item>
 				<Item>
-					<input type="radio" name="connect" value="oesd"onChange={(e) => setConnect(e.target.value)}   />
+					<input type="radio" name="connect" value="oesd" onChange={(e) => setConnect(e.target.value)}   checked={connect === 'oesd'} />
 					<label for="connect">OESD</label>
 				</Item>
 				<Item>
-					<input type="radio" name="connect" value="connect" onChange={(e) => setConnect(e.target.value)}  />
+					<input type="radio" name="connect" value="connect" onChange={(e) => setConnect(e.target.value)} checked={connect === 'connect'}  />
 					<label for="connect">Connect</label>
 				</Item>
 			</Field>
 			<Field>
 				<legend>High</legend>
-				<Item>
-					<input defaultChecked type="checkbox" name="high" value="any" onChange={(e) => setHigh('any')}  checked={high === 'any'}  />
-					<label for="high">Any</label>
-				</Item>
-				{
-					CardList.map(c => {
-						return <Item>
-							<input type="checkbox" name="high" value={c} checked={high !== 'any' && high.includes(c)}
-								onChange={(e) => {
-									if (high === 'any') {
-										setHigh([c])
-									} else {
-										setHigh([...high, c])
-									}
-								}}
-							/>
-							<label for="high">{c}</label>
-						</Item>
-					})
-				}
+				<div>
+					<Item>
+						<input defaultChecked type="checkbox" name="high" value="any" onChange={(e) => setHigh('any')}  checked={high === 'any'}  />
+						<label for="high">Any</label>
+					</Item>
+					{
+						CardList.map(c => {
+							return <Item>
+								<input type="checkbox" name="high" value={c} checked={high !== 'any' && high.includes(c)}
+									onChange={(e) => {
+										if (high === 'any') {
+											setHigh([c])
+										} else {
+											if (high.includes(c)) {
+												setHigh(high.filter(h => h !== c))
+											} else {
+												setHigh([...high, c])
+											}
+										}
+									}}
+								/>
+								<label for="high">{c}</label>
+							</Item>
+						})
+					}
+				</div>
+				<div>
+					<label>Not</label>
+					{
+						CardList.map(c => {
+							return <Item>
+								<input type="checkbox" name="high-not" value={c} checked={highNot.includes(c)}
+									onChange={(e) => {
+										if (highNot.includes(c)) {
+											setHighNot(highNot.filter(h => h !== c))
+										} else {
+											setHighNot([...highNot, c])
+										}
+									}}
+								/>
+								<label for="high-not">{c}</label>
+							</Item>
+						})
+					}
+				</div>
 			</Field>
 			<Field>
 				<legend>Middle</legend>
-				<Item>
-					<input defaultChecked type="checkbox" name="middle" value="any" onChange={(e) => setMiddle('any')} checked={middle === 'any'}    />
-					<label for="middle">Any</label>
-				</Item>
-				{
-					CardList.map(c => {
-						return <Item>
-							<input type="checkbox" name="middle" value={c} checked={middle !== 'any' && middle.includes(c)}
-								onChange={(e) => {
-									if (middle === 'any') {
-										setMiddle([c])
-									} else {
-										setMiddle([...middle, c])
-									}
-								}}
-							/>
-							<label for="middle">{c}</label>
-						</Item>
-					})
-				}
+				<div>
+					<Item>
+						<input defaultChecked type="checkbox" name="middle" value="any" onChange={(e) => setMiddle('any')} checked={middle === 'any'}    />
+						<label for="middle">Any</label>
+					</Item>
+					{
+						CardList.map(c => {
+							return <Item>
+								<input type="checkbox" name="middle" value={c} checked={middle !== 'any' && middle.includes(c)}
+									onChange={(e) => {
+										if (middle === 'any') {
+											setMiddle([c])
+										} else {
+											if (middle.includes(c)) {
+												setMiddle(middle.filter(h => h !== c))
+											} else {
+												setMiddle([...middle, c])
+											}
+										}
+									}}
+								/>
+								<label for="middle">{c}</label>
+							</Item>
+						})
+					}
+				</div>
+				<div>
+					<label>Not</label>
+					{
+						CardList.map(c => {
+							return <Item>
+								<input type="checkbox" name="middle-not" value={c} checked={middleNot.includes(c)}
+									onChange={(e) => {
+										if (middleNot.includes(c)) {
+											setMiddleNot(middleNot.filter(h => h !== c))
+										} else {
+											setMiddleNot([...middleNot, c])
+										}
+									}}
+								/>
+								<label for="middle-not">{c}</label>
+							</Item>
+						})
+					}
+				</div>
 			</Field>
 			<Field>
 				<legend>Low</legend>
-				<Item>
-					<input defaultChecked type="checkbox" name="low" value="any" onChange={(e) => setLow('any')} checked={low === 'any'}  />
-					<label for="low">Any</label>
-				</Item>
-				{
-					CardList.map(c => {
-						return <Item>
-							<input type="checkbox" name="low" value={c} checked={low !== 'any' && low.includes(c)}
-								onChange={(e) => {
-									if (low === 'any') {
-										setLow([c])
-									} else {
-										setLow([...low, c])
-									}
-								}}
-							/>
-							<label for="low">{c}</label>
-						</Item>
-					})
-				}
+				<div>
+					<Item>
+						<input defaultChecked type="checkbox" name="low" value="any" onChange={(e) => setLow('any')} checked={low === 'any'}  />
+						<label for="low">Any</label>
+					</Item>
+					{
+						CardList.map(c => {
+							return <Item>
+								<input type="checkbox" name="low" value={c} checked={low !== 'any' && low.includes(c)}
+									onChange={(e) => {
+										if (low === 'any') {
+											setLow([c])
+										} else {
+											if (low.includes(c)) {
+												setLow(low.filter(h => h !== c))
+											} else {
+												setLow([...low, c])
+											}
+										}
+									}}
+								/>
+								<label for="low">{c}</label>
+							</Item>
+						})
+					}
+				</div>
+				<div>
+					<label>Not</label>
+					{
+						CardList.map(c => {
+							return <Item>
+								<input type="checkbox" name="low-not" value={c} checked={lowNot.includes(c)}
+									onChange={(e) => {
+										if (lowNot.includes(c)) {
+											setLowNot(lowNot.filter(h => h !== c))
+										} else {
+											setLowNot([...lowNot, c])
+										}
+									}}
+								/>
+								<label for="low-not">{c}</label>
+							</Item>
+						})
+					}
+				</div>
 			</Field>
 			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 				<button onClick={handleCancel}>Cancel</button>
+				<button onClick={handleDefault}>Default</button>
 				<button onClick={handleSave}>Confirm</button>
 			</div>
 		</Wrapper>
