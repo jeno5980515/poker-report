@@ -1838,6 +1838,9 @@ const SizeMap = {
   "R4.1": 'Big',
   "R6.9": 'Big',
   "R6.95": 'Small',
+  "R6.75": 'Small',
+  "R26.65": 'Big',
+  "R13.55": 'Big',
   "R7.15": 'Big',
   "R7.8": 'Big',
   'R7.4': 'Small',
@@ -2377,6 +2380,7 @@ const ReportSummaryPage = ({ data = [] }) => {
     groupMap[key] = groupMap[key]
       .map(d => {
         const result = {}
+
         d.actions.forEach((a) => {
           if (a.action_code === 'X' || a.action_code === 'RAI') return
           
