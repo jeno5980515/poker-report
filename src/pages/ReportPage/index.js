@@ -6,6 +6,8 @@ import { Canvg } from 'canvg';
 import styled from 'styled-components';
 import Select, { components } from "react-select";
 
+import Collapsible from 'react-collapsible';
+
 import FilterModal from '../../components/modal/FilterModal'
 import { ReactComponent as ArrowSVG } from '../../assets/arrow.svg';
 import Content from './Content';
@@ -1821,6 +1823,57 @@ const Control = styled.div`
   flex-wrap: wrap;
 `
 
+const SizeMap = {
+  "R1.8": 'Small',
+  "R1.65": "Small",
+  "R2.5": "Middle",
+  "R3.75": "Big",
+  "R6.25": "Big",
+  "R2": "Small",
+  "R5.45": "Small",
+  "R3.65": 'Big',
+  "R3.95": 'Big',
+  "R2.75": 'Middle',
+  "R13.85": 'Big',
+  "R4.1": 'Big',
+  "R6.9": 'Big',
+  "R6.95": 'Small',
+  "R7.15": 'Big',
+  "R7.8": 'Big',
+  'R7.4': 'Small',
+  "R14.85": 'Big',
+  "R7.6": 'Big',
+  "R10.9": "Big",
+  "R21.45": "Big",
+  "R27.3": "Big",
+  "R29.25": "Big",
+  "R10.4": "Small",
+  "R20.75": "Middle",
+  "R3": "Middle",
+  "R3.05": "Middle",
+  "R4.6": "Big",
+  "R31.1": "Big",
+  "R4.5": "Big",
+  "R7.5": "Big"
+}
+
+// const COLOR_MAP = {
+// 	'R1.8': "rgb(240, 60, 60)",
+// 	'R2': "rgb(240, 60, 60)",
+// 	'R6.95': "rgb(240, 60, 60)",
+// 	'R2.75': "rgb(202, 50, 50)",
+// 	"R3.65": "rgb(202, 50, 50)",
+// 	"R13.85": "rgb(202, 50, 50)",
+// 	"R3.95": "rgb(202, 50, 50)",
+// 	'R4.1': "rgb(163, 41, 41)",
+// 	"R6.9": "rgb(125, 31, 31)",
+// 	"R7.15": "rgb(125, 31, 31)",
+// 	"R7.8": "rgb(125, 31, 31)",
+// 	"R27.3": "rgb(125, 31, 31)",
+// 	"RAI": "rgb(106, 26, 26)",
+// 	"X": "rgb(90, 185, 102)"
+// }
+
 
 function sum(values) {
   return values.reduce((prev, value) => prev + value, 0);
@@ -2133,6 +2186,318 @@ const usePrevious = (value) => {
   return ref.current;
 }
 
+const Page = styled.div`
+
+`
+
+const ReportGraphPage = ({
+  chartWrapperRef,
+  barX,
+  chartScrollX,
+  width,
+  margin,
+  height,
+  axisHeight,
+  chartRef,
+  rectTextRef,
+  axisBottomRef,
+  stacked,
+  color,
+  scaleY,
+  onBarMouseOver,
+  onCanvasClick,
+  axisLeftRef,
+  scaleX,
+  canvasRef,
+  content
+}) => {
+  return <>
+    <ChartWrapper
+      ref={chartWrapperRef}
+    >
+      <Tooltip left={barX - chartScrollX}></Tooltip>
+      <svg
+        width={width + margin.left + margin.right}
+        height={height + margin.top + margin.bottom + axisHeight}
+        ref={chartRef}
+      >
+        <g transform={`translate(${margin.left}, ${margin.top})`}>
+          <rect
+            ref={rectTextRef}
+            height={axisHeight}
+            width={width}
+            x={0}
+            y={height}
+            opacity={0}
+          />
+          <g ref={axisBottomRef} transform={`translate(0, ${height})`} />
+          {stacked.map((data, index) => {
+
+            return (
+              <g key={`group-${index}`} fill={color(data.key)}>
+                {data.map((d, index) => {
+                  const label = String(d.data.label);
+                  const y0 = scaleY(d[0]);
+                  const y1 = scaleY(d[1]);
+
+                  return (
+                    <rect
+                      onMouseOver={onBarMouseOver}
+                      key={`rect-${index}`}
+                      x={scaleX(label)}
+                      y={y1}
+                      data-index={index}
+                      width={scaleX.bandwidth()}
+                      height={y0 - y1 || 0}
+                      stroke='black'
+                      strokeWidth='0.7'
+                    />
+                  );
+                })}
+              </g>
+            );
+          })}
+          <g ref={axisLeftRef} />
+        </g>
+      </svg>
+    </ChartWrapper>
+    <CanvasWrapper>
+      <canvas ref={canvasRef} onClick={onCanvasClick}/>
+    </CanvasWrapper>
+    { content && <Content data={content}/> }
+  </>
+}
+
+const getCategory = (data) => {
+  const { Small, Big } = data
+  if (Small >= 80) {
+    return 'Small'
+  } else if (Big >= 80) {
+    return 'Big'
+  } else if (Small > Big) {
+    if (Small - Big >= 20) {
+      return 'Small Most, Big Some'
+    } else {
+      return 'Big, Small'
+    }
+  } else if (Big > Small) {
+    if (Big - Small >= 20) {
+      return 'Big Most, Small Some'
+    } else {
+      return 'Big, Small'
+    }
+  } 
+
+  return 'Unknown'
+}
+
+const SummaryPage = styled.div`
+  color: white;
+`
+
+const FlopWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+`
+
+
+const FreqKeyMap = {
+  '80': '80% - 100%',
+  '60': '60% - 80%',
+  '40': '40% - 60%',
+  '20': '20% - 40%',
+  '0': '0% - 20%'
+}
+
+const FreqColorMap = {
+  '80': 'rgb(255, 0, 0)',
+  '60': 'rgb(255, 128, 0)',
+  '40': 'rgb(255, 255, 0)',
+  '20': 'rgb(128, 255, 0)',
+  '0': 'rgb(0, 255, 0)'
+}
+
+
+const SuitCharacter = styled.div`
+	color: ${({ color }) => color};
+`
+
+const SuitText = styled.div`
+	border: 1px solid;
+	display: flex;
+	padding: 7px;
+	> * {
+		width: 13px;
+		font-size: 15px;
+		padding: 2px;
+	}
+	:hover: {
+		background: blue;
+	}
+`
+
+const CategoryWrapper = styled.div`
+  margin-left: 20px;
+`
+
+
+const Flop = ({ data }) => {
+  return <SuitText>
+		<SuitCharacter color={getColor(data[1])}>{data[0]}</SuitCharacter>
+		<SuitCharacter color={getColor(data[3])}>{data[2]}</SuitCharacter>
+		<SuitCharacter color={getColor(data[5])}>{data[4]}</SuitCharacter>
+  </SuitText>
+}
+
+const ReportSummaryPage = ({ data = [] }) => {
+  const groupMap = {
+    '80': [],
+    '60': [],
+    '40': [],
+    '20': [],
+    '0': []
+  }
+  data.forEach(d => {
+    const check = d.actions.find(a => a.action_code === 'X')
+    const freq = 100 - (check.frequency * 100)
+    if (freq >= 80) {
+      groupMap['80'] = [...groupMap['80'], d]
+    } else if (freq >= 60) {
+      groupMap['60'] = [...groupMap['60'], d]
+    } else if (freq >= 40) {
+      groupMap['40'] = [...groupMap['40'], d]
+    } else if (freq >= 20) {
+      groupMap['20'] = [...groupMap['20'], d]
+    } else if (freq >= 0) {
+      groupMap['0'] = [...groupMap['0'], d]
+    }
+  })
+  Object.entries(groupMap).forEach(([key, value]) => {
+    groupMap[key] = groupMap[key]
+      .map(d => {
+        const result = {}
+        d.actions.forEach((a) => {
+          if (a.action_code === 'X' || a.action_code === 'RAI') return
+          
+          if (SizeMap[a.action_code] === 'Middle') {
+            result['Small'] = (result['Small'] || 0) + (a.frequency * 100 / 2)
+            result['Big'] = (result['Big'] || 0) + (a.frequency * 100 / 2)
+          } else {
+            result[SizeMap[a.action_code]] = (result[SizeMap[a.action_code]] || 0) + (a.frequency * 100)
+          }
+
+        })
+        const total = Object.values(result).reduce((cal, val) => cal + val, 0)
+        Object.entries(result).forEach(([rKey, rValue]) => {
+          result[rKey] = (result[rKey]/total) * 100
+        })
+        const category = getCategory(result)
+        return {
+          ...d,
+          summary: result,
+          category
+        }
+      })
+  })
+  
+  return <SummaryPage>
+      <div>Bet Frequency</div>
+      {
+        Object.entries(groupMap).sort((a, b) => b[0] - a[0]).map(([key, value]) => {
+          const small = groupMap[key].filter(d => d.category === 'Small')
+          const big = groupMap[key].filter(d => d.category === 'Big')
+          const bigSmall = groupMap[key].filter(d => d.category === 'Big, Small')
+          const smallMostBigSome = groupMap[key].filter(d => d.category === 'Small Most, Big Some')
+          const bigMostSmallSome = groupMap[key].filter(d => d.category === 'Big Most, Small Some')
+          const unknown = groupMap[key].filter(d => d.category === 'Unknown')
+          
+
+          return value.length ? <Collapsible trigger={`+ ${FreqKeyMap[key]}`} transitionTime={200} triggerStyle={{ color: FreqColorMap[key] }}>
+            {
+              big.length ? <CategoryWrapper>
+               <Collapsible trigger={`+ Big`}  transitionTime={200}  triggerStyle={{ color: 'rgb(139, 0, 0)' }}>
+                 <FlopWrapper>
+                   {
+                     big.map(d => {
+                       return <Flop data={d.flop} />
+                     })
+                   }
+                 </FlopWrapper>
+               </Collapsible>
+             </CategoryWrapper> : null
+            }
+            {
+              bigMostSmallSome.length ? <CategoryWrapper>
+                <Collapsible trigger={`+ Big Most, Small Some`}  transitionTime={200}   triggerStyle={{ color: 'rgb(204, 0, 0)' }}>
+                  <FlopWrapper>
+                    {
+                      bigMostSmallSome.map(d => {
+                        return <Flop data={d.flop} />
+                      })
+                    }
+                  </FlopWrapper>
+                </Collapsible>
+              </CategoryWrapper> : null
+            }
+            {
+              bigSmall.length ? <CategoryWrapper>
+                <Collapsible trigger={`+ Big, Small`}  transitionTime={200}   triggerStyle={{ color: 'rgb(255, 0, 0)' }}>
+                  <FlopWrapper>
+                    {
+                      bigSmall.map(d => {
+                        return <Flop data={d.flop} />
+                      })
+                    }
+                  </FlopWrapper>
+                </Collapsible>
+              </CategoryWrapper> : null
+            }
+            {
+              smallMostBigSome.length ? <CategoryWrapper>
+                <Collapsible trigger={`+ Small Most, Big Some`}  transitionTime={200}   triggerStyle={{ color: 'rgb(255, 99, 71)' }}>
+                  <FlopWrapper>
+                    {
+                      smallMostBigSome.map(d => {
+                        return <Flop data={d.flop} />
+                      })
+                    }
+                  </FlopWrapper>
+                </Collapsible>
+              </CategoryWrapper> : null
+            }
+            {
+              small.length ? <CategoryWrapper>
+                <Collapsible trigger={`+ Small`}  transitionTime={200}   triggerStyle={{ color: 'rgb(255, 160, 122)' }}>
+                  <FlopWrapper>
+                    {
+                      small.map(d => {
+                        return <Flop data={d.flop} />
+                      })
+                    }
+                  </FlopWrapper>
+                </Collapsible>
+              </CategoryWrapper> : null
+            }
+            {
+              unknown.length ? <CategoryWrapper>
+                <Collapsible trigger={`+ Unknown`}  transitionTime={200}   triggerStyle={{ color: 'rgb(255, 160, 122)' }}>
+                  <FlopWrapper>
+                    {
+                      unknown.map(d => {
+                        return <Flop data={d.flop} />
+                      })
+                    }
+                  </FlopWrapper>
+                </Collapsible>
+              </CategoryWrapper> : null
+            }
+          </Collapsible> : null
+        })
+      }
+  </SummaryPage>
+}
+
 
 const ReportPage = () => {
   const canvasRef = useRef(null);
@@ -2162,6 +2527,7 @@ const ReportPage = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [filteredFlop, setFilteredFlop] = useState(flops)
   const [filterState, setFilterState] = useState({})
+  const [reportPageState, setReportPageState] = useState('graph')
 	const navigate = useNavigate();
 
   const header = "label,value1,value2,value3,value4,value5,value6,value7,value8,value9";
@@ -2528,59 +2894,36 @@ const ReportPage = () => {
         />
         <button onClick={() => setIsFilterModalOpen(true)}>Filter</button>
       </Control>
-      <ChartWrapper
-        ref={chartWrapperRef}
-      >
-        <Tooltip left={barX - chartScrollX}></Tooltip>
-        <svg
-          width={width + margin.left + margin.right}
-          height={height + margin.top + margin.bottom + axisHeight}
-          ref={chartRef}
-        >
-          <g transform={`translate(${margin.left}, ${margin.top})`}>
-            <rect
-              ref={rectTextRef}
-              height={axisHeight}
-              width={width}
-              x={0}
-              y={height}
-              opacity={0}
-            />
-            <g ref={axisBottomRef} transform={`translate(0, ${height})`} />
-            {stacked.map((data, index) => {
-
-              return (
-                <g key={`group-${index}`} fill={color(data.key)}>
-                  {data.map((d, index) => {
-                    const label = String(d.data.label);
-                    const y0 = scaleY(d[0]);
-                    const y1 = scaleY(d[1]);
-
-                    return (
-                      <rect
-                        onMouseOver={onBarMouseOver}
-                        key={`rect-${index}`}
-                        x={scaleX(label)}
-                        y={y1}
-                        data-index={index}
-                        width={scaleX.bandwidth()}
-                        height={y0 - y1 || 0}
-                        stroke='black'
-                        strokeWidth='0.7'
-                      />
-                    );
-                  })}
-                </g>
-              );
-            })}
-            <g ref={axisLeftRef} />
-          </g>
-        </svg>
-      </ChartWrapper>
-      <CanvasWrapper>
-        <canvas ref={canvasRef} onClick={onCanvasClick}/>
-      </CanvasWrapper>
-      { content && <Content data={content}/> }
+      <Page>
+        <div style={{ display: 'flex', margin: '10px' }}>
+          <button onClick={() => setReportPageState('graph')}>Graph</button>
+          <button onClick={() => setReportPageState('summary')}>Summary</button>
+        </div>
+        {
+          reportPageState === 'graph'
+            ? <ReportGraphPage
+                chartWrapperRef={chartWrapperRef}
+                barX={barX}
+                chartScrollX={chartScrollX}
+                width={width}
+                margin={margin}
+                height={height}
+                axisHeight={axisHeight}
+                chartRef={chartRef}
+                rectTextRef={rectTextRef}
+                axisBottomRef={axisBottomRef}
+                stacked={stacked}
+                color={color}
+                scaleY={scaleY}
+                onBarMouseOver={onBarMouseOver}
+                onCanvasClick={onCanvasClick}
+                axisLeftRef={axisLeftRef}
+                scaleX={scaleX}
+                canvasRef={canvasRef}
+                content={content}
+            /> : <ReportSummaryPage data={data} />
+        }
+      </Page>
       {
         isFilterModalOpen
           ? <FilterModal
