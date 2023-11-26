@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Canvg } from 'canvg';
 import styled from 'styled-components';
 import Select, { components } from "react-select";
@@ -21,6 +21,13 @@ const SolutionMap = {
   'SRP.IPA.LJVSBB': 'R2.5-F-F-F-F-C',
   'SRP.OPA.SBVSBB': 'F-F-F-F-R3-C',
   '3Bet.OPA.SB3BBTN': 'F-F-F-R2.5-R10-F-C',
+}
+
+const SolutionReverseMap = {
+  'F-F-F-R2.5-F-C': 'SRP.IPA.BTNVSBB',
+  'R2.5-F-F-F-F-C': 'SRP.IPA.LJVSBB',
+  'F-F-F-F-R3-C': 'SRP.OPA.SBVSBB',
+  'F-F-F-R2.5-R10-F-C': '3Bet.OPA.SB3BBTN',
 }
 
 const flops = [
@@ -2487,6 +2494,7 @@ const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', curren
   const [sizeAnswer, setSizeAnswer] = useState('')
   const [strategyData, setStrategyData] = useState(null)
   const [isShowResult, setIsShowResult] = useState(false)
+	const navigate = useNavigate();
   const flop = data[index]
   const board = (flop || {}).flop
 
@@ -2586,6 +2594,9 @@ const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', curren
     <button onClick={() => {
       setIsShowResult(true)
     }}>Result</button>
+    <button onClick={() => {
+      navigate(`/solution?board=${board}&preflop=${preflop}&setting=${setting}`);
+    }}>Solution</button>
     {
       isShowResult && strategyData ? <Board>
         {
@@ -2716,25 +2727,29 @@ const ReportPage = () => {
   const solutionSelectDivRef = useRef(null)
   const settingSelectDivRef = useRef(null)
 
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+
   const [chartScrollX, setChartScrollX] = useState(0)
   const [barX, setBarX] = useState(0)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [rectTextLeft, setRectTextLeft] = useState(0)
   const [order, setOrder] = useState('asc')
   const [type, setType] = useState('flop')
-  const [solution, setSolution] = useState('SRP.IPA.BTNVSBB')
-  const [setting, setSetting] = useState('NL500')
+  const [solution, setSolution] = useState(SolutionReverseMap[queryParams.get('preflop')] || 'SRP.IPA.BTNVSBB')
+  const [setting, setSetting] = useState(queryParams.get('setting') || 'NL500')
   const [orderMenuIsOpen, setOrderMenuIsOpen] = useState(false)
   const [solutionMenuIsOpen, setSolutionMenuIsOpen] = useState(false)
   const [settingMenuIsOpen, setSettingMenuIsOpen] = useState(false)
   const [data, setData] = useState(null)
   const [originData, setOriginData] = useState(null)
-  const [solutions, setSolutions] = useState(SOLUTION_OPTIONS)
+  const [solutions, setSolutions] = useState(queryParams.get('setting') === 'NL50GG' ? SOLUTION_NL50GG_OPTIONS : SOLUTION_OPTIONS)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [filteredFlop, setFilteredFlop] = useState(flops)
   const [filterState, setFilterState] = useState({})
-  const [reportPageState, setReportPageState] = useState('graph')
+  const [reportPageState, setReportPageState] = useState(queryParams.get('page') || 'graph')
 	const navigate = useNavigate();
+  
 
   const header = "label,value1,value2,value3,value4,value5,value6,value7,value8,value9";
   const body = (data || []).map(d => ({
@@ -3072,6 +3087,7 @@ const ReportPage = () => {
           onChange={(e) => {
             setSetting(e.value);
             setSettingMenuIsOpen(false)
+            navigate(`?setting=${e.value}`);
           }}
           styles={{
             menu: base => ({
@@ -3088,6 +3104,9 @@ const ReportPage = () => {
           onChange={(e) => {
             setSolution(e.value);
             setSolutionMenuIsOpen(false)
+            if (SolutionMap[e.value]) {
+              navigate(`?preflop=${SolutionMap[e.value]}`);
+            }
           }}
           styles={{
             menu: base => ({
@@ -3102,9 +3121,18 @@ const ReportPage = () => {
       </Control>
       <Page>
         <div style={{ display: 'flex', margin: '10px' }}>
-          <button onClick={() => setReportPageState('graph')}>Graph</button>
-          <button onClick={() => setReportPageState('summary')}>Summary</button>
-          <button onClick={() => setReportPageState('train')}>Train</button>
+          <button onClick={() => {
+            setReportPageState('graph')
+            navigate('?page=graph')
+          }}>Graph</button>
+          <button onClick={() => {
+            setReportPageState('summary')
+            navigate('?page=summary')
+          }}>Summary</button>
+          <button onClick={() => {
+            setReportPageState('train')
+            navigate('?page=train')
+          }}>Train</button>
         </div>
         {
           reportPageState === 'graph'

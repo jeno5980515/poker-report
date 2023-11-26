@@ -1,4 +1,5 @@
 import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import ReportPage from "./pages/ReportPage";
@@ -9,10 +10,15 @@ import TurnReportPage from "./pages/TurnReportPage";
 import './App.css';
 
 function Layout() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   return (
     <div>
       <nav>
         <ul>
+          <li>
+            <Link onClick={() => navigate(-1, { replace: false, query: searchParams.toString() })}>Back</Link>
+          </li>
           <li>
             <Link to="/report">Report</Link>
           </li>

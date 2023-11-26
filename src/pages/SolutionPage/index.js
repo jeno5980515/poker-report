@@ -2410,6 +2410,7 @@ const RangePage = () => {
 	useEffect(() => {
 		if (!filteredFlop.includes(board)) { 
 			setBoard(filteredFlop[0])
+			navigate(`?board=${filteredFlop[0]}`);
 		}
 	}, [JSON.stringify(filteredFlop)])
 
@@ -2482,6 +2483,7 @@ const RangePage = () => {
 						options={boardOptions}
 						onChange={(e) => {
 							setBoard(e.value)
+							navigate(`?board=${e.value}`);
 						}}
 						isClearable={false}
 						isSearchable={false}
@@ -2497,6 +2499,7 @@ const RangePage = () => {
 							const index = Math.floor(Math.random() * (max - min + 1)) + min
 							const newFlop = list[index]
 							setBoard(newFlop)
+							navigate(`?board=${newFlop}`);
 						}}
 					>Random</button>
 					<button
