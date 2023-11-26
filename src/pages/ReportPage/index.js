@@ -2344,6 +2344,29 @@ const CategoryWrapper = styled.div`
   margin-left: 20px;
 `
 
+const TrainPage = styled.div`
+  color: white;
+`
+
+const OptionWrapper = styled.div`
+  display: flex;
+  width: 100;
+  flex-wrap: wrap;
+  margin: 5px;
+  padding: 5px;
+`
+
+const TrainOption = styled.div`
+  background: rgb(47, 47, 47);
+  padding: 5px;
+  margin: 5px;
+  width: 100px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 
 const Flop = ({ data }) => {
   return <SuitText>
@@ -2353,7 +2376,7 @@ const Flop = ({ data }) => {
   </SuitText>
 }
 
-const ReportSummaryPage = ({ data = [] }) => {
+const getGroupMap = (data) => {
   const groupMap = {
     '80': [],
     '60': [],
@@ -2404,6 +2427,99 @@ const ReportSummaryPage = ({ data = [] }) => {
         }
       })
   })
+  return groupMap;
+}
+
+const CategoryList = ['Big', 'Big Most, Small Some', 'Big, Small', 'Small Most, Big Some', 'Small']
+const CategoryColorMap = {
+  'Big': 'rgb(139, 0, 0)',
+  'Big Most, Small Some': 'rgb(204, 0, 0)',
+  'Big, Small': 'rgb(255, 0, 0)',
+  'Small Most, Big Some': 'rgb(255, 99, 71)',
+  'Small': 'rgb(255, 160, 122)'
+}
+
+const ReportTrainPage = ({ data = [] }) => {
+  const generateIndex = () => {
+    const min = 0;
+    const max = data.length - 1
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+  const groupMap = getGroupMap(data)
+  const [index, setIndex] = useState(generateIndex())
+  const [freqAnswer, setFreqAnswer] = useState('')
+  const [sizeAnswer, setSizeAnswer] = useState('')
+  const flop = data[index]
+
+  let correctFreq = ''
+  let correctSize = ''
+
+  useEffect(() => {
+    setIndex(generateIndex())
+    setFreqAnswer('')
+    setSizeAnswer('')
+  }, [JSON.stringify(data)])
+
+  if (!flop) {
+    return <div>No Data</div>
+  }
+
+  Object.entries(groupMap).forEach(([key, value]) => {
+    const answer = value.find(v => v.flop === (flop || {}).flop)
+    if (answer) {
+      correctFreq = key
+      correctSize = answer.category;
+    }
+  })
+
+  return <TrainPage>
+    <FlopWrapper>
+      <Flop data={flop.flop} />
+    </FlopWrapper>
+    <div>Bet Frequency</div>
+    <OptionWrapper>
+      {
+        Object.keys(groupMap).sort((a, b) => b - a).map((f) => {
+          const style = { color: FreqColorMap[f] }
+          if (freqAnswer !== '') {
+            style.color = 'white';
+            if (f === correctFreq) {
+              style.background = 'rgb(90, 185, 102)'
+            } else if (f === freqAnswer) {
+              style.background = 'rgb(240, 60, 60)'
+            }
+          }
+          return <TrainOption style={style} onClick={freqAnswer === '' ? () => setFreqAnswer(f) : null}>{FreqKeyMap[f]}</TrainOption>
+        })
+      }
+    </OptionWrapper>
+    <div>Bet Size</div>
+    <OptionWrapper>
+      {
+        CategoryList.map((f) => {
+          const style = { color: CategoryColorMap[f] }
+          if (sizeAnswer !== '') {
+            style.color = 'white';
+            if (f === correctSize) {
+              style.background = 'rgb(90, 185, 102)'
+            } else if (f === sizeAnswer) {
+              style.background = 'rgb(240, 60, 60)'
+            }
+          }
+          return <TrainOption style={style} onClick={sizeAnswer === '' ? () => setSizeAnswer(f) : null}>{f}</TrainOption>
+        })
+      }
+    </OptionWrapper>
+    <button onClick={() => {
+      setIndex(generateIndex())
+      setFreqAnswer('')
+      setSizeAnswer('')
+    }}>Next</button>
+  </TrainPage>
+}
+
+const ReportSummaryPage = ({ data = [] }) => {
+  const groupMap = getGroupMap(data)
   
   return <SummaryPage>
       <div>Bet Frequency</div>
@@ -2420,7 +2536,7 @@ const ReportSummaryPage = ({ data = [] }) => {
           return value.length ? <Collapsible trigger={`+ ${FreqKeyMap[key]}`} transitionTime={200} triggerStyle={{ color: FreqColorMap[key] }}>
             {
               big.length ? <CategoryWrapper>
-               <Collapsible trigger={`+ Big`}  transitionTime={200}  triggerStyle={{ color: 'rgb(139, 0, 0)' }}>
+               <Collapsible trigger={`+ Big`}  transitionTime={200}  triggerStyle={{ color: CategoryColorMap['Big'] }}>
                  <FlopWrapper>
                    {
                      big.map(d => {
@@ -2433,7 +2549,7 @@ const ReportSummaryPage = ({ data = [] }) => {
             }
             {
               bigMostSmallSome.length ? <CategoryWrapper>
-                <Collapsible trigger={`+ Big Most, Small Some`}  transitionTime={200}   triggerStyle={{ color: 'rgb(204, 0, 0)' }}>
+                <Collapsible trigger={`+ Big Most, Small Some`}  transitionTime={200}   triggerStyle={{ color: CategoryColorMap['Big Most, Small Some'] }}>
                   <FlopWrapper>
                     {
                       bigMostSmallSome.map(d => {
@@ -2446,7 +2562,7 @@ const ReportSummaryPage = ({ data = [] }) => {
             }
             {
               bigSmall.length ? <CategoryWrapper>
-                <Collapsible trigger={`+ Big, Small`}  transitionTime={200}   triggerStyle={{ color: 'rgb(255, 0, 0)' }}>
+                <Collapsible trigger={`+ Big, Small`}  transitionTime={200}   triggerStyle={{ color: CategoryColorMap['Big, Small'] }}>
                   <FlopWrapper>
                     {
                       bigSmall.map(d => {
@@ -2459,7 +2575,7 @@ const ReportSummaryPage = ({ data = [] }) => {
             }
             {
               smallMostBigSome.length ? <CategoryWrapper>
-                <Collapsible trigger={`+ Small Most, Big Some`}  transitionTime={200}   triggerStyle={{ color: 'rgb(255, 99, 71)' }}>
+                <Collapsible trigger={`+ Small Most, Big Some`}  transitionTime={200}   triggerStyle={{ color: CategoryColorMap['Small Most, Big Some'] }}>
                   <FlopWrapper>
                     {
                       smallMostBigSome.map(d => {
@@ -2472,7 +2588,7 @@ const ReportSummaryPage = ({ data = [] }) => {
             }
             {
               small.length ? <CategoryWrapper>
-                <Collapsible trigger={`+ Small`}  transitionTime={200}   triggerStyle={{ color: 'rgb(255, 160, 122)' }}>
+                <Collapsible trigger={`+ Small`}  transitionTime={200}   triggerStyle={{ color: CategoryColorMap['Small'] }}>
                   <FlopWrapper>
                     {
                       small.map(d => {
@@ -2902,6 +3018,7 @@ const ReportPage = () => {
         <div style={{ display: 'flex', margin: '10px' }}>
           <button onClick={() => setReportPageState('graph')}>Graph</button>
           <button onClick={() => setReportPageState('summary')}>Summary</button>
+          <button onClick={() => setReportPageState('train')}>Train</button>
         </div>
         {
           reportPageState === 'graph'
@@ -2925,7 +3042,15 @@ const ReportPage = () => {
                 scaleX={scaleX}
                 canvasRef={canvasRef}
                 content={content}
-            /> : <ReportSummaryPage data={data} />
+            /> : null
+        }
+        {
+          reportPageState === 'summary'
+            ? <ReportSummaryPage data={data} /> : null
+        }
+        {
+          reportPageState === 'train'
+            ? <ReportTrainPage data={data} /> : null
         }
       </Page>
       {
