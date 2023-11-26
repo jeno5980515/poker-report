@@ -8,6 +8,7 @@ import Select, { components } from "react-select";
 
 import Collapsible from 'react-collapsible';
 
+import { HandDiv } from '../SolutionPage/SolutionStrategyPage'
 import FilterModal from '../../components/modal/FilterModal'
 import { ReactComponent as ArrowSVG } from '../../assets/arrow.svg';
 import Content from './Content';
@@ -2439,7 +2440,42 @@ const CategoryColorMap = {
   'Small': 'rgb(255, 160, 122)'
 }
 
-const ReportTrainPage = ({ data = [] }) => {
+
+const RANGE = [
+	['AA', 'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s'],
+	['AKo', 'KK', 'KQs', 'KJs', 'KTs', 'K9s', 'K8s', 'K7s', 'K6s', 'K5s', 'K4s', 'K3s', 'K2s'],
+	['AQo', 'KQo', 'QQ', 'QJs', 'QTs', 'Q9s', 'Q8s', 'Q7s', 'Q6s', 'Q5s', 'Q4s', 'Q3s', 'Q2s'],
+	['AJo', 'KJo', 'QJo', 'JJ', 'JTs', 'J9s', 'J8s', 'J7s', 'J6s', 'J5s', 'J4s', 'J3s', 'J2s'],
+	['ATo', 'KTo', 'QTo', 'JTo', 'TT', 'T9s', 'T8s', 'T7s', 'T6s', 'T5s', 'T4s', 'T3s', 'T2s'],
+	['A9o', 'K9o', 'Q9o', 'J9o', 'T9o', '99', '98s', '97s', '96s', '95s', '94s', '93s', '92s'],
+	['A8o', 'K8o', 'Q8o', 'J8o', 'T8o', '98o', '88', '87s', '86s', '85s', '84s', '83s', '82s'],
+	['A7o', 'K7o', 'Q7o', 'J7o', 'T7o', '97o', '87o', '77', '76s', '75s', '74s', '73s', '72s'],
+	['A6o', 'K6o', 'Q6o', 'J6o', 'T6o', '96o', '86o', '76o', '66', '65s', '64s', '63s', '62s'],
+	['A5o', 'K5o', 'Q5o', 'J5o', 'T5o', '95o', '85o', '75o', '65o', '55', '54s', '53s', '52s'],
+	['A4o', 'K4o', 'Q4o', 'J4o', 'T4o', '94o', '84o', '74o', '64o', '54o', '44', '43s', '42s'],
+	['A3o', 'K3o', 'Q3o', 'J3o', 'T3o', '93o', '83o', '73o', '63o', '53o', '43o', '33', '32s'],
+	['A2o', 'K2o', 'Q2o', 'J2o', 'T2o', '92o', '82o', '72o', '62o', '52o', '42o', '32o', '22'],
+]
+
+
+const Board = styled.div`
+	display: flex;
+  flex-wrap: wrap;
+	width: 100%;
+	padding: 2.5%;
+
+	@media (max-width: 767px) {
+		padding: 4.8%;
+		width: 90%;
+	}
+
+	@media (min-width: 768px) {
+		width: 60vw;
+	}
+`
+
+
+const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', currentPlayer = 2 }) => {
   const generateIndex = () => {
     const min = 0;
     const max = data.length - 1
@@ -2449,7 +2485,20 @@ const ReportTrainPage = ({ data = [] }) => {
   const [index, setIndex] = useState(generateIndex())
   const [freqAnswer, setFreqAnswer] = useState('')
   const [sizeAnswer, setSizeAnswer] = useState('')
+  const [strategyData, setStrategyData] = useState(null)
+  const [isShowResult, setIsShowResult] = useState(false)
   const flop = data[index]
+  const board = (flop || {}).flop
+
+	const playerHandData = strategyData && strategyData.players_info[currentPlayer === 2 ? 1 : 0].simple_hand_counters;
+  const [playerRangeData, setPlayerRangeData] = useState(RANGE.map(row => {
+		return row.map(v => ({
+      key: v,
+      value : strategyData && playerHandData[v].total_frequency > 0 ? 0 : -1,
+      combo: strategyData && playerHandData[v].total_combos,
+      highlight: true
+    }))
+	}))
 
   let correctFreq = ''
   let correctSize = ''
@@ -2458,7 +2507,24 @@ const ReportTrainPage = ({ data = [] }) => {
     setIndex(generateIndex())
     setFreqAnswer('')
     setSizeAnswer('')
+    setIsShowResult(false)
+    setStrategyData(null)
   }, [JSON.stringify(data)])
+
+  useEffect(() => {
+		const fn = async () => {
+			try {
+				const path = `${process.env.PUBLIC_URL}/solutions/${setting}/${preflop}/${flopAction}/${board}.json`;
+				const response = await fetch(path);
+				const data = await response.json()
+				setStrategyData(data)
+			} catch (e) {
+				console.log(e)
+        setStrategyData(null)
+			}
+		}
+		fn();
+  }, [index])
 
   if (!flop) {
     return <div>No Data</div>
@@ -2514,7 +2580,27 @@ const ReportTrainPage = ({ data = [] }) => {
       setIndex(generateIndex())
       setFreqAnswer('')
       setSizeAnswer('')
+      setStrategyData(null)
+      setIsShowResult(false)
     }}>Next</button>
+    <button onClick={() => {
+      setIsShowResult(true)
+    }}>Result</button>
+    {
+      isShowResult ? <Board>
+        {
+          playerRangeData.map((row, x) => {
+            return row.map((v, y) => {
+              return <HandDiv
+                data={strategyData.players_info[currentPlayer === 2 ? 1 : 0].simple_hand_counters[v.key]}
+                hand={v.key}
+                highlight={v.highlight}
+              />
+            })
+          })
+        }
+		  </Board> : null
+    }
   </TrainPage>
 }
 
@@ -3050,7 +3136,11 @@ const ReportPage = () => {
         }
         {
           reportPageState === 'train'
-            ? <ReportTrainPage data={data} /> : null
+            ? <ReportTrainPage
+                data={data}
+                preflop={SolutionMap[solution]}
+                setting={setting}
+              /> : null
         }
       </Page>
       {

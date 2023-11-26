@@ -129,7 +129,7 @@ const sortBySize = (a, b) => {
 	return parseFloat(b[0].slice(1)) - parseFloat(a[0].slice(1))
 }
 
-const HandDiv = ({
+export const HandDiv = ({
 	data,
 	hand,
 	onMouseEnter,
