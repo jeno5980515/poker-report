@@ -2587,7 +2587,7 @@ const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', curren
       setIsShowResult(true)
     }}>Result</button>
     {
-      isShowResult ? <Board>
+      isShowResult && strategyData ? <Board>
         {
           playerRangeData.map((row, x) => {
             return row.map((v, y) => {
@@ -3140,6 +3140,7 @@ const ReportPage = () => {
                 data={data}
                 preflop={SolutionMap[solution]}
                 setting={setting}
+                flopAction={solution.includes('IPA') ? 'X' : 'Empty'}
               /> : null
         }
       </Page>
