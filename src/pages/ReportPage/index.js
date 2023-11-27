@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Canvg } from 'canvg';
 import styled from 'styled-components';
 import Select, { components } from "react-select";
+import { useSelector, useDispatch } from 'react-redux'
 
 import Collapsible from 'react-collapsible';
 
@@ -2886,9 +2887,8 @@ const ReportPage = () => {
   const [originData, setOriginData] = useState(null)
   const [solutions, setSolutions] = useState(queryParams.get('setting') === 'NL50GG' ? SOLUTION_NL50GG_OPTIONS : SOLUTION_OPTIONS)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
-  const [filteredFlop, setFilteredFlop] = useState(flops)
-  const [filterState, setFilterState] = useState({})
   const [reportPageState, setReportPageState] = useState(queryParams.get('page') || 'graph')
+	const { flops: filteredFlop } = useSelector((state) => state.filter)
 	const navigate = useNavigate();
   
 
@@ -3109,7 +3109,7 @@ const ReportPage = () => {
   }, [JSON.stringify(originData)])
 
   useEffect(() => {
-    if (!data) {
+    if (!originData) {
       return;
     }
     let newData = JSON.parse(JSON.stringify(originData))
@@ -3331,11 +3331,8 @@ const ReportPage = () => {
           ? <FilterModal
               onCancel={() => setIsFilterModalOpen(false)}
               onSave={({ flops, state }) => {
-                setFilteredFlop(flops)
                 setIsFilterModalOpen(false)
-                setFilterState(state)
               }}
-              state={filterState}
             />
           : null
       }

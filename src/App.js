@@ -1,6 +1,8 @@
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
 
 import ReportPage from "./pages/ReportPage";
 import RangePage from "./pages/RangePage";
@@ -43,14 +45,16 @@ function Layout() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<ReportPage />} />
-        <Route path="report" element={<ReportPage />} />
-        <Route path="range" element={<RangePage />} />
-        <Route path="solution" element={<SolutionPage />} />
-        <Route path="turn-report" element={<TurnReportPage />} />
-      </Route>
-    </Routes>
+    <Provider store={store}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<ReportPage />} />
+          <Route path="report" element={<ReportPage />} />
+          <Route path="range" element={<RangePage />} />
+          <Route path="solution" element={<SolutionPage />} />
+          <Route path="turn-report" element={<TurnReportPage />} />
+        </Route>
+      </Routes>
+    </Provider>
   );
 }

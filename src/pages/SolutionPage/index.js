@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import Select, { components } from "react-select";
 import { useLocation } from 'react-router-dom';
 
+import { useSelector, useDispatch } from 'react-redux'
+import filterSlice from '../../reducers/filter/filterSlice'
+
 import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
 import { ReactComponent as DiamondSVG } from '../../assets/diamond.svg';
 import { ReactComponent as ClubSVG } from '../../assets/club.svg';
@@ -2052,10 +2055,11 @@ const RangePage = () => {
   const [chartData, setChartDate] = useState([10, 25, 18, 32, 12, 7]);
 	const [currentPlayer, setCurrentPlayer] = useState(2)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
-	const [filteredFlop, setFilteredFlop] = useState(flops)
+  const dispatch = useDispatch()
   const chartRef = useRef(null);
   const filteredChartRef = useRef(null);
 	const navigate = useNavigate();
+	const { flops: filteredFlop } = useSelector((state) => state.filter)
 
 	const player1HandData = data && data.players_info[0].simple_hand_counters;
 	const player2HandData = data && data.players_info[1].simple_hand_counters;
@@ -2524,7 +2528,6 @@ const RangePage = () => {
 								filteredChartRef={filteredChartRef}
 								selectedKey={selectedKey}
 								setClickedFilter={setClickedFilter}
-								setFilterState={setFilterState}
 								handleClickFilter={handleClickFilter}
 								currentHand={currentHand}
 								detailState={detailState}
@@ -2549,8 +2552,7 @@ const RangePage = () => {
 					isFilterModalOpen
 						? <FilterModal
 								onCancel={() => setIsFilterModalOpen(false)}
-								onSave={(flops) => {
-									setFilteredFlop(flops)
+								onSave={({ flops, state }) => {
 									setIsFilterModalOpen(false)
 								}}
 							/>
