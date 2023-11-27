@@ -2481,6 +2481,147 @@ const Board = styled.div`
 	}
 `
 
+const ReportExamPage = ({ data = [], preflop, setting, flopAction = 'X', currentPlayer = 2 }) => {
+  const groupMap = getGroupMap(data)
+  const [isShowResult, setIsShowResult] = useState(false)
+  const [results, setResults] = useState([])
+
+  let correctResults = []
+  useEffect(() => {
+    setResults([])
+    setIsShowResult(false)
+  }, [JSON.stringify(data)])
+
+  if (!data.length) {
+    return <div>No Data</div>
+  }
+
+  const flops = data.map(f => f.flop)
+  flops.forEach((flop, i) => {
+    Object.entries(groupMap).forEach(([key, value]) => {
+      const answer = value.find(v => v.flop === flop)
+      if (answer) {
+        correctResults[i] = {
+          freq: key,
+          size: answer.category
+        }
+        return
+      }
+    })
+  }) 
+
+  let count = 0;
+  correctResults.forEach((c, i) => {
+    if (correctResults[i].freq === (results[i] || {}).freq) {
+      count ++;
+    }
+    if (correctResults[i].size === (results[i] || {}).size) {
+      count ++;
+    }
+  })
+  const percentage = count / (data.length * 2)
+
+  return <TrainPage>
+    {
+      data.map((d, i) => {
+        return <>
+          <FlopWrapper>
+            <Flop data={d.flop} />
+          </FlopWrapper>
+          <div>Bet Frequency</div>
+          <OptionWrapper>
+            {
+              Object.keys(groupMap).sort((a, b) => b - a).map((f) => {
+                const style = { color: FreqColorMap[f] }
+                if ((results[i] || {}).freq) {
+                  style.color = 'white';
+                  if (isShowResult) {
+                    if (f === correctResults[i].freq) {
+                      style.background = 'rgb(90, 185, 102)'
+                    } else if (f === (results[i] || {}).freq) {
+                      style.background = 'rgb(240, 60, 60)'
+                    }
+                  } else {
+                    if (f === (results[i] || {}).freq) {
+                      style.background = 'rgb(90, 185, 102)'
+                    }
+                  }
+                } else if (isShowResult) {
+                  if (f === correctResults[i].freq) {
+                    style.background = 'rgb(90, 185, 102)'
+                  }
+                }
+                return <TrainOption
+                  style={style}
+                  onClick={!isShowResult ? () => {
+                      const newResults = [...results]
+                      newResults[i] = {
+                        ...newResults[i],
+                        freq: f
+                      }
+                      setResults(newResults)
+                    } : null
+                  }
+                >{FreqKeyMap[f]}</TrainOption>
+              })
+            }
+          </OptionWrapper>
+          <div>Bet Size</div>
+          <OptionWrapper>
+            {
+              CategoryList.map((f) => {
+                const style = { color: CategoryColorMap[f] }
+                if ((results[i] || {}).size) {
+                  style.color = 'white';
+                  if (isShowResult) {
+                    if (f === correctResults[i].size) {
+                      style.background = 'rgb(90, 185, 102)'
+                    } else if (f === (results[i] || {}).size) {
+                      style.background = 'rgb(240, 60, 60)'
+                    }
+                  } else {
+                    if (f === (results[i] || {}).size) {
+                      style.background = 'rgb(90, 185, 102)'
+                    }
+                  }
+                } else if (isShowResult) {
+                  if (f === correctResults[i].size) {
+                    style.background = 'rgb(90, 185, 102)'
+                  }
+                }
+                return <TrainOption
+                  style={style}
+                  onClick={!isShowResult ? () => {
+                    const newResults = [...results]
+                    newResults[i] = {
+                      ...newResults[i],
+                      size: f
+                    }
+                    setResults(newResults)
+                  }: null}>{f}</TrainOption>
+              })
+            }
+          </OptionWrapper>
+        </>
+      })
+    }
+    <button onClick={() => {
+      setResults([])
+      setIsShowResult(false)
+    }}>Reset</button>
+    <button onClick={() => {
+      console.log(results)
+      setIsShowResult(true)
+    }}>Submit</button>
+    <div>
+      {
+        isShowResult ? <div style={{ color: 'white' }}>{(percentage * 100).toFixed(2)}</div> : null
+      }
+    </div>
+  </TrainPage>
+}
+
+
 
 const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', currentPlayer = 2 }) => {
   const generateIndex = () => {
@@ -3133,6 +3274,10 @@ const ReportPage = () => {
             setReportPageState('train')
             navigate('?page=train')
           }}>Train</button>
+          <button onClick={() => {
+            setReportPageState('exam')
+            navigate('?page=exam')
+          }}>Exam</button>
         </div>
         {
           reportPageState === 'graph'
@@ -3165,6 +3310,15 @@ const ReportPage = () => {
         {
           reportPageState === 'train'
             ? <ReportTrainPage
+                data={data}
+                preflop={SolutionMap[solution]}
+                setting={setting}
+                flopAction={solution.includes('IPA') ? 'X' : 'Empty'}
+              /> : null
+        }
+        {
+          reportPageState === 'exam'
+            ? <ReportExamPage
                 data={data}
                 preflop={SolutionMap[solution]}
                 setting={setting}
