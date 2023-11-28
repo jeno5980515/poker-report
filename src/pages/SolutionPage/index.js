@@ -6,7 +6,8 @@ import Select, { components } from "react-select";
 import { useLocation } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux'
-import filterSlice from '../../reducers/filter/filterSlice'
+import * as settingSlice from '../../reducers/setting/settingSlice'
+import * as preflopSlice from '../../reducers/preflop/preflopSlice'
 
 import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
 import { ReactComponent as DiamondSVG } from '../../assets/diamond.svg';
@@ -2042,8 +2043,7 @@ const RangePage = () => {
   const queryParams = new URLSearchParams(search);
 	const [mouseMode, setMouseMode] = useState('none')
 	const [currentCombos, setCurrentCombos] = useState(0)
-	const [setting, setSetting] = useState(queryParams.get('setting') || 'NL500');
-	const [preflop, setPreflop] = useState(queryParams.get('preflop') || 'F-F-F-R2.5-F-C');
+
 	const [flopAction, setFlopAction] = useState('X');
 	const [board, setBoard] = useState(queryParams.get('board') || 'QhJh7d');
 	const [data, setData] = useState(null)
@@ -2055,11 +2055,25 @@ const RangePage = () => {
   const [chartData, setChartDate] = useState([10, 25, 18, 32, 12, 7]);
 	const [currentPlayer, setCurrentPlayer] = useState(2)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  const boardSelectorRef = useRef(null);
   const dispatch = useDispatch()
   const chartRef = useRef(null);
   const filteredChartRef = useRef(null);
 	const navigate = useNavigate();
 	const { flops: filteredFlop } = useSelector((state) => state.filter)
+	const settingStore = useSelector((state) => state.setting)
+	const preflopStore = useSelector((state) => state.preflop)
+	let setting = queryParams.get('setting') || settingStore
+	let preflop = queryParams.get('preflop') || preflopStore
+
+	if (preflop.split('.').length === 3) {
+		preflop = 'R2.5-F-F-F-F-C';
+	}
+
+	if (!DATA[setting]) {
+		setting = 'NL500'
+	}
+
 
 	const player1HandData = data && data.players_info[0].simple_hand_counters;
 	const player2HandData = data && data.players_info[1].simple_hand_counters;
@@ -2418,6 +2432,12 @@ const RangePage = () => {
 		}
 	}, [JSON.stringify(filteredFlop)])
 
+	useEffect(() => {
+		if (DATA[setting][preflop] && !DATA[setting][preflop][flopAction]) {
+			setFlopAction(Object.keys(DATA[setting][preflop])[0])
+		}
+	}, [preflop])
+
 	const playerRangeData = currentPlayer === 1 ? player1RangeData : player2RangeData
 	const currentHand = data && data.players_info[1].simple_hand_counters[selectedKey]
 	// const DetailComp = detailState === 'hands'
@@ -2452,7 +2472,7 @@ const RangePage = () => {
 						defaultValue={settingOptions[0]}
 						options={settingOptions}
 						onChange={(e) => {
-							setSetting(e.value)
+							dispatch(settingSlice.set(e.value))
 						}}
 						isClearable={false}
 						isSearchable={false}
@@ -2462,7 +2482,8 @@ const RangePage = () => {
 						defaultValue={preflopOptions[0]}
 						options={preflopOptions}
 						onChange={(e) => {
-							setPreflop(e.value)
+							dispatch(preflopSlice.set(e.value))
+							navigate(`?preflop=${e.value}`);
 							if (DATA[setting][e.value] && !DATA[setting][e.value][flopAction]) {
 								setFlopAction(Object.keys(DATA[setting][e.value])[0])
 							}
@@ -2485,6 +2506,7 @@ const RangePage = () => {
 						defaultValue={boardOptions[0]}
 						components={{ Option: BoardOption, SingleValue }}
 						options={boardOptions}
+						ref={boardSelectorRef}
 						onChange={(e) => {
 							setBoard(e.value)
 							navigate(`?board=${e.value}`);
@@ -2492,6 +2514,22 @@ const RangePage = () => {
 						isClearable={false}
 						isSearchable={false}
 						value={boardOptions.find(o => o.value === board)}
+						onMenuOpen={() => {
+							setTimeout(() => {
+								if (boardSelectorRef.current &&boardSelectorRef.current.menuListRef) {
+									const index = boardOptions.findIndex((option) => option.value === board);
+									if (boardSelectorRef.current && index !== -1) {
+										const menu = boardSelectorRef.current.menuListRef;
+										const option = menu.childNodes[index];
+							
+										if (option) {
+											menu.scrollTop = option.offsetTop;
+										}
+									}
+								}
+							}, 50)
+						}}
+						// menuIsOpen={true}
 					/>
 					<button onClick={() => setPageState('strategy')}>Strategy</button>
 					<button onClick={() => setPageState('range')}>Range</button>

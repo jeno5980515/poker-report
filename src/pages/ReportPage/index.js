@@ -7,6 +7,9 @@ import styled from 'styled-components';
 import Select, { components } from "react-select";
 import { useSelector, useDispatch } from 'react-redux'
 
+import * as settingSlice from '../../reducers/setting/settingSlice'
+import * as preflopSlice from '../../reducers/preflop/preflopSlice'
+
 import Collapsible from 'react-collapsible';
 
 import { HandDiv } from '../SolutionPage/SolutionStrategyPage'
@@ -2611,7 +2614,6 @@ const ReportExamPage = ({ data = [], preflop, setting, flopAction = 'X', current
       setIsShowResult(false)
     }}>Reset</button>
     <button onClick={() => {
-      console.log(results)
       setIsShowResult(true)
     }}>Submit</button>
     <div>
@@ -2878,8 +2880,6 @@ const ReportPage = () => {
   const [rectTextLeft, setRectTextLeft] = useState(0)
   const [order, setOrder] = useState('asc')
   const [type, setType] = useState('flop')
-  const [solution, setSolution] = useState(SolutionReverseMap[queryParams.get('preflop')] || 'SRP.IPA.BTNVSBB')
-  const [setting, setSetting] = useState(queryParams.get('setting') || 'NL500')
   const [orderMenuIsOpen, setOrderMenuIsOpen] = useState(false)
   const [solutionMenuIsOpen, setSolutionMenuIsOpen] = useState(false)
   const [settingMenuIsOpen, setSettingMenuIsOpen] = useState(false)
@@ -2889,6 +2889,15 @@ const ReportPage = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [reportPageState, setReportPageState] = useState(queryParams.get('page') || 'graph')
 	const { flops: filteredFlop } = useSelector((state) => state.filter)
+	const settingStore = useSelector((state) => state.setting)
+	const preflopStore = useSelector((state) => state.preflop)
+
+
+	const setting = queryParams.get('setting') || settingStore 
+	const solution = SolutionReverseMap[queryParams.get('preflop')] ||  queryParams.get('preflop') || preflopStore
+
+  const dispatch = useDispatch()
+
 	const navigate = useNavigate();
   
 
@@ -3091,7 +3100,9 @@ const ReportPage = () => {
 	useEffect(() => {
 		const fn = async () => {
 			try {
-				const path = `${process.env.PUBLIC_URL}/reports/${setting}/${solution.split('.').join('/')}.json`;
+				const path = solution.split('.').length === 3
+					? `${process.env.PUBLIC_URL}/reports/${setting}/${solution.split('.').join('/')}.json`
+					: `${process.env.PUBLIC_URL}/reports/${setting}/${SolutionReverseMap[solution].split('.').join('/')}.json`
         const response = await fetch(path);
 				const data = await response.json()
 				setOriginData(data.results.data)
@@ -3191,6 +3202,16 @@ const ReportPage = () => {
   const stacked = d3.stack().keys(subgroups)(csv);
   const content = data[selectedIndex]
 
+	let solutionValue = solutions.find(s => s.value === solution)
+	if (!solutionValue) {
+		solutions.forEach(s => {
+			const option = (s.options || []).find(o => o.value === solution || o.value === SolutionReverseMap[solution])
+			if (option) {
+				solutionValue = option
+			}
+		})
+	}
+
   return (
     <>
       <Control>
@@ -3226,7 +3247,7 @@ const ReportPage = () => {
           defaultValue={settingOptions[0]}
           options={settingOptions}
           onChange={(e) => {
-            setSetting(e.value);
+						dispatch(settingSlice.set(e.value))
             setSettingMenuIsOpen(false)
             navigate(`?setting=${e.value}`);
           }}
@@ -3238,16 +3259,15 @@ const ReportPage = () => {
           }}
           isClearable={false}
           isSearchable={false}
+					value={settingOptions.find(s => s.value === setting)}
         />
         <Select
-          defaultValue={solutions[0]}
+          defaultValue={solutions[0].options[0]}
           options={solutions}
           onChange={(e) => {
-            setSolution(e.value);
+						dispatch(preflopSlice.set(SolutionMap[e.value] || e.value))
+						navigate(`?preflop=${SolutionMap[e.value] || e.value}`);
             setSolutionMenuIsOpen(false)
-            if (SolutionMap[e.value]) {
-              navigate(`?preflop=${SolutionMap[e.value]}`);
-            }
           }}
           styles={{
             menu: base => ({
@@ -3257,6 +3277,7 @@ const ReportPage = () => {
           }}
           isClearable={false}
           isSearchable={false}
+					value={solutionValue}
         />
         <button onClick={() => setIsFilterModalOpen(true)}>Filter</button>
       </Control>

@@ -1772,7 +1772,7 @@ const initState = {
 	flops: flops
 }
 
-export const counterSlice = createSlice({
+export const filterSlice = createSlice({
   name: 'filter',
   initialState: initState,
   reducers: {
@@ -1785,6 +1785,6 @@ export const counterSlice = createSlice({
   },
 })
 
-export const { reset, set } = counterSlice.actions
+export const { reset, set } = filterSlice.actions
 
-export default counterSlice.reducer
+export default filterSlice.reducer
