@@ -279,7 +279,7 @@ const getSuitList = (length) => {
 	}
 }
 
-const Hand = ({ data1, data2, onSelectFilter }) => {
+const Hand = ({ data1, data2, onSelectFilter, onClickFilter }) => {
 	return <HandWrapper>
 		<Title>Hands</Title>
 		{
@@ -291,6 +291,7 @@ const Hand = ({ data1, data2, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'hands' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'hands' })}
 					>
 						<Text>
 							<ComparedText bigger={d.total_frequency>data2[d.originalIndex].total_frequency}>{(d.total_frequency * 100).toFixed(1)}%</ComparedText>
@@ -304,7 +305,7 @@ const Hand = ({ data1, data2, onSelectFilter }) => {
 	</HandWrapper>
 }
 
-const EQSimple = ({ data1, data2, onSelectFilter }) => {
+const EQSimple = ({ data1, data2, onSelectFilter, onClickFilter }) => {
 	return <HandWrapper>
 		<Title>EQ Simple</Title>
 		{
@@ -316,6 +317,7 @@ const EQSimple = ({ data1, data2, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'eqs' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'eqs' })}
 					>
 						<Text>
 							<ComparedText bigger={d.total_frequency>data2[d.originalIndex].total_frequency}>{(d.total_frequency * 100).toFixed(1)}%</ComparedText>
@@ -329,7 +331,7 @@ const EQSimple = ({ data1, data2, onSelectFilter }) => {
 	</HandWrapper>
 }
 
-const Draw = ({ data1, data2, onSelectFilter }) => {
+const Draw = ({ data1, data2, onSelectFilter, onClickFilter}) => {
 	return <HandWrapper>
 		<Title>Draw</Title>
 		{
@@ -341,6 +343,7 @@ const Draw = ({ data1, data2, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'draw' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'draw' })}
 					>
 						<Text>
 							<ComparedText bigger={d.total_frequency>data2[d.originalIndex].total_frequency}>{(d.total_frequency * 100).toFixed(1)}%</ComparedText>
@@ -354,7 +357,7 @@ const Draw = ({ data1, data2, onSelectFilter }) => {
 	</HandWrapper>
 }
 
-const EQAdv = ({ data1, data2, onSelectFilter }) => {
+const EQAdv = ({ data1, data2, onSelectFilter, onClickFilter }) => {
 	return <HandWrapper>
 		<Title>EQ Advanced</Title>
 		{
@@ -366,6 +369,7 @@ const EQAdv = ({ data1, data2, onSelectFilter }) => {
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'eqa' })}
 						onMouseLeave={() => onSelectFilter({ type: 'none' })}
+						onClick={() => onClickFilter({ key: d.name, type: 'eqa' })}
 					>
 						<Text>
 							<ComparedText bigger={d.total_frequency>data2[d.originalIndex].total_frequency}>{(d.total_frequency * 100).toFixed(1)}%</ComparedText>
@@ -424,20 +428,20 @@ const Common = ({ data }) => {
 	</HandWrapper>
 }
 
-const RangeFilter = ({ data, onSelectFilter, hand, handleClickFilter }) => {
+const RangeFilter = ({ data, onSelectFilter, hand, onClickFilter }) => {
 	const { solutions, blocker_rate, unblocker_rate } = data
 	const [type, setType] = useState('hands');
 
 	const getComp = () => {
 		switch (type) {
 			case 'hands':
-				return () => <Hand data1={data.players_info[0].hand_categories} data2={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} />
+				return () => <Hand data1={data.players_info[0].hand_categories} data2={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
 			case 'eqs':
-				return () => <EQSimple data1={data.players_info[0].equity_buckets} data2={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter} />
+				return () => <EQSimple data1={data.players_info[0].equity_buckets} data2={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
 			case 'draw':
-				return () => <Draw data1={data.players_info[0].draw_categories} data2={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter} />
+				return () => <Draw data1={data.players_info[0].draw_categories} data2={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
 			case 'eqa':
-				return () => <EQAdv data1={data.players_info[0].equity_buckets_advanced} data2={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter} />
+				return () => <EQAdv data1={data.players_info[0].equity_buckets_advanced} data2={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
 			default:
 				return () => <></>
 		}
@@ -450,7 +454,7 @@ const RangeFilter = ({ data, onSelectFilter, hand, handleClickFilter }) => {
 			<>
 				<div style={{ display: 'flex' }}>
 					<Title>BB - BTN</Title>
-					<button onClick={() => handleClickFilter({ type: 'none' })}>Clear</button>
+					<button onClick={() => onClickFilter({ type: 'none' })}>Clear</button>
 				</div>
 				<Common data={data}/>
 				<Control>

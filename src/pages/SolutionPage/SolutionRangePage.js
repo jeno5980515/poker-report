@@ -4,7 +4,7 @@ import Action from './Action';
 import RangeFilter from './RangeFilter';
 
 const RangeDetail = styled.div`
-	width: 450px;
+	width: 200px;
 	display: flex;
 	flex-direction: column;
 	height: 550px;
@@ -257,7 +257,7 @@ const SolutionRangeDesktopPage = ({
 				data={data}
 				onSelectFilter={({ type, key }) => setFilterState({ type, key })}
 				hand={selectedKey}
-				handleClickFilter={handleClickFilter}
+				onClickFilter={handleClickFilter}
 			></RangeFilter>
 		</RangeDetail>
 	</SolutionPageWrapper>

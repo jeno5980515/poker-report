@@ -2067,6 +2067,7 @@ const FilterModal = ({ onSave, onCancel }) => {
 				return !lowNot.includes(f[4])
 			})
 		}
+
 		dispatch(filterSlice.set({ ...state, flops: finalFlops }))
 		onSave({
 			flops: finalFlops
