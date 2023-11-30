@@ -51,6 +51,8 @@ const Wrapper = styled.div`
 	height: 70px;
 	display: flex;
 	flex-wrap: wrap;
+	margin-bottom: 100px;
+	margin-top: 30px;
 `
 
 const Action = ({ data }) => {

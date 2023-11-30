@@ -2625,7 +2625,6 @@ const ReportExamPage = ({ data = [], preflop, setting, flopAction = 'X', current
 }
 
 
-
 const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', currentPlayer = 2 }) => {
   const generateIndex = () => {
     const min = 0;
