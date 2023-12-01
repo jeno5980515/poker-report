@@ -74,6 +74,8 @@ const ColorBlock = styled.div`
 	width: ${({ width }) => width}%;
 	background: ${({ color }) => color };
 	height: 100%;
+	${({ isSelected }) => isSelected ? 'left: 0;' : '' }
+	${({ isSelected }) => isSelected ? 'position: absolute;' : '' }
 `
 
 const TextBlock = styled.div`
@@ -138,7 +140,8 @@ export const HandDiv = ({
 	indexX,
 	indexY,
 	highlight,
-	isFreq = true
+	isFreq = true,
+	selectedSize = 'none'
 }) => {
 	return <HandDivWrapper
 		onMouseEnter={onMouseEnter}
@@ -154,7 +157,17 @@ export const HandDiv = ({
 				? [...Object.entries(data.actions_total_frequencies)]
 					.sort(sortBySize)
 					.map(([key, value]) => {
-						return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
+						let width = value * 100
+						if (selectedSize !== 'none') {
+							if (key !== selectedSize) {
+								width = 0;
+							}
+						}
+						return <ColorBlock
+							color={COLOR_MAP[key]}
+							width={width}
+							isSelected={selectedSize !== 'none'}
+						></ColorBlock>
 					})
 				: <ColorBlock color={'rgb(255, 143, 0)'} width={data.total_frequency * 100}></ColorBlock>
 		}
@@ -175,6 +188,8 @@ const SolutionStrategyDesktopPage = ({
 	handleClickFilter,
 	currentHand,
 	detailState,
+	selectedSize = 'none',
+	setSelectedSize,
 }) => {
 	return <SolutionPageWrapper>
 		<Board>
@@ -188,13 +203,14 @@ const SolutionStrategyDesktopPage = ({
 							data={data.players_info[currentPlayer === 2 ? 1 : 0].simple_hand_counters[v.key]}
 							hand={v.key}
 							highlight={v.highlight}
+							selectedSize={selectedSize}
 						/>
 					})
 				})
 			}
 		</Board>
 		<StrategyDetail>
-			<Action data={data.solutions}></Action>
+			<Action data={data.solutions} onSizeSelected={setSelectedSize} ></Action>
 			<DetailControlWrapper>
 				<button onClick={() => setDetailState('hands')}>Hands</button>
 				<button onClick={() => setDetailState('filters')}>Filters</button>
@@ -207,7 +223,7 @@ const SolutionStrategyDesktopPage = ({
 							data={data}
 							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
 							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
-							hand={selectedKey}>
+							hand={selectedKey}
 						></Filter>
 			}
 		</StrategyDetail>
@@ -226,9 +242,11 @@ const SolutionStrategyMobilePage = ({
 	handleClickFilter,
 	currentHand,
 	detailState,
+	selectedSize,
+	setSelectedSize,
 }) => {
 	return <SolutionPageWrapper>
-		<Action data={data.solutions}></Action>
+		<Action data={data.solutions} onSizeSelected={setSelectedSize}></Action>
 		<Board>
 			{
 				playerRangeData.map((row, x) => {
@@ -240,6 +258,7 @@ const SolutionStrategyMobilePage = ({
 							data={data.players_info[currentPlayer === 2 ? 1 : 0].simple_hand_counters[v.key]}
 							hand={v.key}
 							highlight={v.highlight}
+							selectedSize={selectedSize}
 						/>
 					})
 				})
@@ -259,7 +278,7 @@ const SolutionStrategyMobilePage = ({
 							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
 							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
 							hand={selectedKey}>
-						></Filter>
+						</Filter>
 			}
 		</StrategyDetail>
 	</SolutionPageWrapper>
@@ -267,8 +286,8 @@ const SolutionStrategyMobilePage = ({
 
 const SolutionStrategyPage = (props) => {
 	return window.innerWidth < 768
-		? <SolutionStrategyMobilePage {...props}/>
-		: <SolutionStrategyDesktopPage {...props}/>
+		? <SolutionStrategyMobilePage {...props} />
+		: <SolutionStrategyDesktopPage {...props} />
 }
 
 export default SolutionStrategyPage

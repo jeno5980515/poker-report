@@ -2060,6 +2060,7 @@ const RangePage = () => {
 	const [detailState, setDetailState] = useState('hands')
 	const [filterState, setFilterState] = useState({ type: 'none' })
 	const [clickedFilter, setClickedFilter] = useState({ type: 'none' })
+	const [selectedSize, setSelectedSize] = useState('none');
   const [chartData, setChartDate] = useState([10, 25, 18, 32, 12, 7]);
 	const [currentPlayer, setCurrentPlayer] = useState(2)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
@@ -2105,7 +2106,6 @@ const RangePage = () => {
 		// setSelectedKey('A3o')
 	}
 
-
 	useEffect(() => {
 		if (!data) {
 			return;
@@ -2122,7 +2122,6 @@ const RangePage = () => {
 
 		const finalState = clickedFilter.type !== 'none' ? clickedFilter : filterState
 		const { key, type } = finalState;
-
 
 		switch (type) {
 			case 'hands': {
@@ -2330,7 +2329,7 @@ const RangePage = () => {
 			.attr('fill', 'rgb(37, 179, 54)')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-	}, [JSON.stringify(filterState), JSON.stringify(clickedFilter), JSON.stringify(data), pageState])
+	}, [JSON.stringify(filterState), JSON.stringify(clickedFilter), JSON.stringify(data), pageState, selectedSize])
 
 
   useEffect(() => {
@@ -2413,10 +2412,19 @@ const RangePage = () => {
 	const handleClickFilter = ({ type, key }) => {
 		if (key === clickedFilter.key || type === 'none') {
 			setClickedFilter({ type: 'none' })
+			setSelectedSize('none')
 		} else {
 			setClickedFilter({ type, key })
 		}
 		setFilterState({ type: 'none' })
+	}
+
+	const handleClickSize = (size) => {
+		if (selectedSize === size) {
+			setSelectedSize('none')
+		} else {
+			setSelectedSize(size)
+		}
 	}
 
 	useEffect(() => {
@@ -2592,6 +2600,8 @@ const RangePage = () => {
 								handleClickFilter={handleClickFilter}
 								currentHand={currentHand}
 								detailState={detailState}
+								setSelectedSize={handleClickSize}
+								selectedSize={selectedSize}
 							/>
 						: <SolutionRangePage
 								data={data}

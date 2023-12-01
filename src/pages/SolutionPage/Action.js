@@ -61,13 +61,13 @@ const Wrapper = styled.div`
 	}
 `
 
-const Action = ({ data }) => {
+const Action = ({ data, onSizeSelected = () => {} }) => {
 	return <Wrapper>
 		{
 			[...data]
 				.sort(sortBySize)
 				.map(d => {
-					return <ColorBlock color={COLOR_MAP[d.action.code]}>
+					return <ColorBlock color={COLOR_MAP[d.action.code]} onClick={() => onSizeSelected(d.action.code)}>
 						<div>{d.action.code}</div>
 						<div>{`${(d.total_frequency * 100).toFixed(1)}%`}</div>
 					</ColorBlock>
