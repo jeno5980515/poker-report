@@ -2915,7 +2915,7 @@ const ReportPage = () => {
   const csv = d3.csvParse([header, body].join("\n"));
 
   const margin = { top: 10, right: 0, bottom: 20, left: 30 };
-  const width = 18.5 * (data || []).length - margin.left - margin.right;
+  const width = 18.5 * (data || []).length
   const height = 350 - margin.top - margin.bottom;
   const axisHeight = 35;
 
@@ -2953,7 +2953,7 @@ const ReportPage = () => {
                 .attr('font-weight', '700')
                 .attr('padding-bottom', '15px')
                 .on('click', () => {
-                  const preflop = SolutionMap[solution]
+                  const preflop = SolutionMap[solution] || solution
                   navigate(`/solution?board=${s}&preflop=${preflop}&setting=${setting}`);
                 })
                 .text(s[0]);
@@ -2965,7 +2965,7 @@ const ReportPage = () => {
                 .attr('font-weight', '700')
                 .attr('padding-bottom', '15px')
                 .on('click', () => {
-                  const preflop = SolutionMap[solution]
+                  const preflop = SolutionMap[solution] || solution
                   navigate(`/solution?board=${s}&preflop=${preflop}&setting=${setting}`);
                 })
                 .text(s[2]);
@@ -2976,7 +2976,7 @@ const ReportPage = () => {
                 .attr('font-size', '15')
                 .attr('font-weight', '700')
                 .on('click', () => {
-                  const preflop = SolutionMap[solution]
+                  const preflop = SolutionMap[solution] || solution
                   navigate(`/solution?board=${s}&preflop=${preflop}&setting=${setting}`);
                 })
                 .text(s[4]);
@@ -3272,7 +3272,11 @@ const ReportPage = () => {
             menu: base => ({
               ...base,
               marginTop: 0
-            })
+            }),
+						control: (provided) => ({
+							...provided,
+							width: '150px',
+						}),
           }}
           isClearable={false}
           isSearchable={false}
@@ -3331,31 +3335,29 @@ const ReportPage = () => {
           reportPageState === 'train'
             ? <ReportTrainPage
                 data={data}
-                preflop={SolutionMap[solution]}
+                preflop={SolutionMap[solution] || solution}
                 setting={setting}
-                flopAction={solution.includes('IPA') ? 'X' : 'Empty'}
+                flopAction={(solution.includes('IPA') || SolutionReverseMap[solution].includes('IPA')) ? 'X' : 'Empty'}
               /> : null
         }
         {
           reportPageState === 'exam'
             ? <ReportExamPage
                 data={data}
-                preflop={SolutionMap[solution]}
+                preflop={SolutionMap[solution] || solution}
                 setting={setting}
-                flopAction={solution.includes('IPA') ? 'X' : 'Empty'}
+                flopAction={(solution.includes('IPA') || SolutionReverseMap[solution].includes('IPA')) ? 'X' : 'Empty'}
               /> : null
         }
       </Page>
-      {
-        isFilterModalOpen
-          ? <FilterModal
-              onCancel={() => setIsFilterModalOpen(false)}
-              onSave={({ flops, state }) => {
-                setIsFilterModalOpen(false)
-              }}
-            />
-          : null
-      }
+      <FilterModal
+				onCancel={() => setIsFilterModalOpen(false)}
+				onSave={({ flops, state }) => {
+					setIsFilterModalOpen(false)
+				}}
+				data={originData}
+				open={isFilterModalOpen}
+			/>
     </>
   );
 }

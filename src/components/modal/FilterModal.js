@@ -1766,11 +1766,127 @@ const flops = [
 	"AhAdAc"
 ]
 
+const SizeMap = {
+  "R1.8": 'Small',
+  "R1.65": "Small",
+  "R2.5": "Middle",
+  "R3.75": "Big",
+  "R6.25": "Big",
+  "R2": "Small",
+  "R5.45": "Small",
+  "R3.65": 'Big',
+  "R3.95": 'Big',
+  "R2.75": 'Middle',
+  "R13.85": 'Big',
+  "R4.1": 'Big',
+  "R6.9": 'Big',
+  "R6.95": 'Small',
+  "R6.75": 'Small',
+  "R26.65": 'Big',
+  "R13.55": 'Big',
+  "R7.15": 'Big',
+  "R7.8": 'Big',
+  'R7.4': 'Small',
+  "R14.85": 'Big',
+  "R7.6": 'Big',
+  "R10.9": "Big",
+  "R21.45": "Big",
+  "R27.3": "Big",
+  "R29.25": "Big",
+  "R10.4": "Small",
+  "R20.75": "Middle",
+  "R3": "Middle",
+  "R3.05": "Middle",
+  "R4.6": "Big",
+  "R31.1": "Big",
+  "R4.5": "Big",
+  "R7.5": "Big"
+}
+
+
+const getCategory = (data) => {
+  const { Small, Big } = data
+  if (Small >= 80) {
+    return 'Small'
+  } else if (Big >= 80) {
+    return 'Big'
+  } else if (Small > Big) {
+    if (Small - Big >= 20) {
+      return 'Small Most, Big Some'
+    } else {
+      return 'Big, Small'
+    }
+  } else if (Big > Small) {
+    if (Big - Small >= 20) {
+      return 'Big Most, Small Some'
+    } else {
+      return 'Big, Small'
+    }
+  } 
+
+  return 'Unknown'
+}
+
+
+const getGroupMap = (data) => {
+  const groupMap = {
+    '80': [],
+    '60': [],
+    '40': [],
+    '20': [],
+    '0': []
+  }
+  data.forEach(d => {
+    const check = d.actions.find(a => a.action_code === 'X')
+    const freq = 100 - (check.frequency * 100)
+    if (freq >= 80) {
+      groupMap['80'] = [...groupMap['80'], d]
+    } else if (freq >= 60) {
+      groupMap['60'] = [...groupMap['60'], d]
+    } else if (freq >= 40) {
+      groupMap['40'] = [...groupMap['40'], d]
+    } else if (freq >= 20) {
+      groupMap['20'] = [...groupMap['20'], d]
+    } else if (freq >= 0) {
+      groupMap['0'] = [...groupMap['0'], d]
+    }
+  })
+  Object.entries(groupMap).forEach(([key, value]) => {
+    groupMap[key] = groupMap[key]
+      .map(d => {
+        const result = {}
+
+        d.actions.forEach((a) => {
+          if (a.action_code === 'X' || a.action_code === 'RAI') return
+          
+          if (SizeMap[a.action_code] === 'Middle') {
+            result['Small'] = (result['Small'] || 0) + (a.frequency * 100 / 2)
+            result['Big'] = (result['Big'] || 0) + (a.frequency * 100 / 2)
+          } else {
+            result[SizeMap[a.action_code]] = (result[SizeMap[a.action_code]] || 0) + (a.frequency * 100)
+          }
+
+        })
+        const total = Object.values(result).reduce((cal, val) => cal + val, 0)
+        Object.entries(result).forEach(([rKey, rValue]) => {
+          result[rKey] = (result[rKey]/total) * 100
+        })
+        const category = getCategory(result)
+        return {
+          ...d,
+          summary: result,
+          category
+        }
+      })
+  })
+  return groupMap;
+}
+
 const Wrapper = styled.div`
 	top: 100px;
 	left: 10%;
 	width: 300px;
-	height: 700px;
+	height: ${({ data }) => data.length ? '1000px' : '700px'};
 	display: flex;
 	position: absolute;
 	flex-direction: column;
@@ -1849,7 +1965,17 @@ const CardMap = {
 	'2': 2
 }
 
+const FreqKeyMap = {
+  '80': '80% - 100%',
+  '60': '60% - 80%',
+  '40': '40% - 60%',
+  '20': '20% - 40%',
+  '0': '0% - 20%'
+}
 const CardList = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']
+const FreqList = ['80', '60', '40', '20', '0'];
+const SizeList = ['Big', 'Big Most, Small Some', 'Big, Small', 'Small Most, Big Some', 'Small']
+
 
 function findCompletedStraightPossibilities(cards) {
 	for (let card1 = 1; card1 <= 13; card1++) {
@@ -1933,7 +2059,7 @@ function hasOESD(cards) {
 
 
 
-const FilterModal = ({ onSave, onCancel }) => {
+const FilterModal = ({ onSave, onCancel, data = [], open = false }) => {
 	const state = useSelector((state) => state.filter)
 	const {
 		suits,
@@ -1944,7 +2070,9 @@ const FilterModal = ({ onSave, onCancel }) => {
 		middle,
 		middleNot,
 		low,
-		lowNot
+		lowNot,
+		freq,
+		size
 	} = state
   const dispatch = useDispatch()
 
@@ -1953,6 +2081,10 @@ const FilterModal = ({ onSave, onCancel }) => {
 	const handleDefault = () => {
 		dispatch(filterSlice.reset())
 	}
+
+	useEffect(() => {
+		handleSave()
+	}, [JSON.stringify(data)])
 
 	const handleSave = () => {
 		let finalFlops = [...flops];
@@ -2068,6 +2200,21 @@ const FilterModal = ({ onSave, onCancel }) => {
 			})
 		}
 
+		if (data.length) {
+			if (freq !== 'any') {
+				finalFlops = finalFlops.filter(f => {
+					const fl = newData.find(d => d.flop === f);
+					return freq.includes(fl.freq)
+				})
+			}
+			if (size !== 'any') {
+				finalFlops = finalFlops.filter(f => {
+					const fl = newData.find(d => d.flop === f);
+					return size.includes(fl.size)
+				})
+			}
+		}
+
 		dispatch(filterSlice.set({ ...state, flops: finalFlops }))
 		onSave({
 			flops: finalFlops
@@ -2079,8 +2226,25 @@ const FilterModal = ({ onSave, onCancel }) => {
 		onCancel();
 	}
 
-  return (
-		<Wrapper>
+	const newData = [...data]
+	const groupMap = getGroupMap(newData)
+	const flopWithData = newData.map(f => f.flop)
+  flopWithData.forEach((flop, i) => {
+    Object.entries(groupMap).forEach(([key, value]) => {
+      const answer = value.find(v => v.flop === flop)
+      if (answer) {
+        newData[i] = {
+					...newData[i],
+          freq: key,
+          size: answer.category
+        }
+        return
+      }
+    })
+  }) 
+
+  return open === true ? (
+		<Wrapper data={data}>
 			<Field>
 				<legend>Suits</legend>
 				<Item>
@@ -2290,13 +2454,71 @@ const FilterModal = ({ onSave, onCancel }) => {
 					}
 				</div>
 			</Field>
+			{
+				data.length !== 0 ?	<Field>
+					<legend>Frequency</legend>
+					<Item>
+						<input defaultChecked type="checkbox" name="freq" value="any" onChange={(e) => dispatch(filterSlice.set({ ...state, freq: e.target.value }))}   checked={freq === 'any'}  />
+						<label for="freq">Any</label>
+					</Item>
+					{
+						FreqList.map(c => {
+							return <Item>
+								<input type="checkbox" name="freq" value={c} checked={freq !== 'any' && freq.includes(c)}
+									onChange={(e) => {
+										if (freq === 'any') {
+											dispatch(filterSlice.set({ ...state, freq:[c] }))
+										} else {
+											if (freq.includes(c)) {
+												dispatch(filterSlice.set({ ...state, freq: freq.filter(h => h !== c) }))
+											} else {
+												dispatch(filterSlice.set({ ...state, freq: [...freq, c] }))
+											}
+										}
+									}}
+								/>
+								<label for="freq">{FreqKeyMap[c]}</label>
+							</Item>
+						})
+					}
+				</Field> : null
+			}
+			{
+				data.length !== 0 ?	<Field>
+					<legend>Size</legend>
+					<Item>
+						<input defaultChecked type="checkbox" name="size" value="any" onChange={(e) => dispatch(filterSlice.set({ ...state, size: e.target.value }))}   checked={size === 'any'}  />
+						<label for="size">Any</label>
+					</Item>
+					{
+						SizeList.map(c => {
+							return <Item>
+								<input type="checkbox" name="size" value={c} checked={size !== 'any' && size.includes(c)}
+									onChange={(e) => {
+										if (size === 'any') {
+											dispatch(filterSlice.set({ ...state, size:[c] }))
+										} else {
+											if (size.includes(c)) {
+												dispatch(filterSlice.set({ ...state, size: size.filter(h => h !== c) }))
+											} else {
+												dispatch(filterSlice.set({ ...state, size: [...size, c] }))
+											}
+										}
+									}}
+								/>
+								<label for="size">{c}</label>
+							</Item>
+						})
+					}
+				</Field> : null
+			}
 			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 				<button onClick={handleCancel}>Cancel</button>
 				<button onClick={handleDefault}>Default</button>
 				<button onClick={handleSave}>Confirm</button>
 			</div>
 		</Wrapper>
-	)
+	) : null
 }
 
 export default FilterModal;

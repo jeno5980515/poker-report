@@ -45,6 +45,11 @@ const FLOP_MAP = {
 	'X-R1.8-R6.35-C': 'X/R VS Small',
 }
 
+const TURN_MAP = {
+	'X': 'Check',
+	'Empty': 'Empty'
+}
+
 // import DATA from './solutions/A42.json'
 
 const Wrapper = styled.div`
@@ -524,6 +529,13 @@ const TurnReportPage = () => {
 	let flopAction = queryParams.get('flopAction') || flopActionStore
 	let turnAction = queryParams.get('turnAction') || turnActionStore
 
+	if (preflop.split('.').length === 3) {
+		preflop = 'F-F-F-R2.5-F-C';
+	}
+
+	if (!DATA[setting]) {
+		setting = 'NL500'
+	}
 
 	const orderOptions = [
 		{ value: 'flop', label: 'Flop' },
@@ -543,15 +555,17 @@ const TurnReportPage = () => {
 	useEffect(() => {
 		let finalFlopAction = flopAction
 		let finalTurnAction = turnAction
+
 		if (DATA[setting][preflop] && !DATA[setting][preflop][flopAction]) {
 			finalFlopAction = Object.keys(DATA[setting][preflop])[0]
 			finalTurnAction = Object.keys(DATA[setting][preflop][finalFlopAction])[0]
 			dispatch(flopActionSlice.set(finalFlopAction))
 			dispatch(turnActionSlice.set(finalTurnAction))
-		}
-		if (DATA[setting][preflop][flopAction] && !DATA[setting][preflop][flopAction][turnAction]) {
+			return
+		} else if (DATA[setting][preflop][flopAction] && !DATA[setting][preflop][flopAction][turnAction]) {
 			finalTurnAction = Object.keys(DATA[setting][preflop][finalFlopAction])[0]
 			dispatch(turnActionSlice.set(finalTurnAction))
+			return
 		}
 		const fn = async () => {
 			try {
@@ -658,14 +672,15 @@ const TurnReportPage = () => {
 	const settingOptions = Object.keys(DATA)
 		.map(k => ({ value: k, label: k }))
 
-	const preflopOptions = Object.keys(DATA[setting] || settingOptions[0])
+	const preflopOptions = Object.keys(DATA[setting] || DATA[settingOptions[0].value])
 		.map(k => ({ value: k, label: PREFLOP_MAP[k] }))
 
-	const flopActionOptions = Object.keys(DATA[setting][preflop] || preflopOptions[0])
+	const flopActionOptions = Object.keys(DATA[setting][preflop] || DATA[setting][preflopOptions[0].value])
 		.map(k => ({ value: k, label: FLOP_MAP[k] || k }))
 
-	const turnActionOptions = Object.keys(DATA[setting][preflop][flopAction] || flopActionOptions[0])
-		.map(k => ({ value: k, label: k }))
+	const turnActionOptions = Object.keys(DATA[setting][preflop][flopAction] || DATA[setting][preflop][flopActionOptions[0].value])
+		.map(k => ({ value: k, label: TURN_MAP[k] || k }))
+
 
 	const boardOptions = filteredFlop
 		.map(k => ({ value: k, label: k }))
@@ -708,6 +723,7 @@ const TurnReportPage = () => {
 						defaultValue={settingOptions[0]}
 						options={settingOptions}
 						onChange={(e) => {
+							navigate(`?setting=${e.value}`);
 							dispatch(settingSlice.set(e.value))
 						}}
 						isClearable={false}
@@ -718,6 +734,7 @@ const TurnReportPage = () => {
 						defaultValue={preflopOptions[0]}
 						options={preflopOptions}
 						onChange={(e) => {
+							navigate(`?preflop=${e.value}`);
 							dispatch(preflopSlice.set(e.value))
 							if (DATA[setting][e.value] && !DATA[setting][e.value][flopAction]) {
 								const flop = Object.keys(DATA[setting][e.value])[0]
@@ -733,6 +750,7 @@ const TurnReportPage = () => {
 						defaultValue={flopActionOptions[0]}
 						options={flopActionOptions}
 						onChange={(e) => {
+							navigate(`?flopAction=${e.value}`);
 							dispatch(flopActionSlice.set(e.value))
 						}}
 						isClearable={false}
@@ -743,6 +761,7 @@ const TurnReportPage = () => {
 						defaultValue={turnActionOptions[0]}
 						options={turnActionOptions}
 						onChange={(e) => {
+							navigate(`?turnAction=${e.value}`);
 							dispatch(turnActionSlice.set(e.value))
 						}}
 						isClearable={false}
@@ -754,6 +773,7 @@ const TurnReportPage = () => {
 						components={{ Option: BoardOption, SingleValue }}
 						options={boardOptions}
 						onChange={(e) => {
+							navigate(`?board=${e.value}`);
 							setBoard(e.value)
 						}}
 						isClearable={false}

@@ -1769,6 +1769,8 @@ const initState = {
 	middleNot: [],
 	low: 'any',
 	lowNot: [],
+	freq: 'any',
+	size: 'any',
 	flops: flops
 }
 

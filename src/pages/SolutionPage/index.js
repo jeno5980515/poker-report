@@ -1784,6 +1784,13 @@ const flops = [
 	"AhAdAc"
 ]
 
+const SolutionReverseMap = {
+  'F-F-F-R2.5-F-C': 'SRP.IPA.BTNVSBB',
+  'R2.5-F-F-F-F-C': 'SRP.IPA.LJVSBB',
+  'F-F-F-F-R3-C': 'SRP.OPA.SBVSBB',
+  'F-F-F-R2.5-R10-F-C': '3Bet.OPA.SB3BBTN',
+}
+
 
 const PREFLOP_MAP = {
 	'F-F-F-R2.5-F-C': 'BTN VS BB',
@@ -2048,6 +2055,7 @@ const RangePage = () => {
 	const [board, setBoard] = useState(queryParams.get('board') || 'QhJh7d');
 	const [data, setData] = useState(null)
 	const [selectedKey, setSelectedKey] = useState('AA')
+	const [reportData, setReportData] = useState([])
 	const [pageState, setPageState] = useState('range')
 	const [detailState, setDetailState] = useState('hands')
 	const [filterState, setFilterState] = useState({ type: 'none' })
@@ -2438,6 +2446,21 @@ const RangePage = () => {
 		}
 	}, [preflop])
 
+	useEffect(() => {
+		const fn = async () => {
+			try {
+				const path = `${process.env.PUBLIC_URL}/reports/${setting}/${SolutionReverseMap[preflop].split('.').join('/')}.json`
+        const response = await fetch(path);
+				const data = await response.json()
+				setReportData(data.results.data)
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		fn();
+	}, [setting, preflop])
+
+
 	const playerRangeData = currentPlayer === 1 ? player1RangeData : player2RangeData
 	const currentHand = data && data.players_info[1].simple_hand_counters[selectedKey]
 	// const DetailComp = detailState === 'hands'
@@ -2451,10 +2474,10 @@ const RangePage = () => {
 	const settingOptions = Object.keys(DATA)
 		.map(k => ({ value: k, label: k }))
 
-	const preflopOptions = Object.keys(DATA[setting] || settingOptions[0])
+	const preflopOptions = Object.keys(DATA[setting] || DATA[settingOptions[0].value])
 		.map(k => ({ value: k, label: PREFLOP_MAP[k] }))
 
-	const flopActionOptions = Object.keys(DATA[setting][preflop] || preflopOptions[0])
+	const flopActionOptions = Object.keys(DATA[setting][preflop] || DATA[setting][preflopOptions[0].value])
 		.map(k => ({ value: k, label: k }))
 
 	const boardOptions = filteredFlop
@@ -2586,16 +2609,14 @@ const RangePage = () => {
 								handleClickFilter={handleClickFilter}
 							/>
 				}
-				{
-					isFilterModalOpen
-						? <FilterModal
-								onCancel={() => setIsFilterModalOpen(false)}
-								onSave={({ flops, state }) => {
-									setIsFilterModalOpen(false)
-								}}
-							/>
-						: null
-				}
+				<FilterModal
+					onCancel={() => setIsFilterModalOpen(false)}
+					onSave={({ flops, state }) => {
+						setIsFilterModalOpen(false)
+					}}
+					data={reportData}
+					open={isFilterModalOpen}
+				/>
 			</Wrapper>
 		</Page>
 	)
