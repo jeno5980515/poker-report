@@ -83,6 +83,8 @@ const TextBlock = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
+	-webkit-transform: translateZ(0);
+  transform: translateZ(0);
 `
 
 const StrategyDetail = styled.div`

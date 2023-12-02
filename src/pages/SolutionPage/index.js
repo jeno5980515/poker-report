@@ -2296,7 +2296,7 @@ const RangePage = () => {
 		let player2FilteredValue = player2MappedEQS.map(({ value, index }) => {
 			return index === index2 ? value * 100 : 0
 		})
-		
+
 		if (pageState === 'range') {
 			d3.select(filteredChartRef.current).selectAll('*').remove();
 		

@@ -125,6 +125,8 @@ const TextBlock = styled.div`
 	display: flex;
 	justify-content: center;
 	width: 100%;
+	-webkit-transform: translateZ(0);
+  transform: translateZ(0);
 `
 
 const Chart = styled.div`
