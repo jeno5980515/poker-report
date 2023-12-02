@@ -241,13 +241,14 @@ const getSuitList = (length) => {
 	}
 }
 
-const Hand = ({ data, onSelectFilter, onClickFilter }) => {
+const Hand = ({ data, onSelectFilter, onClickFilter, mode = 'complex' }) => {
 	return <HandWrapper>
 		<Title>Hands</Title>
 		{
 			data
 				.filter(d => d.total_combos !== 0)
 				.map(d => {
+					const checkFreq = d.actions_total_frequencies.X;
 					return <ItemWrapper
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'hands' })}
@@ -260,11 +261,16 @@ const Hand = ({ data, onSelectFilter, onClickFilter }) => {
 							{
 								<ColorBar>
 									{
-										[...Object.entries(d.actions_total_frequencies)]
-											.sort(sortBySize2)
-											.map(([key, value]) => {
-												return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
-											})
+										mode === 'complex'
+											? [...Object.entries(d.actions_total_frequencies)]
+												.sort(sortBySize2)
+												.map(([key, value]) => {
+													return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
+												})
+											: <>
+												<ColorBlock color={'rgb(240, 60, 60)'} width={(1-checkFreq)*100}></ColorBlock>
+												<ColorBlock color={'rgb(90, 185, 102)'} width={checkFreq*100}></ColorBlock>
+											</>
 									}
 								</ColorBar>
 							}
@@ -275,13 +281,14 @@ const Hand = ({ data, onSelectFilter, onClickFilter }) => {
 	</HandWrapper>
 }
 
-const EQSimple = ({ data, onSelectFilter, onClickFilter }) => {
+const EQSimple = ({ data, onSelectFilter, onClickFilter, mode = 'complex' }) => {
 	return <HandWrapper>
 		<Title>EQ Simple</Title>
 		{
 			data
 				.filter(d => d.total_combos !== 0)
 				.map(d => {
+					const checkFreq = d.actions_total_frequencies.X;
 					return <ItemWrapper
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'eqs' })}
@@ -294,11 +301,16 @@ const EQSimple = ({ data, onSelectFilter, onClickFilter }) => {
 							{
 								<ColorBar>
 									{
-										[...Object.entries(d.actions_total_frequencies)]
-											.sort(sortBySize2)
-											.map(([key, value]) => {
-												return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
-											})
+										mode === 'complex'
+											? [...Object.entries(d.actions_total_frequencies)]
+												.sort(sortBySize2)
+												.map(([key, value]) => {
+													return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
+												})
+											: <>
+												<ColorBlock color={'rgb(240, 60, 60)'} width={(1-checkFreq)*100}></ColorBlock>
+												<ColorBlock color={'rgb(90, 185, 102)'} width={checkFreq*100}></ColorBlock>
+											</>
 									}
 								</ColorBar>
 							}
@@ -309,13 +321,14 @@ const EQSimple = ({ data, onSelectFilter, onClickFilter }) => {
 	</HandWrapper>
 }
 
-const Draw = ({ data, onSelectFilter, onClickFilter }) => {
+const Draw = ({ data, onSelectFilter, onClickFilter, mode = 'complex' }) => {
 	return <HandWrapper>
 		<Title>Draw</Title>
 		{
 			data
 				.filter(d => d.total_combos !== 0)
 				.map(d => {
+					const checkFreq = d.actions_total_frequencies.X;
 					return <ItemWrapper
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'draw' })}
@@ -328,11 +341,16 @@ const Draw = ({ data, onSelectFilter, onClickFilter }) => {
 							{
 								<ColorBar>
 									{
-										[...Object.entries(d.actions_total_frequencies)]
-											.sort(sortBySize2)
-											.map(([key, value]) => {
-												return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
-											})
+										mode === 'complex'
+											? [...Object.entries(d.actions_total_frequencies)]
+												.sort(sortBySize2)
+												.map(([key, value]) => {
+													return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
+												})
+											: <>
+												<ColorBlock color={'rgb(240, 60, 60)'} width={(1-checkFreq)*100}></ColorBlock>
+												<ColorBlock color={'rgb(90, 185, 102)'} width={checkFreq*100}></ColorBlock>
+											</>
 									}
 								</ColorBar>
 							}
@@ -343,13 +361,14 @@ const Draw = ({ data, onSelectFilter, onClickFilter }) => {
 	</HandWrapper>
 }
 
-const EQAdv = ({ data, onSelectFilter, onClickFilter }) => {
+const EQAdv = ({ data, onSelectFilter, onClickFilter, mode = 'complex' }) => {
 	return <HandWrapper>
 		<Title>EQ Advanced</Title>
 		{
 			data
 				.filter(d => d.total_combos !== 0)
 				.map(d => {
+					const checkFreq = d.actions_total_frequencies.X;
 					return <ItemWrapper
 						key={d.name}
 						onMouseEnter={() => onSelectFilter({ key: d.name, type: 'eqa' })}
@@ -362,11 +381,16 @@ const EQAdv = ({ data, onSelectFilter, onClickFilter }) => {
 							{
 								<ColorBar>
 									{
-										[...Object.entries(d.actions_total_frequencies)]
-											.sort(sortBySize2)
-											.map(([key, value]) => {
-												return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
-											})
+										mode === 'complex'
+											? [...Object.entries(d.actions_total_frequencies)]
+												.sort(sortBySize2)
+												.map(([key, value]) => {
+													return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
+												})
+											: <>
+												<ColorBlock color={'rgb(240, 60, 60)'} width={(1-checkFreq)*100}></ColorBlock>
+												<ColorBlock color={'rgb(90, 185, 102)'} width={checkFreq*100}></ColorBlock>
+											</>
 									}
 								</ColorBar>
 							}
@@ -377,16 +401,16 @@ const EQAdv = ({ data, onSelectFilter, onClickFilter }) => {
 	</HandWrapper>
 }
 
-const Filter = ({ data, onSelectFilter, hand, onClickFilter }) => {
+const Filter = ({ data, onSelectFilter, hand, onClickFilter, mode = 'complex' }) => {
 	const { solutions, blocker_rate, unblocker_rate } = data
 
 	return <Wrapper>
 		{
 			<>
-				<Hand data={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} />
-				<EQSimple data={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
-				<Draw data={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
-				<EQAdv data={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
+				<Hand data={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode} />
+				<EQSimple data={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
+				<Draw data={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
+				<EQAdv data={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
 			</>
 		}
 	</Wrapper>

@@ -2061,6 +2061,7 @@ const RangePage = () => {
 	const [filterState, setFilterState] = useState({ type: 'none' })
 	const [clickedFilter, setClickedFilter] = useState({ type: 'none' })
 	const [selectedSize, setSelectedSize] = useState('none');
+	const [strategyMode, setStrategyMode] = useState('complex');
   const [chartData, setChartDate] = useState([10, 25, 18, 32, 12, 7]);
 	const [currentPlayer, setCurrentPlayer] = useState(2)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
@@ -2427,6 +2428,11 @@ const RangePage = () => {
 		}
 	}
 
+	const handleModeClick = (mode) => {
+		setStrategyMode(mode);
+		setSelectedSize('none')
+	}
+
 	useEffect(() => {
 		const fn = async () => {
 			try {
@@ -2602,6 +2608,8 @@ const RangePage = () => {
 								detailState={detailState}
 								setSelectedSize={handleClickSize}
 								selectedSize={selectedSize}
+								setStrategyMode={handleModeClick}
+								strategyMode={strategyMode}
 							/>
 						: <SolutionRangePage
 								data={data}

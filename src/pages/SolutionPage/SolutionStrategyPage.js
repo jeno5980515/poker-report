@@ -141,8 +141,10 @@ export const HandDiv = ({
 	indexY,
 	highlight,
 	isFreq = true,
-	selectedSize = 'none'
+	selectedSize = 'none',
+	mode = 'complex'
 }) => {
+	const checkFreq = data.actions_total_frequencies.X
 	return <HandDivWrapper
 		onMouseEnter={onMouseEnter}
 		onMouseDown={onMouseDown}
@@ -154,21 +156,35 @@ export const HandDiv = ({
 	>
 		{
 			isFreq
-				? [...Object.entries(data.actions_total_frequencies)]
-					.sort(sortBySize)
-					.map(([key, value]) => {
-						let width = value * 100
-						if (selectedSize !== 'none') {
-							if (key !== selectedSize) {
-								width = 0;
-							}
-						}
-						return <ColorBlock
-							color={COLOR_MAP[key]}
-							width={width}
-							isSelected={selectedSize !== 'none'}
-						></ColorBlock>
-					})
+				? 
+					mode === 'complex'
+						? [...Object.entries(data.actions_total_frequencies)]
+								.sort(sortBySize)
+								.map(([key, value]) => {
+									let width = value * 100
+									if (selectedSize !== 'none') {
+										if (key !== selectedSize) {
+											width = 0;
+										}
+									}
+									return <ColorBlock
+										color={COLOR_MAP[key]}
+										width={width}
+										isSelected={selectedSize !== 'none'}
+									></ColorBlock>
+								})
+						: <>
+							<ColorBlock
+								color={'rgb(240, 60, 60)'}
+								width={(selectedSize === 'Bet' || selectedSize === 'none') ? (1 - checkFreq)*100 : 0}
+								isSelected={selectedSize !== 'none'}
+							></ColorBlock>
+							<ColorBlock
+								color={'rgb(90, 185, 102)'}
+								width={(selectedSize === 'X' || selectedSize === 'none') ? checkFreq*100 : 0}
+								isSelected={selectedSize !== 'none'}
+							></ColorBlock>
+						</>
 				: <ColorBlock color={'rgb(255, 143, 0)'} width={data.total_frequency * 100}></ColorBlock>
 		}
 		<TextBlock>{hand}</TextBlock>
@@ -190,6 +206,8 @@ const SolutionStrategyDesktopPage = ({
 	detailState,
 	selectedSize = 'none',
 	setSelectedSize,
+	setStrategyMode,
+	strategyMode,
 }) => {
 	return <SolutionPageWrapper>
 		<Board>
@@ -204,13 +222,18 @@ const SolutionStrategyDesktopPage = ({
 							hand={v.key}
 							highlight={v.highlight}
 							selectedSize={selectedSize}
+							mode={strategyMode}
 						/>
 					})
 				})
 			}
 		</Board>
 		<StrategyDetail>
-			<Action data={data.solutions} onSizeSelected={setSelectedSize} ></Action>
+			<div style={{ display: 'flex' }}>
+				<button onClick={() => setStrategyMode('simple')}>Simple</button>
+				<button onClick={() => setStrategyMode('complex')}>Complex</button>
+			</div>
+			<Action data={data.solutions} onSizeSelected={setSelectedSize} mode={strategyMode} ></Action>
 			<DetailControlWrapper>
 				<button onClick={() => setDetailState('hands')}>Hands</button>
 				<button onClick={() => setDetailState('filters')}>Filters</button>
@@ -224,6 +247,7 @@ const SolutionStrategyDesktopPage = ({
 							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
 							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
 							hand={selectedKey}
+							mode={strategyMode}
 						></Filter>
 			}
 		</StrategyDetail>
@@ -244,9 +268,15 @@ const SolutionStrategyMobilePage = ({
 	detailState,
 	selectedSize,
 	setSelectedSize,
+	setStrategyMode,
+	strategyMode
 }) => {
 	return <SolutionPageWrapper>
-		<Action data={data.solutions} onSizeSelected={setSelectedSize}></Action>
+		<div style={{ display: 'flex' }}>
+			<button onClick={() => setStrategyMode('simple')}>Simple</button>
+			<button onClick={() => setStrategyMode('complex')}>Complex</button>
+		</div>
+		<Action data={data.solutions} onSizeSelected={setSelectedSize} mode={strategyMode}></Action>
 		<Board>
 			{
 				playerRangeData.map((row, x) => {
@@ -259,6 +289,7 @@ const SolutionStrategyMobilePage = ({
 							hand={v.key}
 							highlight={v.highlight}
 							selectedSize={selectedSize}
+							mode={strategyMode}
 						/>
 					})
 				})
@@ -277,7 +308,9 @@ const SolutionStrategyMobilePage = ({
 							data={data}
 							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
 							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
-							hand={selectedKey}>
+							hand={selectedKey}
+							mode={strategyMode}
+						>
 						</Filter>
 			}
 		</StrategyDetail>

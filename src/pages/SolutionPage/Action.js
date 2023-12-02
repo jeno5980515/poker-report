@@ -44,7 +44,8 @@ const COLOR_MAP = {
 	"R7.8": "rgb(125, 31, 31)",
 	"R27.3": "rgb(125, 31, 31)",
 	"RAI": "rgb(106, 26, 26)",
-	"X": "rgb(90, 185, 102)"
+	"X": "rgb(90, 185, 102)",
+	'Bet': 'rgb(240, 60, 60)'
 }
 
 const Wrapper = styled.div`
@@ -61,10 +62,19 @@ const Wrapper = styled.div`
 	}
 `
 
-const Action = ({ data, onSizeSelected = () => {} }) => {
+const Action = ({ data = [], onSizeSelected = () => {}, mode = 'complex' }) => {
+	let betFreq = 0
+	let checkFreq = 0
+	data.forEach((d) => {
+		if (d.action.code === 'X') {
+			checkFreq += d.total_frequency
+		} else {
+			betFreq += d.total_frequency
+		}
+	})
 	return <Wrapper>
 		{
-			[...data]
+			mode === 'complex' ? [...data]
 				.sort(sortBySize)
 				.map(d => {
 					return <ColorBlock color={COLOR_MAP[d.action.code]} onClick={() => onSizeSelected(d.action.code)}>
@@ -72,6 +82,16 @@ const Action = ({ data, onSizeSelected = () => {} }) => {
 						<div>{`${(d.total_frequency * 100).toFixed(1)}%`}</div>
 					</ColorBlock>
 				})
+			: <>
+				<ColorBlock color={'rgb(240, 60, 60)'} onClick={() => onSizeSelected('Bet')}>
+					<div>Bet</div>
+					<div>{`${(betFreq * 100).toFixed(1)}%`}</div>
+				</ColorBlock>
+				<ColorBlock color={'rgb(90, 185, 102)'} onClick={() => onSizeSelected('X')}>
+					<div>Check</div>
+					<div>{`${(checkFreq * 100).toFixed(1)}%`}</div>
+				</ColorBlock>
+			</>
 		}
 	</Wrapper>
 }
