@@ -2074,6 +2074,7 @@ const FilterModal = ({ onSave, onCancel, data = [], open = false }) => {
 		freq,
 		size
 	} = state
+
   const dispatch = useDispatch()
 
 	const originState = { ...state }

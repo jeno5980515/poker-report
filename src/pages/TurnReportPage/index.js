@@ -42,6 +42,7 @@ const FLOP_MAP = {
 	'X-R1.8-C': 'Small',
 	'X-X': 'Check',
 	'R6.95-C': 'Small',
+	'R2-C': 'Small',
 	'X-R1.8-R6.35-C': 'X/R VS Small',
 }
 
@@ -555,8 +556,16 @@ const TurnReportPage = () => {
 	useEffect(() => {
 		let finalFlopAction = flopAction
 		let finalTurnAction = turnAction
+		let finalPreflop = preflop
 
-		if (DATA[setting][preflop] && !DATA[setting][preflop][flopAction]) {
+		if (DATA[setting] && !DATA[setting][preflop]) {
+			finalPreflop = Object.keys(DATA[setting])[0]
+			finalFlopAction = Object.keys(DATA[setting][finalPreflop])[0]
+			finalTurnAction = Object.keys(DATA[setting][finalPreflop][finalFlopAction])[0]
+			dispatch(preflopSlice.set(finalPreflop))
+			dispatch(flopActionSlice.set(finalFlopAction))
+			dispatch(turnActionSlice.set(finalTurnAction))
+		} else if (DATA[setting][preflop] && !DATA[setting][preflop][flopAction]) {
 			finalFlopAction = Object.keys(DATA[setting][preflop])[0]
 			finalTurnAction = Object.keys(DATA[setting][preflop][finalFlopAction])[0]
 			dispatch(flopActionSlice.set(finalFlopAction))
@@ -725,6 +734,10 @@ const TurnReportPage = () => {
 						onChange={(e) => {
 							navigate(`?setting=${e.value}`);
 							dispatch(settingSlice.set(e.value))
+							if (DATA[e.value] && !DATA[e.value][preflop]) {
+								const preflop = Object.keys(DATA[e.value])[0]
+								dispatch(preflopSlice.set(preflop))
+							}
 						}}
 						isClearable={false}
 						isSearchable={false}
@@ -814,16 +827,13 @@ const TurnReportPage = () => {
 				{
 					pageState === 'graph' ? <TurnReportGraphPage data={data} /> : null
 				}
-				{
-					isFilterModalOpen
-						? <FilterModal
-								onCancel={() => setIsFilterModalOpen(false)}
-								onSave={({ flops, state }) => {
-									setIsFilterModalOpen(false)
-								}}
-							/>
-						: null
-				}
+				<FilterModal
+					onCancel={() => setIsFilterModalOpen(false)}
+					onSave={({ flops, state }) => {
+						setIsFilterModalOpen(false)
+					}}
+					open={isFilterModalOpen}
+				/>
 			</Wrapper>
 		</Page>
 	)
