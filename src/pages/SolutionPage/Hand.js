@@ -170,11 +170,11 @@ const getSuitList = (length) => {
 	off: sh, sd, sc, hs, hd, hc, ds, dh, dc, cs, ch, cd
 */
 
-const Hand = ({ data, indexList, hand }) => {
+const Hand = ({ data, indexList, hand, mode = 'complex' }) => {
 	const { solutions, blocker_rate, unblocker_rate } = data;
 	const suitList = getSuitList(indexList.length)
 	const sortedData = [...solutions].sort(sortBySize)
-	
+	const checkData = sortedData.find(d => d.action.code === 'X')
 	return <Wrapper>
 		{
 			indexList.map((v, index) => {
@@ -195,23 +195,43 @@ const Hand = ({ data, indexList, hand }) => {
 						</BlockerText>
 					}
 					{
-						sortedData
-							.map(d => {
-								return <ColorBlock color={COLOR_MAP[d.action.code]} width={d.strategy[v] * 100}></ColorBlock>
-							})
+						mode === 'complex'
+							? sortedData
+									.map(d => {
+										return <ColorBlock color={COLOR_MAP[d.action.code]} width={d.strategy[v] * 100}></ColorBlock>
+									})
+							: <>
+								<ColorBlock color={'rgb(240, 60, 60)'} width={(1 - checkData.strategy[v]) * 100}></ColorBlock>
+								<ColorBlock color={'rgb(90, 185, 102)'} width={checkData.strategy[v] * 100}></ColorBlock>
+							</>
 
 					}
 					<TextWrapper size={indexList.length}>
-						<Left>
-							{
-								sortedData.map(a => <Text>{a.action.code}</Text>)
-							}
-						</Left>
-						<Right>
-							{
-								sortedData.map(a => <Text>{`${(a.strategy[v] * 100).toFixed(1)}%`}</Text>)
-							}
-						</Right>
+						{
+							mode === 'complex' 
+								? <>
+										<Left>
+											{
+												sortedData.map(a => <Text>{a.action.code}</Text>)
+											}
+										</Left>
+										<Right>
+											{
+												sortedData.map(a => <Text>{`${(a.strategy[v] * 100).toFixed(1)}%`}</Text>)
+											}
+										</Right>
+									</>
+								:	<>
+									<Left>
+										<Text>Bet</Text>
+										<Text>Check</Text>
+									</Left>
+									<Right>
+										<Text>{`${((1 - checkData.strategy[v]) * 100).toFixed(1)}%`}</Text>
+										<Text>{`${(checkData.strategy[v] * 100).toFixed(1)}%`}</Text>
+									</Right>
+								</>
+						}
 					</TextWrapper>
 				</SuitBlock>
 			})

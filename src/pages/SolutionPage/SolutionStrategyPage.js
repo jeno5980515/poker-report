@@ -63,7 +63,7 @@ const HandDivWrapper = styled.div`
   aspect-ratio: 1/1;
 	display: flex;
 	align-items: center;
-	justify-content: ${({ isFreq }) => isFreq ? 'center' : 'start'};;
+	justify-content: start;
 	border: black 1px solid;
 	font-size: 0.7em;
 	user-select: none;
@@ -74,16 +74,17 @@ const ColorBlock = styled.div`
 	width: ${({ width }) => width}%;
 	background: ${({ color }) => color };
 	height: 100%;
-	${({ isSelected }) => isSelected ? 'left: 0;' : '' }
-	${({ isSelected }) => isSelected ? 'position: absolute;' : '' }
 `
 
 const TextBlock = styled.div`
 	position: absolute;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 `
 
 const StrategyDetail = styled.div`
-	width: 450px;
+	width: 400px;
 	display: flex;
 	flex-direction: column;
 	height: 550px;
@@ -161,7 +162,7 @@ export const HandDiv = ({
 						? [...Object.entries(data.actions_total_frequencies)]
 								.sort(sortBySize)
 								.map(([key, value]) => {
-									let width = value * 100
+									let width = value * 100 * data.total_frequency
 									if (selectedSize !== 'none') {
 										if (key !== selectedSize) {
 											width = 0;
@@ -176,12 +177,12 @@ export const HandDiv = ({
 						: <>
 							<ColorBlock
 								color={'rgb(240, 60, 60)'}
-								width={(selectedSize === 'Bet' || selectedSize === 'none') ? (1 - checkFreq)*100 : 0}
+								width={(selectedSize === 'Bet' || selectedSize === 'none') ? (1 - checkFreq)*100*data.total_frequency : 0}
 								isSelected={selectedSize !== 'none'}
 							></ColorBlock>
 							<ColorBlock
 								color={'rgb(90, 185, 102)'}
-								width={(selectedSize === 'X' || selectedSize === 'none') ? checkFreq*100 : 0}
+								width={(selectedSize === 'X' || selectedSize === 'none') ? checkFreq*100*data.total_frequency : 0}
 								isSelected={selectedSize !== 'none'}
 							></ColorBlock>
 						</>
@@ -241,7 +242,7 @@ const SolutionStrategyDesktopPage = ({
 			</DetailControlWrapper>
 			{
 				detailState === 'hands'
-					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey} mode={strategyMode}></Hand>
 					: <Filter
 							data={data}
 							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
@@ -303,7 +304,7 @@ const SolutionStrategyMobilePage = ({
 		<StrategyDetail>
 			{
 				detailState === 'hands'
-					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey}></Hand>
+					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey} mode={strategyMode}></Hand>
 					: <Filter
 							data={data}
 							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
