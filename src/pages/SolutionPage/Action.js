@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const sortBySize = (a, b) => {
@@ -72,26 +72,33 @@ const Action = ({ data = [], onSizeSelected = () => {}, mode = 'complex' }) => {
 			betFreq += d.total_frequency
 		}
 	})
+	const complexData = useMemo(() => {
+		return [...data]
+			.sort(sortBySize)
+			.map(d => {
+				return <ColorBlock color={COLOR_MAP[d.action.code]} onClick={() => onSizeSelected(d.action.code)}>
+					<div>{d.action.code}</div>
+					<div>{`${(d.total_frequency * 100).toFixed(1)}%`}</div>
+				</ColorBlock>
+			})
+	}, [JSON.stringify(data)])
+
+	const simpleData = useMemo(() => {
+		return <>
+			<ColorBlock color={'rgb(240, 60, 60)'} onClick={() => onSizeSelected('Bet')}>
+				<div>Bet</div>
+				<div>{`${(betFreq * 100).toFixed(1)}%`}</div>
+			</ColorBlock>
+			<ColorBlock color={'rgb(90, 185, 102)'} onClick={() => onSizeSelected('X')}>
+				<div>Check</div>
+				<div>{`${(checkFreq * 100).toFixed(1)}%`}</div>
+			</ColorBlock>
+		</>
+	}, [JSON.stringify(data)])
+
 	return <Wrapper>
 		{
-			mode === 'complex' ? [...data]
-				.sort(sortBySize)
-				.map(d => {
-					return <ColorBlock color={COLOR_MAP[d.action.code]} onClick={() => onSizeSelected(d.action.code)}>
-						<div>{d.action.code}</div>
-						<div>{`${(d.total_frequency * 100).toFixed(1)}%`}</div>
-					</ColorBlock>
-				})
-			: <>
-				<ColorBlock color={'rgb(240, 60, 60)'} onClick={() => onSizeSelected('Bet')}>
-					<div>Bet</div>
-					<div>{`${(betFreq * 100).toFixed(1)}%`}</div>
-				</ColorBlock>
-				<ColorBlock color={'rgb(90, 185, 102)'} onClick={() => onSizeSelected('X')}>
-					<div>Check</div>
-					<div>{`${(checkFreq * 100).toFixed(1)}%`}</div>
-				</ColorBlock>
-			</>
+			mode === 'complex' ? complexData : simpleData
 		}
 	</Wrapper>
 }

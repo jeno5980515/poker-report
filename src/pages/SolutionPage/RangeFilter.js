@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
@@ -432,22 +432,20 @@ const RangeFilter = ({ data, onSelectFilter, hand, onClickFilter }) => {
 	const { solutions, blocker_rate, unblocker_rate } = data
 	const [type, setType] = useState('hands');
 
-	const getComp = () => {
+	const memoComp = useMemo(() => {
 		switch (type) {
 			case 'hands':
-				return () => <Hand data1={data.players_info[0].hand_categories} data2={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
+				return <Hand data1={data.players_info[0].hand_categories} data2={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter}/>
 			case 'eqs':
-				return () => <EQSimple data1={data.players_info[0].equity_buckets} data2={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
+				return <EQSimple data1={data.players_info[0].equity_buckets} data2={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
 			case 'draw':
-				return () => <Draw data1={data.players_info[0].draw_categories} data2={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
+				return <Draw data1={data.players_info[0].draw_categories} data2={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
 			case 'eqa':
-				return () => <EQAdv data1={data.players_info[0].equity_buckets_advanced} data2={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
+				return <EQAdv data1={data.players_info[0].equity_buckets_advanced} data2={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter}  onClickFilter={onClickFilter}/>
 			default:
-				return () => <></>
+				return <></>
 		}
-	}
-
-	const Comp = getComp()
+	}, [type, JSON.stringify(data)])
 
 	return <Wrapper>
 		{
@@ -463,7 +461,7 @@ const RangeFilter = ({ data, onSelectFilter, hand, onClickFilter }) => {
 					<button onClick={() => setType('draw')}>Draw</button>
 					<button onClick={() => setType('eqa')}>EQA</button>
 				</Control>
-				<Comp />
+				{ memoComp }
 			</>
 		}
 	</Wrapper>

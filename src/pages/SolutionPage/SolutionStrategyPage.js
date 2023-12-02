@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 
 import INDEX_MAP from '../../indexMap.json';
 import Action from './Action';
@@ -273,6 +273,21 @@ const SolutionStrategyMobilePage = ({
 	setStrategyMode,
 	strategyMode
 }) => {
+
+	const memoHand = useMemo(() => {
+		return <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey} mode={strategyMode}></Hand>
+	}, [JSON.stringify(data), JSON.stringify(currentHand), strategyMode])
+
+	const memoFilter = useMemo(() => {
+		return <Filter
+			data={data}
+			onSelectFilter={setFilterState}
+			onClickFilter={handleClickFilter}
+			hand={selectedKey}
+			mode={strategyMode}
+		/>
+	}, [JSON.stringify(data), JSON.stringify(currentHand), strategyMode])
+
 	return <SolutionPageWrapper>
 		<div style={{ display: 'flex' }}>
 			<button onClick={() => setStrategyMode('simple')}>Simple</button>
@@ -305,15 +320,8 @@ const SolutionStrategyMobilePage = ({
 		<StrategyDetail>
 			{
 				detailState === 'hands'
-					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey} mode={strategyMode}></Hand>
-					: <Filter
-							data={data}
-							onSelectFilter={setFilterState}
-							onClickFilter={handleClickFilter}
-							hand={selectedKey}
-							mode={strategyMode}
-						>
-						</Filter>
+					? memoHand
+					: memoFilter
 			}
 		</StrategyDetail>
 	</SolutionPageWrapper>

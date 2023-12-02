@@ -92,10 +92,12 @@ const Board = styled.div`
 const HandDivWrapper = styled.div`
 	@media (max-width: 767px) {
 		flex-basis: 6.5%;
+		font-size: 1em;
 	}
 
 	@media (min-width: 768px) {
 		flex-basis: 7%;
+		font-size: 0.7em;
 	}
 
 	background: rgb(30, 30, 30);
@@ -106,7 +108,6 @@ const HandDivWrapper = styled.div`
 	align-items: center;
 	justify-content: ${({ isFreq }) => isFreq ? 'center' : 'start'};;
 	border: black 1px solid;
-	font-size: 0.7em;
 	user-select: none;
 	position: relative;
 	filter: ${({ highlight }) => highlight ? 'brightness(100%)' : 'brightness(30%)'};
@@ -325,7 +326,7 @@ const SolutionRangeMobilePage = ({
 					data={data}
 					onSelectFilter={({ type, key }) => setFilterState({ type, key })}
 					hand={selectedKey}
-					handleClickFilter={handleClickFilter}
+					onClickFilter={handleClickFilter}
 				>	
 				</RangeFilter>
 			</RangeDetail>

@@ -16,6 +16,7 @@ import { ReactComponent as SpadeSVG } from '../../assets/spade.svg';
 
 
 import FilterModal from '../../components/modal/FilterModal'
+import Loading from '../../components/Loading'
 
 import SolutionRangePage from './SolutionRangePage';
 import SolutionStrategyPage from './SolutionStrategyPage';
@@ -2065,6 +2066,7 @@ const RangePage = () => {
   const [chartData, setChartDate] = useState([10, 25, 18, 32, 12, 7]);
 	const [currentPlayer, setCurrentPlayer] = useState(2)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+	const [loading, setLoading] = useState(false)
   const boardSelectorRef = useRef(null);
   const dispatch = useDispatch()
   const chartRef = useRef(null);
@@ -2287,14 +2289,6 @@ const RangePage = () => {
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
-    d3.select(filteredChartRef.current).selectAll('*').remove();
-		
-    const svg = d3
-      .select(filteredChartRef.current)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height);
-
 		let player1FilteredValue = player1MappedEQS.map(({ value, index }) => {
 			return index === index1 ? value * 100 : 0
 		})
@@ -2303,33 +2297,42 @@ const RangePage = () => {
 			return index === index2 ? value * 100 : 0
 		})
 
-    const xScale1 = d3.scaleLinear().domain([0, player1FilteredValue.length - 1]).range([0, innerWidth]);
-    const xScale2 = d3.scaleLinear().domain([0, player2FilteredValue.length - 1]).range([0, innerWidth]);
-    const yScale1 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
-    const yScale2 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
+		if (pageState === 'range') {
+			d3.select(filteredChartRef.current).selectAll('*').remove();
+		
+			const svg = d3
+				.select(filteredChartRef.current)
+				.append('svg')
+				.attr('width', width)
+				.attr('height', height);
 
-		svg
-			.selectAll('circle.player1')
-			.data(player1FilteredValue)
-			.enter().append('circle')
-			.attr('class', 'player1')
-			.attr('cx', (d, i) => xScale1(i))
-			.attr('cy', d => d > 0 ? yScale1(d) : -300)
-			.attr('r', 5)
-			.attr('fill', 'rgb(151, 234, 248)')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+			const xScale1 = d3.scaleLinear().domain([0, player1FilteredValue.length - 1]).range([0, innerWidth]);
+			const xScale2 = d3.scaleLinear().domain([0, player2FilteredValue.length - 1]).range([0, innerWidth]);
+			const yScale1 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
+			const yScale2 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
 
-		svg
-			.selectAll('circle.player2')
-			.data(player2FilteredValue)
-			.enter().append('circle')
-			.attr('class', 'player2')
-			.attr('cx', (d, i) => xScale2(i))
-			.attr('cy', d => d > 0 ? yScale2(d) : -300)
-			.attr('r', 5)
-			.attr('fill', 'rgb(37, 179, 54)')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+			svg
+				.selectAll('circle.player1')
+				.data(player1FilteredValue)
+				.enter().append('circle')
+				.attr('class', 'player1')
+				.attr('cx', (d, i) => xScale1(i))
+				.attr('cy', d => d > 0 ? yScale1(d) : -300)
+				.attr('r', 5)
+				.attr('fill', 'rgb(151, 234, 248)')
+				.attr('transform', `translate(${margin.left},${margin.top})`);
 
+			svg
+				.selectAll('circle.player2')
+				.data(player2FilteredValue)
+				.enter().append('circle')
+				.attr('class', 'player2')
+				.attr('cx', (d, i) => xScale2(i))
+				.attr('cy', d => d > 0 ? yScale2(d) : -300)
+				.attr('r', 5)
+				.attr('fill', 'rgb(37, 179, 54)')
+				.attr('transform', `translate(${margin.left},${margin.top})`);
+		}
 	}, [JSON.stringify(filterState), JSON.stringify(clickedFilter), JSON.stringify(data), pageState, selectedSize])
 
 
@@ -2348,66 +2351,66 @@ const RangePage = () => {
     const margin = ChartMargin;
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
+		if (pageState === 'range') {
+			d3.select(chartRef.current).selectAll('*').remove();
 
-    d3.select(chartRef.current).selectAll('*').remove();
+			const svg = d3
+				.select(chartRef.current)
+				.append('svg')
+				.attr('width', width)
+				.attr('height', height);
 
-    const svg = d3
-      .select(chartRef.current)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height);
+			const xScale1 = d3.scaleLinear().domain([0, player1Data.length - 1]).range([0, innerWidth]);
+			const xScale2 = d3.scaleLinear().domain([0, player2Data.length - 1]).range([0, innerWidth]);
+			const yScale1 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
+			const line1 = d3.line().x((d, i) => xScale1(i)).y((d) => yScale1(d));
 
-    const xScale1 = d3.scaleLinear().domain([0, player1Data.length - 1]).range([0, innerWidth]);
-    const xScale2 = d3.scaleLinear().domain([0, player2Data.length - 1]).range([0, innerWidth]);
-    const yScale1 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
-    const line1 = d3.line().x((d, i) => xScale1(i)).y((d) => yScale1(d));
+			svg
+				.append('path')
+				.datum(player1Data)
+				.attr('transform', `translate(${margin.left},${margin.top})`)
+				.attr('fill', 'none')
+				.attr('stroke', 'blue')
+				.attr('stroke', 'rgb(151, 234, 248)')
+				.attr('stroke-width', 2)
+				.attr('d', line1);
 
-    svg
-      .append('path')
-      .datum(player1Data)
-      .attr('transform', `translate(${margin.left},${margin.top})`)
-      .attr('fill', 'none')
-      .attr('stroke', 'blue')
-      .attr('stroke', 'rgb(151, 234, 248)')
-      .attr('stroke-width', 2)
-      .attr('d', line1);
+			const yScale2 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
+			const line2 = d3.line().x((d, i) => xScale2(i)).y((d) => yScale2(d));
 
-    const yScale2 = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
-    const line2 = d3.line().x((d, i) => xScale2(i)).y((d) => yScale2(d));
+			svg
+				.append('path')
+				.datum(player2Data)
+				.attr('transform', `translate(${margin.left},${margin.top})`)
+				.attr('fill', 'none')
+				.attr('stroke', 'red')
+				.attr('stroke', 'rgb(37, 179, 54)')
+				.attr('stroke-width', 2)
+				.attr('d', line2);
 
-    svg
-      .append('path')
-      .datum(player2Data)
-      .attr('transform', `translate(${margin.left},${margin.top})`)
-      .attr('fill', 'none')
-      .attr('stroke', 'red')
-      .attr('stroke', 'rgb(37, 179, 54)')
-      .attr('stroke-width', 2)
-      .attr('d', line2);
+			const xAxis = d3.axisBottom(d3.scaleLinear().domain([0, 100]).range([0, innerWidth])).tickValues([25,50,75,100]).tickSizeInner(-innerHeight).tickSizeOuter(0).tickPadding(-3)
+			const yAxis = d3.axisLeft(yScale1).tickValues([0,25,50,75,100])
+			yAxis.tickSize(-5)
+			xAxis.tickSize(-5)
 
-    const xAxis = d3.axisBottom(d3.scaleLinear().domain([0, 100]).range([0, innerWidth])).tickValues([25,50,75,100]).tickSizeInner(-innerHeight).tickSizeOuter(0).tickPadding(-3)
-		const yAxis = d3.axisLeft(yScale1).tickValues([0,25,50,75,100])
-		yAxis.tickSize(-5)
-		xAxis.tickSize(-5)
-
-    svg
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`)
-      .call(yAxis)
-			.selectAll('text')
-			.style('fill', 'white')
-			.selectAll('.tick line')
-			.style('stroke', 'white');
-  
-    svg
-      .append('g')
-      .attr('transform', `translate(${margin.left},${innerHeight + margin.top})`)
-      .call(xAxis)
-			.selectAll('text')
-			.style('fill', 'white')
-			.selectAll('.tick line')
-			.style('stroke', 'white');
-
+			svg
+				.append('g')
+				.attr('transform', `translate(${margin.left},${margin.top})`)
+				.call(yAxis)
+				.selectAll('text')
+				.style('fill', 'white')
+				.selectAll('.tick line')
+				.style('stroke', 'white');
+		
+			svg
+				.append('g')
+				.attr('transform', `translate(${margin.left},${innerHeight + margin.top})`)
+				.call(xAxis)
+				.selectAll('text')
+				.style('fill', 'white')
+				.selectAll('.tick line')
+				.style('stroke', 'white');
+		}
   }, [JSON.stringify(data), pageState]);
 
 	const handleClickFilter = useCallback(({ type, key }) => {
@@ -2436,11 +2439,14 @@ const RangePage = () => {
 	useEffect(() => {
 		const fn = async () => {
 			try {
+				setLoading(true)
 				const path = `${process.env.PUBLIC_URL}/solutions/${setting}/${preflop}/${flopAction}/${board}.json`;
 				const response = await fetch(path);
 				const data = await response.json()
+				setLoading(false)
 				setData(data)
 			} catch (e) {
+				setLoading(false)
 				console.log(e)
 			}
 		}
@@ -2636,6 +2642,9 @@ const RangePage = () => {
 					open={isFilterModalOpen}
 				/>
 			</Wrapper>
+			{
+				loading ? <Loading /> : null
+			}
 		</Page>
 	)
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as HeartSVG } from '../../assets/heart.svg';
@@ -402,15 +402,25 @@ const EQAdv = ({ data, onSelectFilter, onClickFilter, mode = 'complex' }) => {
 }
 
 const Filter = ({ data, onSelectFilter, hand, onClickFilter, mode = 'complex' }) => {
-	const { solutions, blocker_rate, unblocker_rate } = data
-
+	const memoHand = useMemo(() => {
+		return <Hand data={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode} />
+	}, [JSON.stringify(data), mode])
+	const memoEQSimple = useMemo(() => {
+		return <EQSimple data={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
+	}, [JSON.stringify(data), mode])
+	const memoDraw = useMemo(() => {
+		return <Draw data={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
+	}, [JSON.stringify(data), mode])	
+	const memoEQAdv = useMemo(() => {
+		return <EQAdv data={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
+	}, [JSON.stringify(data), mode])
 	return <Wrapper>
 		{
 			<>
-				<Hand data={data.players_info[1].hand_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode} />
-				<EQSimple data={data.players_info[1].equity_buckets} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
-				<Draw data={data.players_info[1].draw_categories} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
-				<EQAdv data={data.players_info[1].equity_buckets_advanced} onSelectFilter={onSelectFilter} onClickFilter={onClickFilter} mode={mode}/>
+				{ memoHand }
+				{ memoEQSimple }
+				{ memoDraw }
+				{ memoEQAdv }
 			</>
 		}
 	</Wrapper>
