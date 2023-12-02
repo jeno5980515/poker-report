@@ -119,6 +119,9 @@ const ColorBlock = styled.div`
 
 const TextBlock = styled.div`
 	position: absolute;
+	display: flex;
+	justify-content: center;
+	width: 100%;
 `
 
 const Chart = styled.div`

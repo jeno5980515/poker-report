@@ -67,6 +67,7 @@ const HandDivWrapper = styled.div`
 	border: black 1px solid;
 	font-size: 0.7em;
 	user-select: none;
+	position: relative;
 	filter: ${({ highlight }) => highlight ? 'brightness(100%)' : 'brightness(30%)'};
 `
 
