@@ -8,7 +8,13 @@ const Wrapper = styled.div`
 	height: 100vh;
 	background: black;
 	opacity: 0.5;
-	padding-top: 50%;
+	@media (max-width: 767px) {
+		padding-top: 50%;
+	}
+
+	@media (min-width: 768px) {
+
+	}
 `
 
 

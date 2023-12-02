@@ -75,6 +75,7 @@ const ColorBlock = styled.div`
 	width: ${({ width }) => width}%;
 	background: ${({ color }) => color };
 	height: 100%;
+	display: ${({ width }) => width === 0 ? 'none' : 'block'};
 `
 
 const TextBlock = styled.div`
@@ -169,11 +170,11 @@ export const HandDiv = ({
 											width = 0;
 										}
 									}
-									return <ColorBlock
+									return width !== 0 ? <ColorBlock
 										color={COLOR_MAP[key]}
 										width={width}
 										isSelected={selectedSize !== 'none'}
-									></ColorBlock>
+									></ColorBlock> : null
 								})
 						: <>
 							<ColorBlock
@@ -187,7 +188,7 @@ export const HandDiv = ({
 								isSelected={selectedSize !== 'none'}
 							></ColorBlock>
 						</>
-				: <ColorBlock color={'rgb(255, 143, 0)'} width={data.total_frequency * 100}></ColorBlock>
+				: data.total_frequenc !== 0 ? <ColorBlock color={'rgb(255, 143, 0)'} width={data.total_frequency * 100}></ColorBlock> : null
 		}
 		<TextBlock>{hand}</TextBlock>
 	</HandDivWrapper>

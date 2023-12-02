@@ -116,6 +116,7 @@ const HandDivWrapper = styled.div`
 const ColorBlock = styled.div`
 	width: ${({ width }) => width}%;
 	background: ${({ color }) => color };
+	display: ${({ width }) => width === 0 ? 'none' : 'block'};
 	height: 100%;
 `
 
@@ -195,9 +196,9 @@ const HandDiv = ({
 				? [...Object.entries(data.actions_total_frequencies)]
 					.sort(sortBySize)
 					.map(([key, value]) => {
-						return <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock>
+						return value !== 0 ? <ColorBlock color={COLOR_MAP[key]} width={value*100}></ColorBlock> : null
 					})
-				: <ColorBlock color={'rgb(255, 143, 0)'} width={data.total_frequency * 100}></ColorBlock>
+				: data.total_frequency !== 0 ? <ColorBlock color={'rgb(255, 143, 0)'} width={data.total_frequency * 100}></ColorBlock> : null
 		}
 		<TextBlock>{hand}</TextBlock>
 	</HandDivWrapper>
