@@ -2414,27 +2414,32 @@ const RangePage = () => {
   }, [JSON.stringify(data), pageState]);
 
 	const handleClickFilter = useCallback(({ type, key }) => {
-		if (key === clickedFilter.key || type === 'none') {
-			setClickedFilter({ type: 'none' })
-			setSelectedSize('none')
-		} else {
-			setClickedFilter({ type, key })
-		}
-		setFilterState({ type: 'none' })
-	}, [])
+		setClickedFilter((currentClickedFilter) => {
+			let newFilter = { type: 'none' };
+			if (key === currentClickedFilter.key || type === 'none') {
+				setSelectedSize('none')
+			} else {
+				newFilter = { type, key }
+			}
+			setFilterState({ type: 'none' })
+			return newFilter
+		})
+	}, [setClickedFilter, setSelectedSize, setFilterState, JSON.stringify(clickedFilter)])
 
 	const handleClickSize = useCallback((size) => {
-		if (selectedSize === size) {
-			setSelectedSize('none')
-		} else {
-			setSelectedSize(size)
-		}
-	}, [])
+		setSelectedSize((currentSize) => {
+			if (currentSize === size) {
+				return 'none'
+			} else {
+				return size
+			}
+		})
+	}, [setSelectedSize, selectedSize])
 
 	const handleModeClick = useCallback((mode) => {
 		setStrategyMode(mode);
 		setSelectedSize('none')
-	}, [])
+	}, [setStrategyMode, setSelectedSize])
 
 	useEffect(() => {
 		const fn = async () => {
@@ -2480,7 +2485,6 @@ const RangePage = () => {
 		fn();
 	}, [setting, preflop])
 
-
 	const playerRangeData = currentPlayer === 1 ? player1RangeData : player2RangeData
 	const currentHand = data && data.players_info[1].simple_hand_counters[selectedKey]
 	// const DetailComp = detailState === 'hands'
@@ -2507,6 +2511,7 @@ const RangePage = () => {
 		return <div>Loading</div>
 	}
 
+	// console.log(selectedSize, filterState, clickedFilter)
 	return (
 		<Page>
 			<Wrapper>
