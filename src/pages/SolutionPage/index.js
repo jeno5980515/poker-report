@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Select, { components } from "react-select";
 import { useLocation } from 'react-router-dom';
@@ -2102,10 +2102,10 @@ const RangePage = () => {
 			return cal + val.total_combos
 		}, 0)
 
-	const onHandEnter = ({ key }) => {
+	const onHandEnter = useCallback(({ key }) => {
 		setSelectedKey(key)
 		// setSelectedKey('A3o')
-	}
+	}, [])
 
 	useEffect(() => {
 		if (!data) {
@@ -2410,7 +2410,7 @@ const RangePage = () => {
 
   }, [JSON.stringify(data), pageState]);
 
-	const handleClickFilter = ({ type, key }) => {
+	const handleClickFilter = useCallback(({ type, key }) => {
 		if (key === clickedFilter.key || type === 'none') {
 			setClickedFilter({ type: 'none' })
 			setSelectedSize('none')
@@ -2418,20 +2418,20 @@ const RangePage = () => {
 			setClickedFilter({ type, key })
 		}
 		setFilterState({ type: 'none' })
-	}
+	}, [])
 
-	const handleClickSize = (size) => {
+	const handleClickSize = useCallback((size) => {
 		if (selectedSize === size) {
 			setSelectedSize('none')
 		} else {
 			setSelectedSize(size)
 		}
-	}
+	}, [])
 
-	const handleModeClick = (mode) => {
+	const handleModeClick = useCallback((mode) => {
 		setStrategyMode(mode);
 		setSelectedSize('none')
-	}
+	}, [])
 
 	useEffect(() => {
 		const fn = async () => {

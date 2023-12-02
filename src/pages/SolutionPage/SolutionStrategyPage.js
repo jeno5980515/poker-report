@@ -246,8 +246,8 @@ const SolutionStrategyDesktopPage = ({
 					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey} mode={strategyMode}></Hand>
 					: <Filter
 							data={data}
-							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
-							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
+							onSelectFilter={setFilterState}
+							onClickFilter={handleClickFilter}
 							hand={selectedKey}
 							mode={strategyMode}
 						></Filter>
@@ -308,8 +308,8 @@ const SolutionStrategyMobilePage = ({
 					? <Hand data={data} indexList={INDEX_MAP[currentHand.name]} hand={selectedKey} mode={strategyMode}></Hand>
 					: <Filter
 							data={data}
-							onSelectFilter={({ type, key }) => setFilterState({ type, key })}
-							onClickFilter={({ type, key }) => handleClickFilter({ type, key })}
+							onSelectFilter={setFilterState}
+							onClickFilter={handleClickFilter}
 							hand={selectedKey}
 							mode={strategyMode}
 						>
