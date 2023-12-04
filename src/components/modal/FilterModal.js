@@ -2108,6 +2108,12 @@ const FilterModal = ({ onSave, onCancel, data = [], open = false }) => {
 				})
 				break;
 			}
+			case 'not-monotone': {
+				finalFlops = finalFlops.filter(f => {
+					return [...new Set([f[1], f[3], f[5]])].length !== 1
+				})
+				break;
+			}
 			default: {
 
 			}
@@ -2263,6 +2269,10 @@ const FilterModal = ({ onSave, onCancel, data = [], open = false }) => {
 				<Item>
 					<input type="radio" name="suits" value="monotone" onChange={(e) => dispatch(filterSlice.set({ ...state, suits: e.target.value }))}  checked={suits === 'monotone'} />
 					<label for="suits">Monotone</label>
+				</Item>
+				<Item>
+					<input type="radio" name="suits" value="not-monotone" onChange={(e) => dispatch(filterSlice.set({ ...state, suits: e.target.value }))}  checked={suits === 'not-monotone'} />
+					<label for="suits">Not Monotone</label>
 				</Item>
 			</Field>
 			<Field>
