@@ -2640,6 +2640,7 @@ const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', curren
 	const navigate = useNavigate();
   const flop = data[index]
   const board = (flop || {}).flop
+	const previousBoard = usePrevious(board);
 
 	const playerHandData = strategyData && strategyData.players_info[currentPlayer === 2 ? 1 : 0].simple_hand_counters;
   const [playerRangeData, setPlayerRangeData] = useState(RANGE.map(row => {
@@ -2655,11 +2656,17 @@ const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', curren
   let correctSize = ''
 
   useEffect(() => {
-    setIndex(generateIndex())
     setFreqAnswer('')
     setSizeAnswer('')
     setIsShowResult(false)
     setStrategyData(null)
+
+		const newIndex = data.findIndex(d => d.flop === previousBoard)
+		if (newIndex !== -1) {
+			setIndex(newIndex)
+		} else {
+			setIndex(generateIndex())
+		}
   }, [JSON.stringify(data)])
 
   useEffect(() => {
