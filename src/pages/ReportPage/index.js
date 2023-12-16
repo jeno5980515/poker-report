@@ -1969,10 +1969,10 @@ const SOLUTION_OPTIONS = [
   {
     label: 'SRP - IPA',
     options: [
-      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
-      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
-      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
       { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB' },
+      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
+      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
+      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
     ]
   },
   {
@@ -1995,12 +1995,12 @@ const SOLUTION_OPTIONS = [
   {
     label: '3Bet - IPA',
     options: [
-      { value: '3Bet.IPA.BTN3BCO', label: 'BTN 3B CO' },
-      { value: '3Bet.IPA.BTN3BHJ', label: 'BTN 3B HJ' },
-      { value: '3Bet.IPA.BTN3BLJ', label: 'BTN 3B LJ' },
-      { value: '3Bet.IPA.CO3BHJ', label: 'CO 3B HJ' },
-      { value: '3Bet.IPA.CO3BLJ', label: 'CO 3B LJ' },
       { value: '3Bet.IPA.HJ3BLJ', label: 'HJ 3B LJ' },
+      { value: '3Bet.IPA.CO3BLJ', label: 'CO 3B LJ' },
+      { value: '3Bet.IPA.CO3BHJ', label: 'CO 3B HJ' },
+      { value: '3Bet.IPA.BTN3BLJ', label: 'BTN 3B LJ' },
+      { value: '3Bet.IPA.BTN3BHJ', label: 'BTN 3B HJ' },
+      { value: '3Bet.IPA.BTN3BCO', label: 'BTN 3B CO' },
       { value: '3Bet.IPA.BB3BSB', label: 'BB 3B SB' },
     ]
   },
@@ -2020,14 +2020,14 @@ const SOLUTION_OPTIONS = [
   {
     label: '3Bet - OPA',
     options: [
-      { value: '3Bet.OPA.SB3BBTN', label: 'SB 3B BTN' },
-      { value: '3Bet.OPA.SB3BCO', label: 'SB 3B CO' },
-      { value: '3Bet.OPA.SB3BHJ', label: 'SB 3B HJ' },
       { value: '3Bet.OPA.SB3BLJ', label: 'SB 3B LJ' },
-      { value: '3Bet.OPA.BB3BBTN', label: 'BB 3B BTN' },
-      { value: '3Bet.OPA.BB3BCO', label: 'BB 3B CO' },
-      { value: '3Bet.OPA.BB3BHJ', label: 'BB 3B HJ' },
+      { value: '3Bet.OPA.SB3BHJ', label: 'SB 3B HJ' },
+      { value: '3Bet.OPA.SB3BCO', label: 'SB 3B CO' },
+      { value: '3Bet.OPA.SB3BBTN', label: 'SB 3B BTN' },
       { value: '3Bet.OPA.BB3BLJ', label: 'BB 3B LJ' },
+      { value: '3Bet.OPA.BB3BHJ', label: 'BB 3B HJ' },
+      { value: '3Bet.OPA.BB3BCO', label: 'BB 3B CO' },
+      { value: '3Bet.OPA.BB3BBTN', label: 'BB 3B BTN' },
     ]
   },
   {
@@ -2075,14 +2075,14 @@ const SOLUTION_NL50GG_OPTIONS = [
   {
     label: 'SRP - IPA',
     options: [
-      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
-      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
-      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
-      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
-      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
-      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
       { value: 'SRP.IPA.LJVSBB', label: 'LJ vs BB' },
+      { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
+      { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
+      { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
       { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' }
+      { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
+      { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
+      { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
     ]
   },
   {
@@ -2097,9 +2097,9 @@ const SOLUTION_NL50GG_OPTIONS = [
   {
     label: 'SRP - OPA',
     options: [
-      { value: 'SRP.OPA.COVSBTN', label: 'CO vs BTN' },
-      { value: 'SRP.OPA.HJVSBTN', label: 'HJ vs BTN' },
       { value: 'SRP.OPA.LJVSBTN', label: 'LJ vs BTN' },
+      { value: 'SRP.OPA.HJVSBTN', label: 'HJ vs BTN' },
+      { value: 'SRP.OPA.COVSBTN', label: 'CO vs BTN' },
       { value: 'SRP.OPA.SBVSBB', label: 'SB vs BB ' },
     ]
   },
