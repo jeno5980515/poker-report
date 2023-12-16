@@ -1852,7 +1852,11 @@ const SizeMap = {
   "R6.95": 'Small',
   "R6.75": 'Small',
   "R26.65": 'Big',
+	"R27.3": "Big",
   "R13.55": 'Big',
+	"R23.4": "Big",
+	"R11.9": "Big",
+	"R5.95": "Small",
   "R7.15": 'Big',
   "R7.8": 'Big',
   'R7.4': 'Small',
@@ -1860,7 +1864,6 @@ const SizeMap = {
   "R7.6": 'Big',
   "R10.9": "Big",
   "R21.45": "Big",
-  "R27.3": "Big",
   "R29.25": "Big",
   "R10.4": "Small",
   "R20.75": "Middle",
@@ -1869,7 +1872,19 @@ const SizeMap = {
   "R4.6": "Big",
   "R31.1": "Big",
   "R4.5": "Big",
-  "R7.5": "Big"
+  "R7.5": "Big",
+	"R6.4": "Big",
+	"R3.8": "Big",
+	"R2.55": "Middle",
+	"R1.7": "Small",
+	"R7": "Big",
+	"R4.2": "Big",
+	"R2.8": "Middle",
+	"R1.85": "Small",
+	"R5.6": "Big",
+	"R3.4": "Big",
+	"R2.25": "Middle",
+	"R1.5": "Small",
 }
 
 // const COLOR_MAP = {
@@ -2301,7 +2316,9 @@ const getCategory = (data) => {
     } else {
       return 'Big, Small'
     }
-  } 
+  } else if (Big === Small) {
+		return 'Big, Small'
+	}
 
   return 'Unknown'
 }
@@ -2427,9 +2444,10 @@ const getGroupMap = (data) => {
           }
 
         })
+
         const total = Object.values(result).reduce((cal, val) => cal + val, 0)
         Object.entries(result).forEach(([rKey, rValue]) => {
-          result[rKey] = (result[rKey]/total) * 100
+          result[rKey] = (result[rKey]/total) * 100 || 0
         })
         const category = getCategory(result)
         return {
@@ -3344,7 +3362,7 @@ const ReportPage = () => {
                 data={data}
                 preflop={SolutionMap[solution] || solution}
                 setting={setting}
-                flopAction={(solution.includes('IPA') || SolutionReverseMap[solution].includes('IPA')) ? 'X' : 'Empty'}
+                flopAction={(solution.includes('IPA') || (SolutionReverseMap[solution] || '').includes('IPA')) ? 'X' : 'Empty'}
               /> : null
         }
         {
@@ -3353,7 +3371,7 @@ const ReportPage = () => {
                 data={data}
                 preflop={SolutionMap[solution] || solution}
                 setting={setting}
-                flopAction={(solution.includes('IPA') || SolutionReverseMap[solution].includes('IPA')) ? 'X' : 'Empty'}
+                flopAction={(solution.includes('IPA') || (SolutionReverseMap[solution] || '').includes('IPA')) ? 'X' : 'Empty'}
               /> : null
         }
       </Page>
