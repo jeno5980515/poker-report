@@ -2079,7 +2079,7 @@ const SOLUTION_NL50GG_OPTIONS = [
       { value: 'SRP.IPA.HJVSBB', label: 'HJ vs BB' },
       { value: 'SRP.IPA.COVSBB', label: 'CO vs BB' },
       { value: 'SRP.IPA.BTNVSBB', label: 'BTN vs BB' },
-      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' }
+      { value: 'SRP.IPA.LJVSSB', label: 'LJ vs SB' },
       { value: 'SRP.IPA.HJVSSB', label: 'HJ vs SB' },
       { value: 'SRP.IPA.COVSSB', label: 'CO vs SB' },
       { value: 'SRP.IPA.BTNVSSB', label: 'BTN vs SB' },
