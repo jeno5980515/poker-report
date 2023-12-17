@@ -2191,6 +2191,19 @@ const SOLUTION_NL50GG_OPTIONS = [
   { value: 'check', label: '4Bet - OPD' },
 ]
 
+const SOLUTION_TRAIN_V2_OPTIONS = [
+  { value: 'SRP.IPA', label: 'SRP - IPA' },
+  { value: 'SRP.IPD', label: 'SRP - IPD vs X' },
+  { value: 'SRP.OPA', label: 'SRP - OPA' },
+  { value: 'SRP.OPD', label: 'SRP - OPD' },
+  { value: '3Bet.IPA', label: '3Bet - IPA' },
+  { value: '3Bet.IPD', label: '3Bet - IPD vs X' },
+  { value: '3Bet.OPA', label: '3Bet - OPA' },
+  { value: '3Bet.OPD', label: '3Bet - OPD' },
+  { value: '4Bet.IPA', label: '4Bet - IPA' },
+  { value: '4Bet.OPA', label: '4Bet - OPA' },
+]
+
 
 const useOutsideOver = (ref, callback) => {
   const handleOver = (e) => {
@@ -2395,6 +2408,83 @@ const TrainOption = styled.div`
   align-items: center;
   justify-content: center;
 `
+
+const groupKeyOrder = {
+	LJVSBB: 1,
+	HJVSBB: 2,
+	COVSBB: 3,
+	BTNVSBB: 4,
+	LJVSSB: 5,
+	HJVSSB: 6,
+	COVSSB: 7,
+	BTNVSSB: 8,
+	//
+	LJVSBTN: 1,
+	HJVSBTN: 2,
+	COVSBTN: 3,
+	SBVSBB: 4,
+	//
+	HJ3BLJ: 1,
+	CO3BLJ: 2,
+	CO3BHJ: 3,
+	BTN3BLJ: 4,
+	BTN3BHJ: 5,
+	BTN3BCO: 6,
+	BB3BSB: 7,
+	//
+	BTNCallLJ: 1,
+	BTNCallHJ: 2,
+	BTNCallCO: 3,
+	BBCallSB: 4,
+	//
+	LJCallSB3B: 1,
+	HJCallSB3B: 2,
+	COCallSB3B: 3,
+	BTNCallSB3B: 4,
+	LJCallBB3B: 5,
+	HJCallBB3B: 6,
+	COCallBB3B: 7,
+	BTNCallBB3B: 8,
+	//
+	SB3BLJ: 1,
+	SB3BHJ: 2,
+	SB3BCO: 3,
+	SB3BBTN: 4,
+	BB3BLJ: 5,
+	BB3BHJ: 6,
+	BB3BCO: 7,
+	BB3BBTN: 8,
+	//
+	LJCallHJ3B: 1,
+	LJCallCO3B: 2,
+	LJCallBTN3B: 3,
+	HJCallCO3B: 4,
+	HJCallBTN3B: 5,
+	COCallBTN3B: 6,
+	SBCallBB3B: 7,
+	//
+	LJ4BSB: 1,
+	HJ4BSB: 2,
+	CO4BSB: 3,
+	BTN4BSB: 4,
+	LJ4BBB: 5,
+	HJ4BBB: 6,
+	CO4BBB: 7,
+	BTN4BBB: 8,
+	//
+	LJ4BHJ: 1,
+	LJ4BCO: 2,
+	LJ4BBTN: 3,
+	HJ4BCO: 4,
+	HJ4BBTN: 5,
+	CO4BBTN: 6,
+	SB4BBB: 7,
+	//
+}
+
+const sortGroupKey = (a, b) => {
+	return groupKeyOrder[a] - groupKeyOrder[b]
+}
 
 
 const Flop = ({ data }) => {
@@ -2703,7 +2793,7 @@ const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', curren
   }, [index])
 
   if (!flop) {
-    return <div>No Data</div>
+    return <div style={{ height: '500px' }}>No Data</div>
   }
 
   Object.entries(groupMap).forEach(([key, value]) => {
@@ -2782,6 +2872,111 @@ const ReportTrainPage = ({ data = [], preflop, setting, flopAction = 'X', curren
     }
   </TrainPage>
 }
+
+
+const ReportTrainV2Page = ({ data = {} }) => {
+	const generateIndex = () => {
+    const min = 0;
+    const max = (data[Object.keys(data)[0]] || []).length - 1
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+	const totalGroupMap = {}
+	Object.keys(data).forEach(key => {
+		totalGroupMap[key] = getGroupMap(data[key])
+	})
+  const [index, setIndex] = useState(generateIndex())
+  const [freqAnswer, setFreqAnswer] = useState({})
+  const [sizeAnswer, setSizeAnswer] = useState({})
+
+  const flop = (data[Object.keys(data)[0]] || [])[index]
+  const board = (flop || {}).flop
+
+  let correctFreq = {}
+  let correctSize = {}
+
+  useEffect(() => {
+    setFreqAnswer({})
+    setSizeAnswer({})
+		setIndex(generateIndex())
+  }, [JSON.stringify(data)])
+
+
+  if (!flop) {
+    return <div style={{ height: '500px' }}>No Data</div>
+  }
+
+	for (let gorupKey in totalGroupMap) {
+		for (let freqKey in totalGroupMap[gorupKey]) {
+			const answer = totalGroupMap[gorupKey][freqKey].find(v => v.flop === (flop || {}).flop)
+			if (answer) {
+				correctFreq[gorupKey] = freqKey
+				correctSize[gorupKey] = answer.category;
+			}
+		}
+	}
+
+
+  return <TrainPage>
+		{
+			Object.keys(totalGroupMap).sort(sortGroupKey).map(groupKey => {
+				const groupMap = totalGroupMap[groupKey]
+				return (
+					<fieldset style={{ marginTop: '10px', marginBottom: '10px' }}>
+						<FlopWrapper>
+							<Flop data={flop.flop} />
+						</FlopWrapper>
+						<legend>{groupKey}</legend>
+						<div>Bet Frequency</div>
+						<OptionWrapper>
+							{
+								Object.keys(groupMap).sort((a, b) => b - a).map((f) => {
+									const style = { color: FreqColorMap[f] }
+									if (freqAnswer[groupKey] !== undefined) {
+										style.color = 'white';
+										if (f === correctFreq[groupKey]) {
+											style.background = 'rgb(90, 185, 102)'
+										} else if (f === freqAnswer[groupKey]) {
+											style.background = 'rgb(240, 60, 60)'
+										}
+									}
+									return <TrainOption
+										style={style}
+										onClick={freqAnswer[groupKey] === undefined ? () => setFreqAnswer({ ...freqAnswer, [groupKey]: f }) : null}
+									>{FreqKeyMap[f]}</TrainOption>
+								})
+							}
+						</OptionWrapper>
+						<div>Bet Size</div>
+						<OptionWrapper>
+							{
+								CategoryList.map((f) => {
+									const style = { color: CategoryColorMap[f] }
+									if (sizeAnswer[groupKey] !== undefined) {
+										style.color = 'white';
+										if (f === correctSize[groupKey]) {
+											style.background = 'rgb(90, 185, 102)'
+										} else if (f === sizeAnswer[groupKey]) {
+											style.background = 'rgb(240, 60, 60)'
+										}
+									}
+									return <TrainOption
+										style={style}
+										onClick={sizeAnswer[groupKey] === undefined ? () => setSizeAnswer({ ...sizeAnswer, [groupKey]: f }) : null}>{f}</TrainOption>
+								})
+							}
+						</OptionWrapper>
+					</fieldset>
+				)
+			})
+		}
+    <button onClick={() => {
+      setIndex(generateIndex())
+      setFreqAnswer({})
+      setSizeAnswer({})
+    }}>Next</button>
+  </TrainPage>
+}
+
 
 const ReportSummaryPage = ({ data = [] }) => {
   const groupMap = getGroupMap(data)
@@ -2904,10 +3099,12 @@ const ReportPage = () => {
   const [rectTextLeft, setRectTextLeft] = useState(0)
   const [order, setOrder] = useState('asc')
   const [type, setType] = useState('flop')
+  const [trainV2Solution, setTrainV2Solution] = useState(SOLUTION_TRAIN_V2_OPTIONS[0].value)
   const [orderMenuIsOpen, setOrderMenuIsOpen] = useState(false)
   const [solutionMenuIsOpen, setSolutionMenuIsOpen] = useState(false)
   const [settingMenuIsOpen, setSettingMenuIsOpen] = useState(false)
   const [data, setData] = useState(null)
+	const [trainV2data, setTrainV2Data] = useState({})
   const [originData, setOriginData] = useState(null)
   const [solutions, setSolutions] = useState(queryParams.get('setting') === 'NL50GG' ? SOLUTION_NL50GG_OPTIONS : SOLUTION_OPTIONS)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
@@ -3215,6 +3412,38 @@ const ReportPage = () => {
     setSolutions(SOLUTION_OPTIONS)
   }, [setting])
 
+	useEffect(() => {
+		const [pre, pos] = trainV2Solution.split('.')
+		const d = DATA[setting][pre][pos] || {}
+		const tData = {}
+		const fn = async (v) => {
+			try {
+				const path = `${process.env.PUBLIC_URL}/reports/${setting}/${pre}/${pos}/${v}.json`
+        const response = await fetch(path);
+				const data = await response.json()
+				tData[v] = data.results.data
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		const main = async () => {
+			await Promise.all(Object.keys(d).map(fn))
+			setTrainV2Data(tData)
+		}
+		main()
+	}, [trainV2Solution, setting])
+
+	useEffect(() => {
+		const newTrainV2Data = JSON.parse(JSON.stringify(trainV2data))
+		Object.keys(newTrainV2Data).forEach((key) => {
+			newTrainV2Data[key] = newTrainV2Data[key]
+				.filter(d => {
+					return filteredFlop.includes(d.flop)
+				})
+		})
+    setTrainV2Data(newTrainV2Data)
+	}, [JSON.stringify(filteredFlop)])
+
   if (!data) {
     return <div>Loading</div>
   }
@@ -3239,34 +3468,36 @@ const ReportPage = () => {
   return (
     <>
       <Control>
-        <SelectWrapper 
-          ref={orderSelectDivRef}
-          onClick={onOrderSelectClick}
-          onTouchStart={() => setOrderMenuIsOpen(true)}
-          onMouseEnter={() => setOrderMenuIsOpen(true)}
-        >
-          <Select
-            defaultValue={orderOptions[0]}
-            options={orderOptions}
-            components={{ ValueContainer: OrderValueContainer }}
-            menuIsOpen={orderMenuIsOpen}
-            onChange={(e) => {
-              if (e.value === type) {
-                onOrderChange();
-              }
-              setOrderMenuIsOpen(false)
-              setType(e.value);
-            }}
-            styles={{
-              menu: base => ({
-                ...base,
-                marginTop: 0
-              })
-            }}
-						isClearable={false}
-						isSearchable={false}
-          />
-        </SelectWrapper>
+        {
+					reportPageState === 'graph' ? <SelectWrapper 
+						ref={orderSelectDivRef}
+						onClick={onOrderSelectClick}
+						onTouchStart={() => setOrderMenuIsOpen(true)}
+						onMouseEnter={() => setOrderMenuIsOpen(true)}
+					>
+						<Select
+							defaultValue={orderOptions[0]}
+							options={orderOptions}
+							components={{ ValueContainer: OrderValueContainer }}
+							menuIsOpen={orderMenuIsOpen}
+							onChange={(e) => {
+								if (e.value === type) {
+									onOrderChange();
+								}
+								setOrderMenuIsOpen(false)
+								setType(e.value);
+							}}
+							styles={{
+								menu: base => ({
+									...base,
+									marginTop: 0
+								})
+							}}
+							isClearable={false}
+							isSearchable={false}
+						/>
+					</SelectWrapper> : null
+				}
         <Select
           defaultValue={settingOptions[0]}
           options={settingOptions}
@@ -3285,28 +3516,52 @@ const ReportPage = () => {
           isSearchable={false}
 					value={settingOptions.find(s => s.value === setting)}
         />
-        <Select
-          defaultValue={solutions[0].options[0]}
-          options={solutions}
-          onChange={(e) => {
-						dispatch(preflopSlice.set(SolutionMap[e.value] || e.value))
-						navigate(`?preflop=${SolutionMap[e.value] || e.value}`);
-            setSolutionMenuIsOpen(false)
-          }}
-          styles={{
-            menu: base => ({
-              ...base,
-              marginTop: 0
-            }),
-						control: (provided) => ({
-							...provided,
-							width: '150px',
-						}),
-          }}
-          isClearable={false}
-          isSearchable={false}
-					value={solutionValue}
-        />
+        {
+					reportPageState !== 'trainV2' ? <Select
+						defaultValue={solutions[0].options[0]}
+						options={solutions}
+						onChange={(e) => {
+							dispatch(preflopSlice.set(SolutionMap[e.value] || e.value))
+							navigate(`?preflop=${SolutionMap[e.value] || e.value}`);
+							setSolutionMenuIsOpen(false)
+						}}
+						styles={{
+							menu: base => ({
+								...base,
+								marginTop: 0
+							}),
+							control: (provided) => ({
+								...provided,
+								width: '150px',
+							}),
+						}}
+						isClearable={false}
+						isSearchable={false}
+						value={solutionValue}
+					/> : null
+				}
+        {
+					reportPageState === 'trainV2' ? <Select
+						defaultValue={SOLUTION_TRAIN_V2_OPTIONS[0]}
+						options={SOLUTION_TRAIN_V2_OPTIONS}
+						onChange={(e) => {
+							setTrainV2Solution(e.value)
+						}}
+						styles={{
+							menu: base => ({
+								...base,
+								marginTop: 0
+							}),
+							control: (provided) => ({
+								...provided,
+								width: '150px',
+							}),
+						}}
+						isClearable={false}
+						isSearchable={false}
+						value={(SOLUTION_TRAIN_V2_OPTIONS.find(e => e.value === trainV2Solution) || {})}
+					/> : null
+				}
         <button onClick={() => setIsFilterModalOpen(true)}>Filter</button>
       </Control>
       <Page>
@@ -3327,6 +3582,10 @@ const ReportPage = () => {
             setReportPageState('exam')
             navigate('?page=exam')
           }}>Exam</button>
+          <button onClick={() => {
+            setReportPageState('trainV2')
+            navigate('?page=trainV2')
+          }}>Train V2</button>
         </div>
         {
           reportPageState === 'graph'
@@ -3374,13 +3633,19 @@ const ReportPage = () => {
                 flopAction={(solution.includes('IPA') || (SolutionReverseMap[solution] || '').includes('IPA')) ? 'X' : 'Empty'}
               /> : null
         }
+				{
+          reportPageState === 'trainV2'
+            ? <ReportTrainV2Page
+                data={trainV2data}
+              /> : null
+        }
       </Page>
       <FilterModal
 				onCancel={() => setIsFilterModalOpen(false)}
 				onSave={({ flops, state }) => {
 					setIsFilterModalOpen(false)
 				}}
-				data={originData}
+				data={reportPageState !== 'trainV2' ? originData : undefined}
 				open={isFilterModalOpen}
 			/>
     </>
