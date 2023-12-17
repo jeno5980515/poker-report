@@ -2917,6 +2917,12 @@ const ReportTrainV2Page = ({ data = {} }) => {
 
 
   return <TrainPage>
+		<button onClick={() => {
+      setIndex(generateIndex())
+      setFreqAnswer({})
+      setSizeAnswer({})
+			window.scrollTo(0, 0)
+    }}>Next</button>
 		{
 			Object.keys(totalGroupMap).sort(sortGroupKey).map(groupKey => {
 				const groupMap = totalGroupMap[groupKey]
@@ -2973,7 +2979,10 @@ const ReportTrainV2Page = ({ data = {} }) => {
       setIndex(generateIndex())
       setFreqAnswer({})
       setSizeAnswer({})
-    }}>Next</button>
+			window.scrollTo(0, 0)
+    }}
+			style={{ marginBottom: '70px' }}
+		>Next</button>
   </TrainPage>
 }
 
