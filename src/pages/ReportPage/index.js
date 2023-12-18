@@ -2923,6 +2923,11 @@ const ReportTrainV2Page = ({ data = {} }) => {
       setSizeAnswer({})
 			window.scrollTo(0, 0)
     }}>Next</button>
+		<button onClick={() => {
+      setFreqAnswer(correctFreq)
+      setSizeAnswer(correctSize)
+			window.scrollTo(0, 0)
+    }}>Show</button>
 		{
 			Object.keys(totalGroupMap).sort(sortGroupKey).map(groupKey => {
 				const groupMap = totalGroupMap[groupKey]
