@@ -3451,7 +3451,7 @@ const ReportPage = () => {
 				})
 		})
     setTrainV2Data(newTrainV2Data)
-	}, [JSON.stringify(filteredFlop)])
+	}, [JSON.stringify(filteredFlop), JSON.stringify(trainV2data)])
 
   if (!data) {
     return <div>Loading</div>
