@@ -8,6 +8,8 @@ import ReportPage from "./pages/ReportPage";
 import RangePage from "./pages/RangePage";
 import SolutionPage from "./pages/SolutionPage";
 import TurnReportPage from "./pages/TurnReportPage";
+import PushPage from "./pages/PushPage";
+
 
 import './App.css';
 
@@ -33,6 +35,9 @@ function Layout() {
           <li>
             <Link to="/turn-report">Turn Report</Link>
           </li>
+          <li>
+            <Link to="/push">Push & Fold</Link>
+          </li>
         </ul>
       </nav>
 
@@ -53,6 +58,7 @@ export default function App() {
           <Route path="range" element={<RangePage />} />
           <Route path="solution" element={<SolutionPage />} />
           <Route path="turn-report" element={<TurnReportPage />} />
+          <Route path="push" element={<PushPage />} />
         </Route>
       </Routes>
     </Provider>
