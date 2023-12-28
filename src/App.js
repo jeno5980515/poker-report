@@ -36,7 +36,7 @@ function Layout() {
             <Link to="/turn-report">Turn Report</Link>
           </li>
           <li>
-            <Link to="/push">Push & Fold</Link>
+            <Link to="/push">Spin & Go</Link>
           </li>
         </ul>
       </nav>
