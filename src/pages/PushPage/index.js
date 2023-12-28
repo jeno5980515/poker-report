@@ -61,6 +61,7 @@ const Button = styled.div`
 
 const ButtonWrapper = styled.div`
 	display: flex;
+	flex-wrap: wrap;
 `
 
 const ControlTitle = styled.div`
