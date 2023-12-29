@@ -226,7 +226,7 @@ const PushPage = () => {
 			<Field>
 				<legend style={{ color: 'white' }}>Type</legend>
 				<Control>
-					<ControlTitle>Limp/Open</ControlTitle>
+					<ControlTitle>{ type.includes('2') ? 'Limp/Open' : 'Open' }</ControlTitle>
 					{
 						type.includes('2')
 							? <ButtonWrapper>
@@ -241,33 +241,59 @@ const PushPage = () => {
 				{
 					type.includes('3')
 						? <Control>
-								<ControlTitle>SB VS Open/Limp/Shove</ControlTitle>
+								<ControlTitle>SB VS Open/Shove</ControlTitle>
 									<ButtonWrapper>
 										<Button onClick={() => setType('3sbVsbtn')} isSelected={type === '3sbVsbtn'}>SB VS BTN</Button>
 										<Button onClick={() => setType('3sbCallbtn')} isSelected={type === '3sbCallbtn'}>SB Call Btn Shove</Button>
 									</ButtonWrapper>	
 							</Control> : null
 				}
-				<Control>
-					<ControlTitle>BB VS Open/Limp/Shove</ControlTitle>
-					{
-						type.includes('2')
-							? <ButtonWrapper>
+				{
+					type.includes('2')
+						? <Control>
+								<ControlTitle>BB VS Open/Limp/Shove</ControlTitle>
+								<ButtonWrapper>
 									<Button onClick={() => setType('2bbVssb')} isSelected={type === '2bbVssb'}>BB VS SB</Button>
 									<Button onClick={() => setType('2bbIsosb')} isSelected={type === '2bbIsosb'}>BB ISO SB</Button>
 									<Button onClick={() => setType('2bbCallshovesb')} isSelected={type === '2bbCallshovesb'}>BB Call SB Shove</Button>
 								</ButtonWrapper>
-							: <ButtonWrapper>
+							</Control>
+						: null
+				}
+				{
+					type.includes('3')
+						? <Control>
+								<ControlTitle>BB VS Btn</ControlTitle>
+								<ButtonWrapper>
 									<Button onClick={() => setType('3bbVsbtn')} isSelected={type === '3bbVsbtn'}>BB VS BTN</Button>
+									<Button onClick={() => setType('3bbCallshovebtn')} isSelected={type === '3bbCallshovebtn'}>BB Call Btn Shove</Button>
+								</ButtonWrapper>	
+							</Control>
+						: null
+				}
+				{
+					type.includes('3')
+						? <Control>
+								<ControlTitle>BB VS SB</ControlTitle>
+								<ButtonWrapper>
 									<Button onClick={() => setType('3bbVssb')} isSelected={type === '3bbVssb'}>BB VS SB</Button>
 									<Button onClick={() => setType('3bbIsosb')} isSelected={type === '3bbIsosb'}>BB ISO SB</Button>
-									<Button onClick={() => setType('3bbIsobtnsb')} isSelected={type === '3bbIsobtnsb'}>BB ISO BTN + SB</Button>
-									<Button onClick={() => setType('3bbCallshovebtn')} isSelected={type === '3bbCallshovebtn'}>BB Call Btn Shove</Button>
 									<Button onClick={() => setType('3bbCallshovesb')} isSelected={type === '3bbCallshovesb'}>BB Call SB Shove</Button>
+								</ButtonWrapper>	
+							</Control>
+						: null
+				}
+				{
+					type.includes('3')
+						? <Control>
+								<ControlTitle>BB VS BTN + SB</ControlTitle>
+								<ButtonWrapper>
+									<Button onClick={() => setType('3bbIsobtnsb')} isSelected={type === '3bbIsobtnsb'}>BB ISO BTN + SB</Button>
 									<Button onClick={() => setType('3bbCallshovebtnsb')} isSelected={type === '3bbCallshovebtnsb'}>BB Call Both Shove</Button>
 								</ButtonWrapper>	
-					}
-				</Control>
+							</Control>
+						: null
+				}
 				{/* <Control>
 					<ControlTitle>Open VS 3Bet</ControlTitle>
 					{
@@ -280,13 +306,22 @@ const PushPage = () => {
 								</ButtonWrapper>	
 					}
 				</Control> */}
+				{
+					type.includes('2')
+						?	<Control>
+								<ControlTitle>Limp VS Action</ControlTitle>
+								<ButtonWrapper>
+									<Button onClick={() => setType('2sbLimpisobb')} isSelected={type === '2sbLimpisobb'}>SB Limp VS ISO</Button>
+									<Button onClick={() => setType('2sbLimpshovebb')} isSelected={type === '2sbLimpshovebb'}>SB Limp VS Shove</Button>
+								</ButtonWrapper>
+							</Control>
+						: null
+				}
 				<Control>
-					<ControlTitle>Limp/Open VS Action</ControlTitle>
+					<ControlTitle>{ type.includes('2') ? 'Open VS Action' : 'Btn Open VS Action' }</ControlTitle>
 					{
 						type.includes('2')
 							? <ButtonWrapper>
-									<Button onClick={() => setType('2sbLimpisobb')} isSelected={type === '2sbLimpisobb'}>SB Limp VS ISO</Button>
-									<Button onClick={() => setType('2sbLimpshovebb')} isSelected={type === '2sbLimpshovebb'}>SB Limp VS Shove</Button>
 									<Button onClick={() => setType('2sbOpenshovebb')} isSelected={type === '2sbOpenshovebb'}>SB Open VS Shove</Button>
 									<Button onClick={() => setType('2sbOpenraisebb')} isSelected={type === '2sbOpenraisebb'}>SB Open VS 3Bet</Button>
 								</ButtonWrapper>
